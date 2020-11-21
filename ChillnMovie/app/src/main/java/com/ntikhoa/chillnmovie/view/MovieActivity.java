@@ -36,7 +36,7 @@ public class MovieActivity extends AppCompatActivity {
     private void initComponent() {
         recyclerView = findViewById(R.id.recyclerViewMovie);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MoviePagedListAdapter();
+        adapter = new MoviePagedListAdapter(MovieActivity.this);
         recyclerView.setAdapter(adapter);
         movieViewModel = new ViewModelProvider(this,
                 ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()))

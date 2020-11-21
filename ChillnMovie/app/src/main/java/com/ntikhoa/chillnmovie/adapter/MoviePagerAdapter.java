@@ -1,5 +1,7 @@
 package com.ntikhoa.chillnmovie.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,11 +17,14 @@ import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerDrawable;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.model.Movie;
+import com.ntikhoa.chillnmovie.view.MovieDetailActivity;
 import com.squareup.picasso.Picasso;
 
 public class MoviePagerAdapter extends ListAdapter<Movie, MoviePagerAdapter.MovieViewHolder> {
-    public MoviePagerAdapter() {
+    private final Context context;
+    public MoviePagerAdapter(Context context) {
         super(Movie.CALLBACK);
+        this.context = context;
     }
 
     @NonNull
@@ -34,9 +40,9 @@ public class MoviePagerAdapter extends ListAdapter<Movie, MoviePagerAdapter.Movi
         Movie movie = getItem(position);
         if (movie != null) {
             Shimmer shimmer = new Shimmer.ColorHighlightBuilder()
-                    .setBaseColor(Color.parseColor("#F3F3F3"))
+                    .setBaseColor(ContextCompat.getColor(context, R.color.colorShimmerBase))
                     .setBaseAlpha(1)
-                    .setHighlightColor(Color.parseColor("#C3C3C3"))
+                    .setHighlightColor(ContextCompat.getColor(context, R.color.colorShimmerHighlight))
                     .setHighlightAlpha(1)
                     .setDropoff(50)
                     .setDuration(500)
@@ -48,6 +54,15 @@ public class MoviePagerAdapter extends ListAdapter<Movie, MoviePagerAdapter.Movi
             Picasso.get().load(path)
                     .placeholder(drawable)
                     .into(holder.imageViewBackdrop);
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, MovieDetailActivity.class);
+                    intent.putExtra(MovieDetailActivity.EXTRA_ID, movie.getId());
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 

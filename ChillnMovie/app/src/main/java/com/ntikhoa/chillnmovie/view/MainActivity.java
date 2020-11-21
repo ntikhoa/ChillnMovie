@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 .get(MovieViewModel.class);
 
         viewPagerTrendingMovie = findViewById(R.id.viewPagerTrending);
-        trendingMovieAdapter = new MoviePagerAdapter();
+        trendingMovieAdapter = new MoviePagerAdapter(MainActivity.this);
         viewPagerTrendingMovie.setAdapter(trendingMovieAdapter);
 
         tabLayout = findViewById(R.id.tabs);
@@ -70,25 +70,25 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewPopularMovie = findViewById(R.id.recycerViewPopularMovie);
         recyclerViewPopularMovie.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        popularMovieAdapter = new MovieAdapter();
+        popularMovieAdapter = new MovieAdapter(MainActivity.this);
         recyclerViewPopularMovie.setAdapter(popularMovieAdapter);
 
         recyclerViewNowPlayingMovie = findViewById(R.id.recycerViewNowPlaying);
         recyclerViewNowPlayingMovie.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        nowPlayingMovieAdapter = new MovieAdapter();
+        nowPlayingMovieAdapter = new MovieAdapter(MainActivity.this);
         recyclerViewNowPlayingMovie.setAdapter(nowPlayingMovieAdapter);
 
         recyclerViewUpcomingMovie = findViewById(R.id.recycerViewUpcoming);
         recyclerViewUpcomingMovie.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        upcomingMovieAdapter = new MovieAdapter();
+        upcomingMovieAdapter = new MovieAdapter(MainActivity.this);
         recyclerViewUpcomingMovie.setAdapter(upcomingMovieAdapter);
 
         recyclerViewTopRatedMovie = findViewById(R.id.recycerViewTopRated);
         recyclerViewTopRatedMovie.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        topRatedMovieAdapter = new MovieAdapter();
+        topRatedMovieAdapter = new MovieAdapter(MainActivity.this);
         recyclerViewTopRatedMovie.setAdapter(topRatedMovieAdapter);
     }
 

@@ -84,4 +84,8 @@ public class Movie {
     public String getBackdropPath() {
         return backdropPath;
     }
+
+    public Integer getId() {
+        return id;
+    }
 }
