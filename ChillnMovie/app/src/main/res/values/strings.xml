@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ChillnMovie</string>
+    <string name="API_key">e1ccb0be53deb720478324dfc600cdfa</string>
+    <string name="lang_vietnamses">vi-VN</string>
+
+    <string name="more"><u><i>More</i></u></string>
+    <string name="popular_movie">Popular Movie</string>
+    <string name="upcoming_movie">Upcoming Movie</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="top_rated">Top Rated</string>
+    <string name="trending">Trending</string>
+</resources>
