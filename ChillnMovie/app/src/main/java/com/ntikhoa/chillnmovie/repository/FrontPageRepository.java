@@ -1,11 +1,15 @@
-package com.ntikhoa.chillnmovie.model;
+package com.ntikhoa.chillnmovie.repository;
 
 import android.app.Application;
 import android.widget.Toast;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.model.Movie;
+import com.ntikhoa.chillnmovie.model.MovieDBresponse;
+import com.ntikhoa.chillnmovie.model.MovieDetail;
 import com.ntikhoa.chillnmovie.service.RetrofitClient;
 
 import java.util.ArrayList;
@@ -15,15 +19,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Repository {
+public class FrontPageRepository {
     MutableLiveData<List<Movie>> MLDtrendingMovie;
     MutableLiveData<List<Movie>> MLDpopularMovie;
     MutableLiveData<List<Movie>> MLDupcomingMovie;
     MutableLiveData<List<Movie>> MLDnowPlayingMovie;
     MutableLiveData<List<Movie>> MLDtopRatedMovie;
+
     Application application;
 
-    public Repository(Application application) {
+    public FrontPageRepository(Application application) {
         this.application = application;
         MLDpopularMovie = new MutableLiveData<>();
         MLDupcomingMovie = new MutableLiveData<>();
@@ -32,7 +37,7 @@ public class Repository {
         MLDtrendingMovie = new MutableLiveData<>();
     }
 
-    public MutableLiveData getMLDtrendingMovie() {
+    public MutableLiveData<List<Movie>> getMLDtrendingMovie() {
         RetrofitClient.getInstance()
                 .getMovieAPI()
                 .getTrendingMovie(application.getString(R.string.API_key))
@@ -56,7 +61,7 @@ public class Repository {
         return MLDtrendingMovie;
     }
 
-    public MutableLiveData getMLDpopularMovie() {
+    public MutableLiveData<List<Movie>> getMLDpopularMovie() {
         RetrofitClient.getInstance()
                 .getMovieAPI()
                 .getPopularMovie(application.getString(R.string.API_key),
@@ -79,7 +84,7 @@ public class Repository {
         return MLDpopularMovie;
     }
 
-    public MutableLiveData getMLDupcomingMovie() {
+    public MutableLiveData<List<Movie>> getMLDupcomingMovie() {
         RetrofitClient.getInstance()
                 .getMovieAPI()
                 .getUpcomingMovie(application.getString(R.string.API_key),
@@ -102,7 +107,7 @@ public class Repository {
         return MLDupcomingMovie;
     }
 
-    public MutableLiveData getMLDnowPlayingMovie() {
+    public MutableLiveData<List<Movie>> getMLDnowPlayingMovie() {
         RetrofitClient.getInstance()
                 .getMovieAPI()
                 .getNowPlayingMovie(application.getString(R.string.API_key),
@@ -125,7 +130,7 @@ public class Repository {
         return MLDnowPlayingMovie;
     }
 
-    public MutableLiveData getMLDtopRatedMovie() {
+    public MutableLiveData<List<Movie>> getMLDtopRatedMovie() {
         RetrofitClient.getInstance()
                 .getMovieAPI()
                 .getTopRatedMovie(application.getString(R.string.API_key),

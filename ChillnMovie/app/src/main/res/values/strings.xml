@@ -9,4 +9,11 @@
     <string name="now_playing">Now Playing</string>
     <string name="top_rated">Top Rated</string>
     <string name="trending">Trending</string>
+    <string name="backdrop_image">backdrop image</string>
+    <string name="team_logo">team logo</string>
+    <string name="image_poster">poster image</string>
+    <string name="play_trailer">Play trailer</string>
+    <string name="rate_button">rate button</string>
+    <string name="add_to_favorite_list_button">add to favorite list button</string>
+    <string name="top_billed_caster">Top Billed Caster</string>
 </resources>

@@ -1,10 +1,7 @@
 package com.ntikhoa.chillnmovie.view;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,7 +9,6 @@ import android.os.Bundle;
 
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.adapter.MoviePagedListAdapter;
-import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.viewmodel.MovieViewModel;
 
 public class MovieActivity extends AppCompatActivity {
@@ -20,7 +16,7 @@ public class MovieActivity extends AppCompatActivity {
     public static final String EXTRA_CATEGORY = "category";
     private MoviePagedListAdapter adapter;
     private RecyclerView recyclerView;
-    private MovieViewModel movieViewModel;
+    private MovieViewModel viewModel;
     private int category = -1;
 
     @Override
@@ -29,8 +25,7 @@ public class MovieActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie);
 
         initComponent();
-
-        getData();
+        loadData();
     }
 
     private void initComponent() {
@@ -38,19 +33,14 @@ public class MovieActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MoviePagedListAdapter(MovieActivity.this);
         recyclerView.setAdapter(adapter);
-        movieViewModel = new ViewModelProvider(this,
+        viewModel = new ViewModelProvider(this,
                 ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()))
                 .get(MovieViewModel.class);
     }
 
-    private void getData() {
+    private void loadData() {
         category = getIntent().getIntExtra(EXTRA_CATEGORY, -1);
-        movieViewModel.getMoviePagedListLiveData(category)
-                .observe(this, new Observer<PagedList<Movie>>() {
-                    @Override
-                    public void onChanged(PagedList<Movie> movies) {
-                        adapter.submitList(movies);
-                    }
-                });
+        viewModel.getMoviePagedListLiveData(category)
+                .observe(this, movies -> adapter.submitList(movies));
     }
 }

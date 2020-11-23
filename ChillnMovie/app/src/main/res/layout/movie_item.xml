@@ -4,9 +4,9 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="5dp"
-    app:cardElevation="8dp"
-    app:cardCornerRadius="8dp">
+    android:layout_margin="10dp"
+    app:cardElevation="16dp"
+    app:cardCornerRadius="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,6 +18,7 @@
             android:layout_width="200dp"
             android:layout_height="300dp"
             android:scaleType="centerCrop"
+            android:contentDescription="@string/image_poster"
             tools:src="@drawable/ic_launcher_background"/>
 
 <!--        <com.google.android.material.textview.MaterialTextView-->

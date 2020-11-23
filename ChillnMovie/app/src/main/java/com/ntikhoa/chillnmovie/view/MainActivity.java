@@ -1,6 +1,5 @@
 package com.ntikhoa.chillnmovie.view;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -11,7 +10,6 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -19,12 +17,12 @@ import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.adapter.MovieAdapter;
 import com.ntikhoa.chillnmovie.adapter.MoviePagerAdapter;
 import com.ntikhoa.chillnmovie.model.Movie;
-import com.ntikhoa.chillnmovie.viewmodel.MovieViewModel;
+import com.ntikhoa.chillnmovie.viewmodel.FrontPageViewModel;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    MovieViewModel movieViewModel;
+    FrontPageViewModel viewModel;
 
     MoviePagerAdapter trendingMovieAdapter;
     ViewPager2 viewPagerTrendingMovie;
@@ -48,52 +46,49 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initComponent();
-        getData();
+        loadData();
     }
 
     private void initComponent() {
-        movieViewModel = new ViewModelProvider(this,
+        viewModel = new ViewModelProvider(this,
                 ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()))
-                .get(MovieViewModel.class);
+                .get(FrontPageViewModel.class);
 
         viewPagerTrendingMovie = findViewById(R.id.viewPagerTrending);
         trendingMovieAdapter = new MoviePagerAdapter(MainActivity.this);
         viewPagerTrendingMovie.setAdapter(trendingMovieAdapter);
 
         tabLayout = findViewById(R.id.tabs);
-        new TabLayoutMediator(tabLayout, viewPagerTrendingMovie, new TabLayoutMediator.TabConfigurationStrategy() {
-            @Override
-            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-            }
+        new TabLayoutMediator(tabLayout, viewPagerTrendingMovie, (tab, position) -> {
         }).attach();
 
-        recyclerViewPopularMovie = findViewById(R.id.recycerViewPopularMovie);
+        recyclerViewPopularMovie = findViewById(R.id.recyclerViewPopularMovie);
         recyclerViewPopularMovie.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         popularMovieAdapter = new MovieAdapter(MainActivity.this);
         recyclerViewPopularMovie.setAdapter(popularMovieAdapter);
 
-        recyclerViewNowPlayingMovie = findViewById(R.id.recycerViewNowPlaying);
+        recyclerViewNowPlayingMovie = findViewById(R.id.recyclerViewNowPlaying);
         recyclerViewNowPlayingMovie.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         nowPlayingMovieAdapter = new MovieAdapter(MainActivity.this);
         recyclerViewNowPlayingMovie.setAdapter(nowPlayingMovieAdapter);
 
-        recyclerViewUpcomingMovie = findViewById(R.id.recycerViewUpcoming);
+        recyclerViewUpcomingMovie = findViewById(R.id.recyclerViewUpcoming);
         recyclerViewUpcomingMovie.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         upcomingMovieAdapter = new MovieAdapter(MainActivity.this);
         recyclerViewUpcomingMovie.setAdapter(upcomingMovieAdapter);
 
-        recyclerViewTopRatedMovie = findViewById(R.id.recycerViewTopRated);
+        recyclerViewTopRatedMovie = findViewById(R.id.recyclerViewTopRated);
         recyclerViewTopRatedMovie.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         topRatedMovieAdapter = new MovieAdapter(MainActivity.this);
         recyclerViewTopRatedMovie.setAdapter(topRatedMovieAdapter);
     }
 
-    private void getData() {
-        movieViewModel.getMLDtrendingMovie()
+    private void loadData() {
+        viewModel.getMLDtrendingMovie()
                 .observe(this, new Observer<List<Movie>>() {
                     @Override
                     public void onChanged(List<Movie> movies) {
@@ -101,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-        movieViewModel.getMLDpopularMovie()
+        viewModel.getMLDpopularMovie()
                 .observe(this, new Observer<List<Movie>>() {
                     @Override
                     public void onChanged(List<Movie> movies) {
@@ -109,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-        movieViewModel.getMLDnowPlayingMovie()
+        viewModel.getMLDnowPlayingMovie()
                 .observe(this, new Observer<List<Movie>>() {
                     @Override
                     public void onChanged(List<Movie> movies) {
@@ -117,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-        movieViewModel.getMLDupcomingMovie()
+        viewModel.getMLDupcomingMovie()
                 .observe(this, new Observer<List<Movie>>() {
                     @Override
                     public void onChanged(List<Movie> movies) {
@@ -125,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-        movieViewModel.getMLDtopRatedMovie()
+        viewModel.getMLDtopRatedMovie()
                 .observe(this, new Observer<List<Movie>>() {
                     @Override
                     public void onChanged(List<Movie> movies) {

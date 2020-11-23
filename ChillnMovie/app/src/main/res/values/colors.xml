@@ -10,6 +10,7 @@
 
     <color name="colorPrimary">#FF9800</color>
     <color name="colorPrimaryVariant">#F57C00</color>
+    <color name="colorPrimaryVariantTransparent">#50F57C00</color>
     <color name="colorOnPrimary">#FFCC80</color>
 
     <color name="colorShimmerBase">#F3F3F3</color>

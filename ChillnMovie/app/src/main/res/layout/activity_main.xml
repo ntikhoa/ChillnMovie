@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:src="@drawable/logo"
+            android:contentDescription="@string/team_logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -69,7 +70,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tabs" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycerViewPopularMovie"
+            android:id="@+id/recyclerViewPopularMovie"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -84,7 +85,7 @@
             android:onClick="onClickSeeMore"
             android:text="@string/more"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/recycerViewPopularMovie"
+            app:layout_constraintBottom_toTopOf="@+id/recyclerViewPopularMovie"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
@@ -95,10 +96,10 @@
             android:text="@string/now_playing"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recycerViewPopularMovie" />
+            app:layout_constraintTop_toBottomOf="@+id/recyclerViewPopularMovie" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycerViewNowPlaying"
+            android:id="@+id/recyclerViewNowPlaying"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -113,7 +114,7 @@
             android:onClick="onClickSeeMore"
             android:text="@string/more"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/recycerViewNowPlaying"
+            app:layout_constraintBottom_toTopOf="@+id/recyclerViewNowPlaying"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
@@ -124,10 +125,10 @@
             android:text="@string/upcoming_movie"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recycerViewNowPlaying" />
+            app:layout_constraintTop_toBottomOf="@+id/recyclerViewNowPlaying" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycerViewUpcoming"
+            android:id="@+id/recyclerViewUpcoming"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -142,7 +143,7 @@
             android:onClick="onClickSeeMore"
             android:text="@string/more"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/recycerViewUpcoming"
+            app:layout_constraintBottom_toTopOf="@+id/recyclerViewUpcoming"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
@@ -153,10 +154,10 @@
             android:text="@string/top_rated"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recycerViewUpcoming" />
+            app:layout_constraintTop_toBottomOf="@+id/recyclerViewUpcoming" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycerViewTopRated"
+            android:id="@+id/recyclerViewTopRated"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -171,7 +172,7 @@
             android:onClick="onClickSeeMore"
             android:text="@string/more"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/recycerViewTopRated"
+            app:layout_constraintBottom_toTopOf="@+id/recyclerViewTopRated"
             app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

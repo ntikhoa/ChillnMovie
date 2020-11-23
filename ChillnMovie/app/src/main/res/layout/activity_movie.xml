@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.MovieActivity">
+    tools:context=".view.MovieActivity"
+    android:background="@drawable/background">
 
 
     <androidx.recyclerview.widget.RecyclerView

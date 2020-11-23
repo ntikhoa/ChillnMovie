@@ -67,6 +67,18 @@ public class MovieDetail {
     @SerializedName("vote_count")
     @Expose
     private Integer voteCount;
+
+    public String getBackdropPath() {
+        return backdropPath;
+    }
+
+    public String getPosterPath() {
+        return posterPath;
+    }
+
+    public String getTitle() {
+        return title;
+    }
 }
 
 class Genre {
