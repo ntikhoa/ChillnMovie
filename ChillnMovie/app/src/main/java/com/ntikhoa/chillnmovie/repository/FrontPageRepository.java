@@ -3,14 +3,12 @@ package com.ntikhoa.chillnmovie.repository;
 import android.app.Application;
 import android.widget.Toast;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDBresponse;
-import com.ntikhoa.chillnmovie.model.MovieDetail;
-import com.ntikhoa.chillnmovie.service.RetrofitClient;
+import com.ntikhoa.chillnmovie.service.RetrofitTMDbClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +36,9 @@ public class FrontPageRepository {
     }
 
     public MutableLiveData<List<Movie>> getMLDtrendingMovie() {
-        RetrofitClient.getInstance()
+        RetrofitTMDbClient.getInstance()
                 .getMovieAPI()
-                .getTrendingMovie(application.getString(R.string.API_key))
+                .getTrendingMovie(application.getString(R.string.TMDb_API_key))
                 .enqueue(new Callback<MovieDBresponse>() {
                     @Override
                     public void onResponse(Call<MovieDBresponse> call, Response<MovieDBresponse> response) {
@@ -62,10 +60,10 @@ public class FrontPageRepository {
     }
 
     public MutableLiveData<List<Movie>> getMLDpopularMovie() {
-        RetrofitClient.getInstance()
+        RetrofitTMDbClient.getInstance()
                 .getMovieAPI()
-                .getPopularMovie(application.getString(R.string.API_key),
-                        application.getString(R.string.lang_vietnamses),
+                .getPopularMovie(application.getString(R.string.TMDb_API_key),
+                        application.getString(R.string.lang_vietnamese),
                         1)
                 .enqueue(new Callback<MovieDBresponse>() {
                     @Override
@@ -85,10 +83,10 @@ public class FrontPageRepository {
     }
 
     public MutableLiveData<List<Movie>> getMLDupcomingMovie() {
-        RetrofitClient.getInstance()
+        RetrofitTMDbClient.getInstance()
                 .getMovieAPI()
-                .getUpcomingMovie(application.getString(R.string.API_key),
-                        application.getString(R.string.lang_vietnamses),
+                .getUpcomingMovie(application.getString(R.string.TMDb_API_key),
+                        application.getString(R.string.lang_vietnamese),
                         1)
                 .enqueue(new Callback<MovieDBresponse>() {
                     @Override
@@ -108,10 +106,10 @@ public class FrontPageRepository {
     }
 
     public MutableLiveData<List<Movie>> getMLDnowPlayingMovie() {
-        RetrofitClient.getInstance()
+        RetrofitTMDbClient.getInstance()
                 .getMovieAPI()
-                .getNowPlayingMovie(application.getString(R.string.API_key),
-                        application.getString(R.string.lang_vietnamses),
+                .getNowPlayingMovie(application.getString(R.string.TMDb_API_key),
+                        application.getString(R.string.lang_vietnamese),
                         1)
                 .enqueue(new Callback<MovieDBresponse>() {
                     @Override
@@ -131,10 +129,10 @@ public class FrontPageRepository {
     }
 
     public MutableLiveData<List<Movie>> getMLDtopRatedMovie() {
-        RetrofitClient.getInstance()
+        RetrofitTMDbClient.getInstance()
                 .getMovieAPI()
-                .getTopRatedMovie(application.getString(R.string.API_key),
-                        application.getString(R.string.lang_vietnamses),
+                .getTopRatedMovie(application.getString(R.string.TMDb_API_key),
+                        application.getString(R.string.lang_vietnamese),
                         1)
                 .enqueue(new Callback<MovieDBresponse>() {
                     @Override

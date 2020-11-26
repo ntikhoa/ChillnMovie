@@ -1,5 +1,6 @@
 package com.ntikhoa.chillnmovie.model;
 
+import com.google.firebase.firestore.Exclude;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -68,6 +69,8 @@ public class MovieDetail {
     @Expose
     private Integer voteCount;
 
+    private String trailer_key;
+
     public String getBackdropPath() {
         return backdropPath;
     }
@@ -79,15 +82,79 @@ public class MovieDetail {
     public String getTitle() {
         return title;
     }
-}
 
-class Genre {
-    @SerializedName("id")
-    @Expose
-    private Integer id;
-    @SerializedName("name")
-    @Expose
-    private String name;
+    public Integer getBudget() {
+        return budget;
+    }
+
+    public List<Genre> getGenres() {
+        return genres;
+    }
+
+    @Exclude
+    public Integer getId() {
+        return id;
+    }
+
+    public String getImdbId() {
+        return imdbId;
+    }
+
+    public String getOriginalLanguage() {
+        return originalLanguage;
+    }
+
+    public String getOriginalTitle() {
+        return originalTitle;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public Double getPopularity() {
+        return popularity;
+    }
+
+    public List<ProductionCompany> getProductionCompanies() {
+        return productionCompanies;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public Integer getRevenue() {
+        return revenue;
+    }
+
+    public Integer getRuntime() {
+        return runtime;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getTagline() {
+        return tagline;
+    }
+
+    public Double getVoteAverage() {
+        return voteAverage;
+    }
+
+    public Integer getVoteCount() {
+        return voteCount;
+    }
+
+    public String getTrailer_key() {
+        return trailer_key;
+    }
+
+    public void setTrailer_key(String trailer_key) {
+        this.trailer_key = trailer_key;
+    }
 }
 
 class ProductionCompany {
@@ -103,4 +170,16 @@ class ProductionCompany {
     @SerializedName("origin_country")
     @Expose
     private String originCountry;
+
+    public String getName() {
+        return name;
+    }
+
+    public String getLogoPath() {
+        return logoPath;
+    }
+
+    public String getOriginCountry() {
+        return originCountry;
+    }
 }

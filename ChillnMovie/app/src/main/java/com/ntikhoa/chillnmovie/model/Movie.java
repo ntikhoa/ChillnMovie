@@ -3,6 +3,7 @@ package com.ntikhoa.chillnmovie.model;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 
+import com.google.firebase.firestore.Exclude;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -17,6 +18,7 @@ public class Movie {
     public static final int NOW_PLAYING = 2;
     public static final int UPCOMING = 3;
     public static final int TOP_RATED = 4;
+
 
     @SerializedName("vote_count")
     @Expose
@@ -73,6 +75,16 @@ public class Movie {
         }
     };
 
+    public Movie(MovieDetail movieDetail) {
+        this.title = movieDetail.getTitle();
+        this.posterPath = movieDetail.getPosterPath();
+        this.backdropPath = movieDetail.getBackdropPath();
+        this.voteCount = movieDetail.getVoteCount();
+        this.voteAverage = movieDetail.getVoteAverage();
+        this.popularity = movieDetail.getPopularity();
+        this.releaseDate = movieDetail.getReleaseDate();
+    }
+
     public String getTitle() {
         return title;
     }
@@ -85,7 +97,24 @@ public class Movie {
         return backdropPath;
     }
 
+    @Exclude
     public Integer getId() {
         return id;
+    }
+
+    public Integer getVoteCount() {
+        return voteCount;
+    }
+
+    public Double getVoteAverage() {
+        return voteAverage;
+    }
+
+    public Double getPopularity() {
+        return popularity;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
     }
 }

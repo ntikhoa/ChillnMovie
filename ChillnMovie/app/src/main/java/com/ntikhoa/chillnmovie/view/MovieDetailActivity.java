@@ -2,25 +2,24 @@ package com.ntikhoa.chillnmovie.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerDrawable;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.adapter.CasterAdapter;
 import com.ntikhoa.chillnmovie.model.Caster;
@@ -33,12 +32,11 @@ import com.squareup.picasso.Target;
 import java.util.List;
 
 public class MovieDetailActivity extends AppCompatActivity {
-    private static final String TAG = "MovieDetailActivity";
+    public static final String TAG = "MovieDetailActivity";
     public static final String EXTRA_ID = "tmdb_movie_id";
 
     private MovieDetailViewModel viewModel;
     private FrameLayout fragmentContainer;
-    private NestedScrollView nestedScrollView;
     private ImageView imageViewBackdrop;
 
     private RecyclerView recyclerViewCaster;
@@ -56,6 +54,14 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         initComp();
         loadData();
+
+        FloatingActionButton btn = findViewById(R.id.fabAddToDb);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewModel.addToDatabase(movieDetail);
+            }
+        });
     }
 
     private void initComp() {
@@ -64,7 +70,6 @@ public class MovieDetailActivity extends AppCompatActivity {
                 .get(MovieDetailViewModel.class);
         fragmentContainer = findViewById(R.id.fragmentContainer);
         imageViewBackdrop = findViewById(R.id.imageViewBackdrop);
-        nestedScrollView = findViewById(R.id.nestedScrollView);
 
         recyclerViewCaster = findViewById(R.id.recyclerViewCaster);
         recyclerViewCaster.setLayoutManager(
@@ -80,6 +85,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         viewModel.getMLDmovieDetail(id).observe(this, new Observer<MovieDetail>() {
             @Override
             public void onChanged(MovieDetail movieDetail) {
+                MovieDetailActivity.this.movieDetail = movieDetail;
                 setBackground(movieDetail);
                 setBackdropImage(movieDetail);
                 setTextInfo(movieDetail);
@@ -101,7 +107,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 .into(new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        nestedScrollView.setBackground(new BitmapDrawable(getResources(), bitmap));
+                        fragmentContainer.setBackground(new BitmapDrawable(getResources(), bitmap));
                     }
 
                     @Override
@@ -132,9 +138,69 @@ public class MovieDetailActivity extends AppCompatActivity {
                 .load(backdropUrl)
                 .placeholder(drawable)
                 .into(imageViewBackdrop);
+        textViewTitle.setText(movieDetail.getTitle());
     }
 
     private void setTextInfo(MovieDetail movieDetail) {
-        textViewTitle.setText(movieDetail.getTitle());
+        View rootView = findViewById(R.id.layout_description);
+        TextView textViewTitle = rootView.findViewById(R.id.textViewTitle);
+        TextView textViewOriginalTitle = rootView.findViewById(R.id.textViewOriginalTitle);
+        TextView textViewStatus = rootView.findViewById(R.id.textViewStatus);
+        TextView textViewReleaseDate = rootView.findViewById(R.id.textViewReleaseDate);
+        TextView textViewGenres = rootView.findViewById(R.id.textViewGenres);
+        TextView textViewRuntime = rootView.findViewById(R.id.textViewRuntime);
+        TextView textViewOriginalLanguage = rootView.findViewById(R.id.textViewOriginalLanguage);
+        TextView textViewBudget = rootView.findViewById(R.id.textViewBudget);
+        TextView textViewRevenue = rootView.findViewById(R.id.textViewRevenue);
+        TextView textViewOverview = rootView.findViewById(R.id.textViewOverview);
+
+        String title = movieDetail.getTitle();
+        if (title != null)
+            textViewTitle.setText(title);
+
+        String originalTitle = movieDetail.getOriginalTitle();
+        if (originalTitle != null)
+            textViewOriginalTitle.setText(originalTitle);
+
+        String status = movieDetail.getStatus();
+        if (status != null)
+            textViewStatus.setText(status);
+
+        String releaseDate = movieDetail.getReleaseDate();
+        if (releaseDate != null)
+            textViewReleaseDate.setText(releaseDate);
+
+        String genres;
+        StringBuilder genresBuilder = new StringBuilder();
+        if (movieDetail.getGenres().size() > 0) {
+            for (int i = 0; i < movieDetail.getGenres().size(); i++) {
+                genresBuilder.append("-");
+                genresBuilder.append(movieDetail.getGenres().get(i).getName());
+                genresBuilder.append("\n");
+            }
+            genresBuilder.deleteCharAt(genresBuilder.length() - 1);
+            genres = genresBuilder.toString();
+            textViewGenres.setText(genres);
+        }
+
+        Integer runtime = movieDetail.getRuntime();
+        if (runtime != null)
+            textViewRuntime.setText(runtime + " ph");
+
+        String originalLanguage = movieDetail.getOriginalLanguage();
+        if (originalLanguage != null)
+            textViewOriginalLanguage.setText(originalLanguage);
+
+        Integer budget = movieDetail.getBudget();
+        if (budget != null && budget != 0)
+            textViewBudget.setText("$" + budget);
+
+        Integer revenue = movieDetail.getRevenue();
+        if (revenue != null && revenue != 0)
+            textViewRevenue.setText("$" + revenue);
+
+        String overview = movieDetail.getOverview();
+        if (overview != null)
+            textViewOverview.setText(overview);
     }
 }

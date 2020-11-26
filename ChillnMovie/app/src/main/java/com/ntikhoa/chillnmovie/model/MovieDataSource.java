@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.paging.PageKeyedDataSource;
 
 import com.ntikhoa.chillnmovie.R;
-import com.ntikhoa.chillnmovie.service.RetrofitClient;
+import com.ntikhoa.chillnmovie.service.RetrofitTMDbClient;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -72,28 +72,28 @@ public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
 
     private void initDataSourceType(int pageKey) {
         if (category == Movie.POPULAR) {
-            dBresponseCall = RetrofitClient.getInstance()
+            dBresponseCall = RetrofitTMDbClient.getInstance()
                     .getMovieAPI()
-                    .getPopularMovie(application.getString(R.string.API_key),
-                            application.getString(R.string.lang_vietnamses),
+                    .getPopularMovie(application.getString(R.string.TMDb_API_key),
+                            application.getString(R.string.lang_vietnamese),
                             pageKey);
         } else if (category == Movie.NOW_PLAYING) {
-            dBresponseCall = RetrofitClient.getInstance()
+            dBresponseCall = RetrofitTMDbClient.getInstance()
                     .getMovieAPI()
-                    .getNowPlayingMovie(application.getString(R.string.API_key),
-                            application.getString(R.string.lang_vietnamses),
+                    .getNowPlayingMovie(application.getString(R.string.TMDb_API_key),
+                            application.getString(R.string.lang_vietnamese),
                             pageKey);
         } else if (category == Movie.UPCOMING) {
-            dBresponseCall = RetrofitClient.getInstance()
+            dBresponseCall = RetrofitTMDbClient.getInstance()
                     .getMovieAPI()
-                    .getUpcomingMovie(application.getString(R.string.API_key),
-                            application.getString(R.string.lang_vietnamses),
+                    .getUpcomingMovie(application.getString(R.string.TMDb_API_key),
+                            application.getString(R.string.lang_vietnamese),
                             pageKey);
         } else if (category == Movie.TOP_RATED) {
-            dBresponseCall = RetrofitClient.getInstance()
+            dBresponseCall = RetrofitTMDbClient.getInstance()
                     .getMovieAPI()
-                    .getTopRatedMovie(application.getString(R.string.API_key),
-                            application.getString(R.string.lang_vietnamses),
+                    .getTopRatedMovie(application.getString(R.string.TMDb_API_key),
+                            application.getString(R.string.lang_vietnamese),
                             pageKey);
         }
     }

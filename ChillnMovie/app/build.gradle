@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -33,6 +34,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.3'
+    implementation 'com.google.firebase:firebase-core:18.0.0'
+    implementation 'com.google.firebase:firebase-firestore:22.0.0'
+
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -55,4 +59,6 @@ dependencies {
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
     //round image view
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    //expandable text view
+    implementation 'com.ms-square:expandableTextView:0.1.4'
 }

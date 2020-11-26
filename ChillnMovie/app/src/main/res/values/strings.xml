@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">ChillnMovie</string>
-    <string name="API_key">e1ccb0be53deb720478324dfc600cdfa</string>
-    <string name="lang_vietnamses">vi-VN</string>
+    <string name="TMDb_API_key">e1ccb0be53deb720478324dfc600cdfa</string>
+    <string name="IMDb_API_key">k_8ewo9eed</string>
+    <string name="lang_vietnamese">vi-VN</string>
 
     <string name="more"><u><i>More</i></u></string>
-    <string name="popular_movie">Popular Movie</string>
-    <string name="upcoming_movie">Upcoming Movie</string>
+    <string name="popular_movie">Popular</string>
+    <string name="upcoming_movie">Upcoming</string>
     <string name="now_playing">Now Playing</string>
     <string name="top_rated">Top Rated</string>
     <string name="trending">Trending</string>
@@ -16,4 +17,16 @@
     <string name="rate_button">rate button</string>
     <string name="add_to_favorite_list_button">add to favorite list button</string>
     <string name="top_billed_caster">Top Billed Caster</string>
+    <string name="add_to_database">add to database</string>
+    <string name="title">Title:</string>
+    <string name="original_title">Original Title:</string>
+    <string name="release_date">Release Date:</string>
+    <string name="genres">Genres:</string>
+    <string name="runtime">Runtime:</string>
+    <string name="status">Status:</string>
+    <string name="original_language">Original Language:</string>
+    <string name="budget">Budget:</string>
+    <string name="revenue">Revenue:</string>
+    <string name="overview">Overview:</string>
+    <string name="default_description">-</string>
 </resources>

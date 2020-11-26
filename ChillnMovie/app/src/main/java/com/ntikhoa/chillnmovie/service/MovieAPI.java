@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import com.ntikhoa.chillnmovie.model.CreditDBresponse;
 import com.ntikhoa.chillnmovie.model.MovieDBresponse;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
+import com.ntikhoa.chillnmovie.model.VideoDBResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -50,6 +51,11 @@ public interface MovieAPI {
 
     @GET("movie/{movie_id}/credits")
     Call<CreditDBresponse> getCaster(
+            @Path("movie_id") Integer movieId,
+            @Query("api_key") String key);
+
+    @GET("movie/{movie_id}/videos")
+    Call<VideoDBResponse> getVideo(
             @Path("movie_id") Integer movieId,
             @Query("api_key") String key);
 }

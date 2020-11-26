@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparentBlack80"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/labelTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/default_description"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textViewOriginalLanguage"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Fate/stay night: Heaven's Feel III. Spring Song (2020)" />
+
+
+    <TextView
+        android:id="@+id/labelOriginalTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/original_title"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
+
+    <TextView
+        android:id="@+id/textViewOriginalTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/default_description"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textViewOriginalLanguage"
+        app:layout_constraintTop_toTopOf="@+id/labelOriginalTitle"
+        tools:text="劇場版「Fate/stay night [Heaven’s Feel]」Ⅲ.spring song" />
+
+    <TextView
+        android:id="@+id/labelStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/status"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewOriginalTitle" />
+
+    <TextView
+        android:id="@+id/textViewStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/default_description"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="@+id/textViewOriginalLanguage"
+        app:layout_constraintTop_toTopOf="@+id/labelStatus"
+        tools:text="Released" />
+
+    <TextView
+        android:id="@+id/labelReleaseDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/release_date"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewStatus" />
+
+    <TextView
+        android:id="@+id/textViewReleaseDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/default_description"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="@+id/textViewOriginalLanguage"
+        app:layout_constraintTop_toTopOf="@+id/labelReleaseDate"
+        tools:text="11/18/2020" />
+
+    <TextView
+        android:id="@+id/labelGenres"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/genres"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewReleaseDate" />
+
+    <TextView
+        android:id="@+id/textViewGenres"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/default_description"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="@+id/textViewOriginalLanguage"
+        app:layout_constraintTop_toTopOf="@+id/labelGenres"
+        tools:text="Animation" />
+
+    <TextView
+        android:id="@+id/labelRuntime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/runtime"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewGenres" />
+
+    <TextView
+        android:id="@+id/textViewRuntime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/default_description"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="@+id/textViewOriginalLanguage"
+        app:layout_constraintTop_toTopOf="@+id/labelRuntime"
+        tools:text="2h" />
+
+    <TextView
+        android:id="@+id/labelOriginalLanguage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/original_language"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewRuntime" />
+
+    <TextView
+        android:id="@+id/textViewOriginalLanguage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="@string/default_description"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toEndOf="@+id/labelOriginalLanguage"
+        app:layout_constraintTop_toTopOf="@+id/labelOriginalLanguage"
+        tools:text="Japanese" />
+
+    <TextView
+        android:id="@+id/labelBudget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/budget"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewOriginalLanguage" />
+
+    <TextView
+        android:id="@+id/textViewBudget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/default_description"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="@+id/textViewOriginalLanguage"
+        app:layout_constraintTop_toTopOf="@+id/labelBudget"
+        tools:text="$50000000" />
+
+    <TextView
+        android:id="@+id/labelRevenue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/revenue"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewBudget" />
+
+    <TextView
+        android:id="@+id/textViewRevenue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/default_description"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="@+id/textViewOriginalLanguage"
+        app:layout_constraintTop_toTopOf="@+id/labelRevenue"
+        tools:text="$15,540,379.00" />
+
+    <TextView
+        android:id="@+id/labelOverview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/overview"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewRevenue" />
+
+    <TextView
+        android:id="@+id/textViewOverview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="@string/default_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelOverview"
+        tools:text="As Sakura drowns in the murky darkness of the sins she has committed, Shirō's vow to protect her at all costs leads him into a raging battle to put an end to the Holy Grail War. Will Shirō's wish reach Sakura even as he challenges fate itself in a desperate battle against the rising tide?" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

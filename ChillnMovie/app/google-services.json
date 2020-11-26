@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "547980628908",
+    "firebase_url": "https://chillnmovie-8053b.firebaseio.com",
+    "project_id": "chillnmovie-8053b",
+    "storage_bucket": "chillnmovie-8053b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:547980628908:android:e9c59a024b94d9faaee009",
+        "android_client_info": {
+          "package_name": "com.ntikhoa.chillnmovie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "547980628908-g8h0ltm2fj9br8v737e8meishi5hcglu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBT_G41gErH9_O5QoUDZ451oe5wcyIlmRM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "547980628908-g8h0ltm2fj9br8v737e8meishi5hcglu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

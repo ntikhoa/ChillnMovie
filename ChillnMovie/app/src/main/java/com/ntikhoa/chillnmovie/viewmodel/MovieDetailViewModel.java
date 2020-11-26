@@ -28,4 +28,8 @@ public class MovieDetailViewModel extends AndroidViewModel {
     public MutableLiveData<List<Caster>> getMLDcaster(Integer id) {
         return repository.getMLDcaster(id);
     }
+
+    public void addToDatabase(MovieDetail movieDetail) {
+        repository.addToFirestore(movieDetail);
+    }
 }
