@@ -29,4 +29,34 @@
     <string name="revenue">Revenue:</string>
     <string name="overview">Overview:</string>
     <string name="default_description">-</string>
+
+    <string name="minute">Minute</string>
+    <string name="yyyy_mm_dd">YYYY-MM-DD</string>
+    <string name="released">E.g: Released</string>
+    <string name="usd">USD</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="edit_genres">Edit Genres</string>
+
+    <string-array name="genres">
+        <item>Phim Hành Động</item>
+        <item>Phim Phiêu Lưu</item>
+        <item>Phim Hoạt Hình</item>
+        <item>Phim Hài</item>
+        <item>Phim Hình Sự</item>
+        <item>Phim Tài Liệu</item>
+        <item>Phim Chính Kịch</item>
+        <item>Phim Gia Đình</item>
+        <item>Phim Giả Tượng</item>
+        <item>Phim Lịch Sử</item>
+        <item>Phim Kinh Dị</item>
+        <item>Phim Nhạc</item>
+        <item>Phim Bí Ẩn</item>
+        <item>Phim Lãng Mạn</item>
+        <item>Phim Khoa Học Viễn Tưởng</item>
+        <item>Chương Trình Truyền Hình</item>
+        <item>Phim Gây Cấn</item>
+        <item>Phim Chiến Tranh</item>
+        <item>Phim Miền Tây</item>
+    </string-array>
 </resources>

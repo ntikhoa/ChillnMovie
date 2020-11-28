@@ -71,6 +71,14 @@ public class MovieDetail {
 
     private String trailer_key;
 
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getBackdropPath() {
         return backdropPath;
     }
@@ -91,7 +99,6 @@ public class MovieDetail {
         return genres;
     }
 
-    @Exclude
     public Integer getId() {
         return id;
     }
@@ -154,6 +161,38 @@ public class MovieDetail {
 
     public void setTrailer_key(String trailer_key) {
         this.trailer_key = trailer_key;
+    }
+
+    public void setBudget(Integer budget) {
+        this.budget = budget;
+    }
+
+    public void setOriginalLanguage(String originalLanguage) {
+        this.originalLanguage = originalLanguage;
+    }
+
+    public void setOriginalTitle(String originalTitle) {
+        this.originalTitle = originalTitle;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public void setRevenue(Integer revenue) {
+        this.revenue = revenue;
+    }
+
+    public void setRuntime(Integer runtime) {
+        this.runtime = runtime;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
 

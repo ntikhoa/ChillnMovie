@@ -17,4 +17,5 @@
     <color name="colorShimmerHighlight">#C3C3C3</color>
     <color name="transparentBlack80">#80000000</color>
     <color name="transparentBlack50">#50000000</color>
+    <color name="transparentBlackA0">#A0000000</color>
 </resources>

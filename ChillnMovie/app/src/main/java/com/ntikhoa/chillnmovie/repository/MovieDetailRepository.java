@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.model.Caster;
@@ -45,7 +46,7 @@ public class MovieDetailRepository {
         db = FirebaseFirestore.getInstance();
     }
 
-    public MutableLiveData<MovieDetail> getMLDmovieDetail(Integer id) {
+    private MutableLiveData<MovieDetail> getMovieDetailFromTMDb(Integer id) {
         getVideo(id);
 
         RetrofitTMDbClient.getInstance()
@@ -66,6 +67,30 @@ public class MovieDetailRepository {
                     @Override
                     public void onFailure(Call<MovieDetail> call, Throwable t) {
                         showMessage(t.getMessage());
+                    }
+                });
+        return MLDmovieDetail;
+    }
+
+    public MutableLiveData<MovieDetail> getMLDmovieDetail(Integer id) {
+        db.collection(CollectionName.MOVIE_DETAIL)
+                .document(String.valueOf(id))
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            MovieDetail movieDetail = documentSnapshot.toObject(MovieDetail.class);
+                            MLDmovieDetail.postValue(movieDetail);
+                        } else {
+                            MLDmovieDetail = getMovieDetailFromTMDb(id);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showMessage(e.getMessage());
                     }
                 });
         return MLDmovieDetail;
@@ -141,7 +166,6 @@ public class MovieDetailRepository {
     public void addToFirestore(MovieDetail movieDetail) {
         if (movieDetail != null) {
             int id = movieDetail.getId();
-
             db.collection(CollectionName.MOVIE_DETAIL)
                     .document(String.valueOf(id))
                     .set(movieDetail)
@@ -164,17 +188,16 @@ public class MovieDetailRepository {
                 .show();
     }
 
-    OnSuccessListener<Void> onSuccessListener = new OnSuccessListener<Void>() {
+    private final OnSuccessListener<Void> onSuccessListener = new OnSuccessListener<Void>() {
         @Override
         public void onSuccess(Void aVoid) {
-            Log.d(MovieDetailActivity.TAG, "addToFireStore: success");
+            Toast.makeText(application.getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
         }
     };
-    OnFailureListener onFailureListener = new OnFailureListener() {
+    private final OnFailureListener onFailureListener = new OnFailureListener() {
         @Override
         public void onFailure(@NonNull Exception e) {
             Log.d(MovieDetailActivity.TAG, "addToFireStore: " + e.getMessage());
-
         }
     };
 }

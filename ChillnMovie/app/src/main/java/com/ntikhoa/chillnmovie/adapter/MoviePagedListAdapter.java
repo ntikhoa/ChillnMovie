@@ -2,7 +2,6 @@ package com.ntikhoa.chillnmovie.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +75,7 @@ public class MoviePagedListAdapter extends PagedListAdapter<Movie, MoviePagedLis
         public MovieViewHolder(@NonNull View itemView) {
             super(itemView);
             imageViewBackdrop = itemView.findViewById(R.id.imageViewBackdrop);
-            textViewTitle = itemView.findViewById(R.id.textViewTitle);
+            textViewTitle = itemView.findViewById(R.id.editTextTitle);
         }
     }
 }

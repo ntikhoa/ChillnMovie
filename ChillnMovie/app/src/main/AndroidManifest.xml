@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChillnMovie"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.MovieDetailActivity"></activity>
+        <activity android:name=".view.EditMovieActivity"></activity>
+        <activity android:name=".view.MovieDetailActivity"/>
         <activity android:name=".view.MovieActivity" />
         <activity android:name=".view.MainActivity">
             <intent-filter>

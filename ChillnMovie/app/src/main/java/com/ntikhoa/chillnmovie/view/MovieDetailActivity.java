@@ -2,6 +2,7 @@ package com.ntikhoa.chillnmovie.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,6 +30,7 @@ import com.ntikhoa.chillnmovie.viewmodel.MovieDetailViewModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class MovieDetailActivity extends AppCompatActivity {
@@ -59,10 +61,18 @@ public class MovieDetailActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.addToDatabase(movieDetail);
+                getSupportFragmentManager().popBackStack();
+                EditorMenuFragment editorMenuFragment = new EditorMenuFragment();
+                editorMenuFragment.setMovieDetail(movieDetail);
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.add(R.id.fragmentContainer, editorMenuFragment);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.addToBackStack(null);
+                ft.commit();
             }
         });
     }
+
 
     private void initComp() {
         viewModel = new ViewModelProvider(MovieDetailActivity.this,
@@ -77,11 +87,12 @@ public class MovieDetailActivity extends AppCompatActivity {
         casterAdapter = new CasterAdapter(this);
         recyclerViewCaster.setAdapter(casterAdapter);
 
-        textViewTitle = findViewById(R.id.textViewTitle);
+        textViewTitle = findViewById(R.id.editTextTitle);
     }
 
     private void loadData() {
         id = getIntent().getIntExtra(EXTRA_ID, -1);
+        movieDetail = viewModel.getMLDmovieDetail(id).getValue();
         viewModel.getMLDmovieDetail(id).observe(this, new Observer<MovieDetail>() {
             @Override
             public void onChanged(MovieDetail movieDetail) {
@@ -91,7 +102,6 @@ public class MovieDetailActivity extends AppCompatActivity {
                 setTextInfo(movieDetail);
             }
         });
-
         viewModel.getMLDcaster(id).observe(this, new Observer<List<Caster>>() {
             @Override
             public void onChanged(List<Caster> casters) {
@@ -143,32 +153,30 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     private void setTextInfo(MovieDetail movieDetail) {
         View rootView = findViewById(R.id.layout_description);
-        TextView textViewTitle = rootView.findViewById(R.id.textViewTitle);
-        TextView textViewOriginalTitle = rootView.findViewById(R.id.textViewOriginalTitle);
-        TextView textViewStatus = rootView.findViewById(R.id.textViewStatus);
-        TextView textViewReleaseDate = rootView.findViewById(R.id.textViewReleaseDate);
-        TextView textViewGenres = rootView.findViewById(R.id.textViewGenres);
-        TextView textViewRuntime = rootView.findViewById(R.id.textViewRuntime);
-        TextView textViewOriginalLanguage = rootView.findViewById(R.id.textViewOriginalLanguage);
-        TextView textViewBudget = rootView.findViewById(R.id.textViewBudget);
-        TextView textViewRevenue = rootView.findViewById(R.id.textViewRevenue);
-        TextView textViewOverview = rootView.findViewById(R.id.textViewOverview);
+        TextView textViewTitle = rootView.findViewById(R.id.editTextTitle);
+        TextView textViewOriginalTitle = rootView.findViewById(R.id.editTextOriginalTitle);
+        TextView textViewStatus = rootView.findViewById(R.id.editTextStatus);
+        TextView textViewReleaseDate = rootView.findViewById(R.id.editTextReleaseDate);
+        TextView textViewGenres = rootView.findViewById(R.id.editTextGenres);
+        TextView textViewRuntime = rootView.findViewById(R.id.editTextRuntime);
+        TextView textViewOriginalLanguage = rootView.findViewById(R.id.editTextOriginalLanguage);
+        TextView textViewBudget = rootView.findViewById(R.id.editTextBudget);
+        TextView textViewRevenue = rootView.findViewById(R.id.editTextRevenue);
+        TextView textViewOverview = rootView.findViewById(R.id.editTextOverview);
 
         String title = movieDetail.getTitle();
-        if (title != null)
-            textViewTitle.setText(title);
+        setDescription(textViewTitle, title);
 
         String originalTitle = movieDetail.getOriginalTitle();
-        if (originalTitle != null)
-            textViewOriginalTitle.setText(originalTitle);
+        setDescription(textViewOriginalTitle, originalTitle);
+
 
         String status = movieDetail.getStatus();
-        if (status != null)
-            textViewStatus.setText(status);
+        setDescription(textViewStatus, status);
+
 
         String releaseDate = movieDetail.getReleaseDate();
-        if (releaseDate != null)
-            textViewReleaseDate.setText(releaseDate);
+        setDescription(textViewReleaseDate, releaseDate);
 
         String genres;
         StringBuilder genresBuilder = new StringBuilder();
@@ -184,23 +192,36 @@ public class MovieDetailActivity extends AppCompatActivity {
         }
 
         Integer runtime = movieDetail.getRuntime();
-        if (runtime != null)
+        if (runtime != null && runtime != 0)
             textViewRuntime.setText(runtime + " ph");
+        else textViewRuntime.setText("-");
 
         String originalLanguage = movieDetail.getOriginalLanguage();
-        if (originalLanguage != null)
-            textViewOriginalLanguage.setText(originalLanguage);
+        setDescription(textViewOriginalLanguage, originalLanguage);
 
         Integer budget = movieDetail.getBudget();
-        if (budget != null && budget != 0)
-            textViewBudget.setText("$" + budget);
+        if (budget != null && budget != 0) {
+            DecimalFormat formatter = new DecimalFormat("#,###");
+            String budgetFormatted = "$";
+            budgetFormatted += formatter.format(budget);
+            textViewBudget.setText(budgetFormatted);
+        } else textViewBudget.setText("-");
 
         Integer revenue = movieDetail.getRevenue();
-        if (revenue != null && revenue != 0)
-            textViewRevenue.setText("$" + revenue);
+        if (revenue != null && revenue != 0) {
+            DecimalFormat formatter = new DecimalFormat("#,###");
+            String revenueFormatted = "$";
+            revenueFormatted += formatter.format(revenue);
+            textViewRevenue.setText(revenueFormatted);
+        } else textViewRevenue.setText("-");
 
         String overview = movieDetail.getOverview();
-        if (overview != null)
-            textViewOverview.setText(overview);
+        setDescription(textViewOverview, overview);
+    }
+
+    private void setDescription(TextView textView, String data) {
+        if (data != null && !data.equals(""))
+            textView.setText(data);
+        else textView.setText(getString(R.string.default_description));
     }
 }
