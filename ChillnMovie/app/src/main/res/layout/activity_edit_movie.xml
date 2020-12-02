@@ -102,14 +102,14 @@
             android:id="@+id/layoutOriginalLanguage"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
-            android:layout_marginTop="32dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:hint="@string/original_language"
             app:hintTextAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintEnd_toStartOf="@id/layoutRuntime"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewGenres">
+            app:layout_constraintTop_toBottomOf="@+id/layoutTrailer">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextOriginalLanguage"
@@ -142,7 +142,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <TextView
             android:id="@+id/textViewGenres"
             android:layout_width="0dp"
@@ -159,8 +158,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="*Require"
             android:layout_marginStart="16dp"
+            android:text="*Require"
             android:textColor="@color/colorOnPrimary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewGenres" />
@@ -178,6 +177,47 @@
             app:strokeColor="@color/white"
             app:strokeWidth="2dp" />
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutTrailer"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:hint="@string/video_key"
+            app:hintTextAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="@+id/textViewGenres"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewGenres">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextTrailer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="8iUGUKLoQwE" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/btnHelp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/ic_help"
+            app:layout_constraintBottom_toBottomOf="@+id/layoutTrailer"
+            app:layout_constraintEnd_toEndOf="@+id/layoutTrailer"
+            app:layout_constraintTop_toTopOf="@id/layoutTrailer" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPlayTrailer"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/test_video"
+            app:layout_constraintBottom_toBottomOf="@+id/layoutTrailer"
+            app:layout_constraintEnd_toEndOf="@+id/btnEditGenres"
+            app:layout_constraintStart_toStartOf="@+id/btnEditGenres"
+            app:layout_constraintTop_toTopOf="@+id/layoutTrailer"
+            app:strokeColor="@color/white"
+            app:strokeWidth="2dp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutBudget"

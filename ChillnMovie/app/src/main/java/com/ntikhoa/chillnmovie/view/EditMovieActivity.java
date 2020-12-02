@@ -2,18 +2,25 @@ package com.ntikhoa.chillnmovie.view;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
@@ -41,6 +48,7 @@ public class EditMovieActivity extends AppCompatActivity {
     private EditText editTextStatus;
     private EditText editTextReleaseDate;
     private TextView textViewGenres;
+    private EditText editTextTrailer;
     private EditText editTextRuntime;
     private EditText editTextOriginalLanguage;
     private EditText editTextBudget;
@@ -50,6 +58,8 @@ public class EditMovieActivity extends AppCompatActivity {
     private MaterialButton btnSave;
     private MaterialButton btnCancel;
     private MaterialButton btnEditGenres;
+    private MaterialButton btnPlayTrailer;
+    private ImageButton btnHelp;
 
     private String[] listGenres;
     private boolean[] checkedGenres;
@@ -87,6 +97,23 @@ public class EditMovieActivity extends AppCompatActivity {
                 editGenres();
             }
         });
+
+        btnHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editTextTrailer.setError(getString(R.string.help), null);
+            }
+        });
+
+        btnPlayTrailer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String videoKey = editTextTrailer.getText().toString();
+                Intent intent = new Intent(getApplicationContext(), TrailerPlayerActivity.class);
+                intent.putExtra(TrailerPlayerActivity.EXTRA_TRAILER_KEY, videoKey);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initComponent() {
@@ -95,6 +122,7 @@ public class EditMovieActivity extends AppCompatActivity {
         editTextStatus = findViewById(R.id.editTextStatus);
         editTextReleaseDate = findViewById(R.id.editTextReleaseDate);
         textViewGenres = findViewById(R.id.textViewGenres);
+        editTextTrailer = findViewById(R.id.editTextTrailer);
         editTextRuntime = findViewById(R.id.editTextRuntime);
         editTextOriginalLanguage = findViewById(R.id.editTextOriginalLanguage);
         editTextBudget = findViewById(R.id.editTextBudget);
@@ -104,6 +132,8 @@ public class EditMovieActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btnSave);
         btnCancel = findViewById(R.id.btnCancel);
         btnEditGenres = findViewById(R.id.btnEditGenres);
+        btnPlayTrailer = findViewById(R.id.btnPlayTrailer);
+        btnHelp = findViewById(R.id.btnHelp);
 
         listGenres = getResources().getStringArray(R.array.genres);
         checkedGenres = new boolean[listGenres.length];
@@ -137,6 +167,9 @@ public class EditMovieActivity extends AppCompatActivity {
         fetchViewString(editTextReleaseDate, releaseDate);
 
         fetchGenres();
+
+        String videoKey = movieDetail.getTrailer_key();
+        fetchViewString(editTextTrailer, videoKey);
 
         Integer runtime = movieDetail.getRuntime();
         fetchViewInteger(editTextRuntime, runtime);
@@ -197,6 +230,7 @@ public class EditMovieActivity extends AppCompatActivity {
 
         String originalTitle = editTextOriginalTitle.getText().toString();
         String status = editTextStatus.getText().toString();
+        String videoKey = editTextTrailer.getText().toString();
 
 
         String releaseDate = editTextReleaseDate.getText().toString();
@@ -238,6 +272,7 @@ public class EditMovieActivity extends AppCompatActivity {
         movieDetail.setOriginalTitle(originalTitle);
         movieDetail.setStatus(status);
         movieDetail.setReleaseDate(releaseDate);
+        movieDetail.setTrailer_key(videoKey);
         movieDetail.setRuntime(runtime);
         movieDetail.setOriginalLanguage(originalLanguage);
         movieDetail.setBudget(budget);
