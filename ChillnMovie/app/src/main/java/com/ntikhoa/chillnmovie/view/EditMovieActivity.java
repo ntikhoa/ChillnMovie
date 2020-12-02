@@ -116,13 +116,10 @@ public class EditMovieActivity extends AppCompatActivity {
     private void loadData() {
         id = getIntent().getIntExtra(EXTRA_ID, -1);
         viewModel.getMLDmovieDetail(id)
-                .observe(this, new Observer<MovieDetail>() {
-                    @Override
-                    public void onChanged(MovieDetail movieDetail) {
-                        EditMovieActivity.this.movieDetail = movieDetail;
-                        setBackground(movieDetail);
-                        fetchData(movieDetail);
-                    }
+                .observe(this, movieDetail -> {
+                    EditMovieActivity.this.movieDetail = movieDetail;
+                    setBackground(movieDetail);
+                    fetchData(movieDetail);
                 });
     }
 
@@ -269,6 +266,7 @@ public class EditMovieActivity extends AppCompatActivity {
             return false;
         if (day < 1 || day > 31)
             return false;
+
         return true;
     }
 
@@ -298,46 +296,38 @@ public class EditMovieActivity extends AppCompatActivity {
     private void editGenres() {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle("Edit genres");
-        builder.setMultiChoiceItems(listGenres, checkedGenres, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int position, boolean isChecked) {
-                if (isChecked) {
-                    indexGenres.add(position);
-                } else {
-                    indexGenres.remove((Integer.valueOf(position)));
-                }
+        builder.setMultiChoiceItems(listGenres, checkedGenres, (dialog, position, isChecked) -> {
+            if (isChecked) {
+                indexGenres.add(position);
+            } else {
+                indexGenres.remove((Integer.valueOf(position)));
             }
         });
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int position) {
-                newGenres = new ArrayList<>();
-                for (int i = 0; i < indexGenres.size(); i++) {
-                    Genre genre = new Genre();
-                    genre.setId(i);
-                    genre.setName(listGenres[indexGenres.get(i)]);
-                    newGenres.add(genre);
-                }
 
-                String genres;
-                StringBuilder genresBuilder = new StringBuilder();
-                if (newGenres.size() > 0) {
-                    for (int i = 0; i < newGenres.size(); i++) {
-                        genresBuilder.append("-");
-                        genresBuilder.append(newGenres.get(i).getName());
-                        genresBuilder.append("\n");
-                    }
-                    genres = genresBuilder.toString();
-                    textViewGenres.setText(genres);
-                } else textViewGenres.setText("-");
+        builder.setPositiveButton("Ok", (dialog, position) -> {
+            newGenres = new ArrayList<>();
+            for (int i = 0; i < indexGenres.size(); i++) {
+                Genre genre = new Genre();
+                genre.setId(i);
+                genre.setName(listGenres[indexGenres.get(i)]);
+                newGenres.add(genre);
             }
+
+            String genres;
+            StringBuilder genresBuilder = new StringBuilder();
+            if (newGenres.size() > 0) {
+                for (int i = 0; i < newGenres.size(); i++) {
+                    genresBuilder.append("-");
+                    genresBuilder.append(newGenres.get(i).getName());
+                    genresBuilder.append("\n");
+                }
+                genres = genresBuilder.toString();
+                textViewGenres.setText(genres);
+            } else textViewGenres.setText("-");
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                dialogInterface.dismiss();
-            }
-        });
+
+        builder.setNegativeButton("Cancel", (dialogInterface, which) -> dialogInterface.dismiss());
+
         AlertDialog dialog = builder.create();
         dialog.show();
     }

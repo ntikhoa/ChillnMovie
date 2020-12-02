@@ -17,13 +17,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/editTextTitle"
+        android:id="@+id/textViewTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/default_description"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/editTextOriginalLanguage"
+        app:layout_constraintStart_toStartOf="@+id/textViewOriginalLanguage"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Fate/stay night: Heaven's Feel III. Spring Song (2020)" />
 
@@ -35,16 +35,16 @@
         android:text="@string/original_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
 
     <TextView
-        android:id="@+id/editTextOriginalTitle"
+        android:id="@+id/textViewOriginalTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/default_description"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/editTextOriginalLanguage"
+        app:layout_constraintStart_toStartOf="@+id/textViewOriginalLanguage"
         app:layout_constraintTop_toTopOf="@+id/labelOriginalTitle"
         tools:text="劇場版「Fate/stay night [Heaven’s Feel]」Ⅲ.spring song" />
 
@@ -55,15 +55,15 @@
         android:text="@string/status"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextOriginalTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewOriginalTitle" />
 
     <TextView
-        android:id="@+id/editTextStatus"
+        android:id="@+id/textViewStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/default_description"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintStart_toStartOf="@+id/editTextOriginalLanguage"
+        app:layout_constraintStart_toStartOf="@+id/textViewOriginalLanguage"
         app:layout_constraintTop_toTopOf="@+id/labelStatus"
         tools:text="Released" />
 
@@ -74,35 +74,35 @@
         android:text="@string/release_date"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextStatus" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewStatus" />
 
     <TextView
-        android:id="@+id/editTextReleaseDate"
+        android:id="@+id/textViewReleaseDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/default_description"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintStart_toStartOf="@+id/editTextOriginalLanguage"
+        app:layout_constraintStart_toStartOf="@+id/textViewOriginalLanguage"
         app:layout_constraintTop_toTopOf="@+id/labelReleaseDate"
         tools:text="11-18-2020" />
 
     <TextView
-        android:id="@+id/textViewGenres"
+        android:id="@+id/labelGenres"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/genres"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextReleaseDate" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewReleaseDate" />
 
     <TextView
-        android:id="@+id/editTextGenres"
+        android:id="@+id/textViewGenres"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/default_description"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintStart_toStartOf="@+id/editTextOriginalLanguage"
-        app:layout_constraintTop_toTopOf="@+id/textViewGenres"
+        app:layout_constraintStart_toStartOf="@+id/textViewOriginalLanguage"
+        app:layout_constraintTop_toTopOf="@+id/labelGenres"
         tools:text="Animation" />
 
     <TextView
@@ -112,15 +112,15 @@
         android:text="@string/runtime"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextGenres" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewGenres" />
 
     <TextView
-        android:id="@+id/editTextRuntime"
+        android:id="@+id/textViewRuntime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/default_description"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintStart_toStartOf="@+id/editTextOriginalLanguage"
+        app:layout_constraintStart_toStartOf="@+id/textViewOriginalLanguage"
         app:layout_constraintTop_toTopOf="@+id/labelRuntime"
         tools:text="2h" />
 
@@ -131,10 +131,10 @@
         android:text="@string/original_language"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextRuntime" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewRuntime" />
 
     <TextView
-        android:id="@+id/editTextOriginalLanguage"
+        android:id="@+id/textViewOriginalLanguage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -151,15 +151,15 @@
         android:text="@string/budget"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextOriginalLanguage" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewOriginalLanguage" />
 
     <TextView
-        android:id="@+id/editTextBudget"
+        android:id="@+id/textViewBudget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/default_description"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintStart_toStartOf="@+id/editTextOriginalLanguage"
+        app:layout_constraintStart_toStartOf="@+id/textViewOriginalLanguage"
         app:layout_constraintTop_toTopOf="@+id/labelBudget"
         tools:text="$50000000" />
 
@@ -170,15 +170,15 @@
         android:text="@string/revenue"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextBudget" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewBudget" />
 
     <TextView
-        android:id="@+id/editTextRevenue"
+        android:id="@+id/textViewRevenue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/default_description"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintStart_toStartOf="@+id/editTextOriginalLanguage"
+        app:layout_constraintStart_toStartOf="@+id/textViewOriginalLanguage"
         app:layout_constraintTop_toTopOf="@+id/labelRevenue"
         tools:text="$15,540,379.00" />
 
@@ -189,10 +189,10 @@
         android:text="@string/overview"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextRevenue" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewRevenue" />
 
     <TextView
-        android:id="@+id/editTextOverview"
+        android:id="@+id/textViewOverview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"

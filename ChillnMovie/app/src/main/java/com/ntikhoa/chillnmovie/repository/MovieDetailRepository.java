@@ -180,7 +180,6 @@ public class MovieDetailRepository {
         }
     }
 
-
     private void showMessage(String message) {
         Toast.makeText(application.getApplicationContext(),
                 message,

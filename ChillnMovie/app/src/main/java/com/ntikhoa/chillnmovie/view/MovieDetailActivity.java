@@ -8,18 +8,22 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerDrawable;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.adapter.CasterAdapter;
@@ -47,7 +51,34 @@ public class MovieDetailActivity extends AppCompatActivity {
     private int id;
     private MovieDetail movieDetail;
 
+    private MaterialButton btnPlayTrailer;
+
     private TextView textViewTitle;
+
+    private TextView textViewDesTitle;
+    private TextView textViewOriginalTitle;
+    private TextView textViewStatus;
+    private TextView textViewReleaseDate;
+    private TextView textViewGenres;
+    private TextView textViewRuntime;
+    private TextView textViewOriginalLanguage;
+    private TextView textViewBudget;
+    private TextView textViewRevenue;
+    private TextView textViewOverview;
+
+    private FloatingActionButton fabExpand;
+    private FloatingActionButton fabAdd;
+    private FloatingActionButton fabEdit;
+    private FloatingActionButton fabRefresh;
+
+    Animation rotateOpen;
+    Animation rotateClose;
+    Animation from_bottom_vertical;
+    Animation to_bottom_vertical;
+    Animation from_bottom_horizontal;
+    Animation to_bottom_horizontal;
+
+    boolean clicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,37 +88,143 @@ public class MovieDetailActivity extends AppCompatActivity {
         initComp();
         loadData();
 
-        FloatingActionButton btn = findViewById(R.id.fabAddToDb);
-        btn.setOnClickListener(new View.OnClickListener() {
+        fabExpand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getSupportFragmentManager().popBackStack();
-                EditorMenuFragment editorMenuFragment = new EditorMenuFragment();
-                editorMenuFragment.setMovieDetail(movieDetail);
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.add(R.id.fragmentContainer, editorMenuFragment);
-                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                ft.addToBackStack(null);
-                ft.commit();
+                clicked = !clicked;
+                setVisibility(clicked);
+                setAnimation(clicked);
+            }
+        });
+
+        fabRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recreate();
+            }
+        });
+
+        fabEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (movieDetail != null) {
+                    Intent intent = new Intent(MovieDetailActivity.this, EditMovieActivity.class);
+                    intent.putExtra(EditMovieActivity.EXTRA_ID, movieDetail.getId());
+                    startActivity(intent);
+                }
+            }
+        });
+
+        fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewModel.addToDatabase(movieDetail);
+            }
+        });
+
+        btnPlayTrailer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (movieDetail != null) {
+                    Intent intent = new Intent(getApplicationContext(), TrailerPlayerActivity.class);
+                    intent.putExtra(TrailerPlayerActivity.EXTRA_TRAILER_KEY, movieDetail.getTrailer_key());
+                    startActivity(intent);
+                }
             }
         });
     }
 
+    private void setVisibility(boolean clicked) {
+        if (clicked) {
+            fabEdit.setVisibility(View.VISIBLE);
+            fabAdd.setVisibility(View.VISIBLE);
+            fabRefresh.setVisibility(View.VISIBLE);
+            fabEdit.setClickable(true);
+            fabAdd.setClickable(true);
+            fabRefresh.setClickable(true);
+        } else {
+            fabEdit.setVisibility(View.INVISIBLE);
+            fabAdd.setVisibility(View.INVISIBLE);
+            fabRefresh.setVisibility(View.INVISIBLE);
+            fabEdit.setClickable(false);
+            fabAdd.setClickable(false);
+            fabRefresh.setClickable(false);
+        }
+    }
+
+    private void setAnimation(boolean clicked) {
+        if (clicked) {
+            fabExpand.startAnimation(rotateOpen);
+            fabEdit.startAnimation(from_bottom_vertical);
+            fabAdd.startAnimation(from_bottom_vertical);
+            fabRefresh.startAnimation(from_bottom_horizontal);
+        } else {
+            fabExpand.startAnimation(rotateClose);
+            fabEdit.startAnimation(to_bottom_vertical);
+            fabAdd.startAnimation(to_bottom_vertical);
+            fabRefresh.startAnimation(to_bottom_horizontal);
+        }
+    }
 
     private void initComp() {
+        initViewModel();
+        initRecyclerView();
+        initDescriptionView();
+        initGeneralView();
+        initEditorMenuView();
+        initAnimation();
+    }
+
+    private void initViewModel() {
         viewModel = new ViewModelProvider(MovieDetailActivity.this,
                 ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()))
                 .get(MovieDetailViewModel.class);
-        fragmentContainer = findViewById(R.id.fragmentContainer);
-        imageViewBackdrop = findViewById(R.id.imageViewBackdrop);
+    }
 
+    private void initRecyclerView() {
         recyclerViewCaster = findViewById(R.id.recyclerViewCaster);
         recyclerViewCaster.setLayoutManager(
                 new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         casterAdapter = new CasterAdapter(this);
         recyclerViewCaster.setAdapter(casterAdapter);
+    }
 
+    private void initGeneralView() {
+        fragmentContainer = findViewById(R.id.fragmentContainer);
+        imageViewBackdrop = findViewById(R.id.imageViewBackdrop);
         textViewTitle = findViewById(R.id.editTextTitle);
+        btnPlayTrailer = findViewById(R.id.btnPlayTrailer);
+    }
+
+    private void initDescriptionView() {
+        View rootView = findViewById(R.id.layout_description);
+        textViewDesTitle = rootView.findViewById(R.id.textViewTitle);
+        textViewOriginalTitle = rootView.findViewById(R.id.textViewOriginalTitle);
+        textViewStatus = rootView.findViewById(R.id.textViewStatus);
+        textViewReleaseDate = rootView.findViewById(R.id.textViewReleaseDate);
+        textViewGenres = rootView.findViewById(R.id.textViewGenres);
+        textViewRuntime = rootView.findViewById(R.id.textViewRuntime);
+        textViewOriginalLanguage = rootView.findViewById(R.id.textViewOriginalLanguage);
+        textViewBudget = rootView.findViewById(R.id.textViewBudget);
+        textViewRevenue = rootView.findViewById(R.id.textViewRevenue);
+        textViewOverview = rootView.findViewById(R.id.textViewOverview);
+    }
+
+    private void initEditorMenuView() {
+        View root = findViewById(R.id.layoutEditorMenu);
+        fabExpand = root.findViewById(R.id.fabExpand);
+        fabAdd = root.findViewById(R.id.fabAdd);
+        fabEdit = root.findViewById(R.id.fabEdit);
+        fabRefresh = root.findViewById(R.id.fabRefresh);
+    }
+
+    private void initAnimation() {
+        rotateOpen = AnimationUtils.loadAnimation(this, R.anim.rotate_open_anim);
+        rotateClose = AnimationUtils.loadAnimation(this, R.anim.rotate_close_anim);
+        from_bottom_vertical = AnimationUtils.loadAnimation(this, R.anim.from_bottom_vertical);
+        to_bottom_vertical = AnimationUtils.loadAnimation(this, R.anim.to_bottom_vertical);
+        from_bottom_horizontal = AnimationUtils.loadAnimation(this, R.anim.from_bottom_horizontal);
+        to_bottom_horizontal = AnimationUtils.loadAnimation(this, R.anim.to_bottom_horizontal);
     }
 
     private void loadData() {
@@ -102,6 +239,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 setTextInfo(movieDetail);
             }
         });
+
         viewModel.getMLDcaster(id).observe(this, new Observer<List<Caster>>() {
             @Override
             public void onChanged(List<Caster> casters) {
@@ -152,32 +290,45 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     private void setTextInfo(MovieDetail movieDetail) {
-        View rootView = findViewById(R.id.layout_description);
-        TextView textViewTitle = rootView.findViewById(R.id.editTextTitle);
-        TextView textViewOriginalTitle = rootView.findViewById(R.id.editTextOriginalTitle);
-        TextView textViewStatus = rootView.findViewById(R.id.editTextStatus);
-        TextView textViewReleaseDate = rootView.findViewById(R.id.editTextReleaseDate);
-        TextView textViewGenres = rootView.findViewById(R.id.editTextGenres);
-        TextView textViewRuntime = rootView.findViewById(R.id.editTextRuntime);
-        TextView textViewOriginalLanguage = rootView.findViewById(R.id.editTextOriginalLanguage);
-        TextView textViewBudget = rootView.findViewById(R.id.editTextBudget);
-        TextView textViewRevenue = rootView.findViewById(R.id.editTextRevenue);
-        TextView textViewOverview = rootView.findViewById(R.id.editTextOverview);
-
         String title = movieDetail.getTitle();
-        setDescription(textViewTitle, title);
+        setDescription(textViewDesTitle, title);
 
         String originalTitle = movieDetail.getOriginalTitle();
         setDescription(textViewOriginalTitle, originalTitle);
 
-
         String status = movieDetail.getStatus();
         setDescription(textViewStatus, status);
-
 
         String releaseDate = movieDetail.getReleaseDate();
         setDescription(textViewReleaseDate, releaseDate);
 
+        setGenres(textViewGenres);
+
+        Integer runtime = movieDetail.getRuntime();
+        if (runtime != null && runtime != 0)
+            textViewRuntime.setText(runtime + " ph");
+        else textViewRuntime.setText("-");
+
+        String originalLanguage = movieDetail.getOriginalLanguage();
+        setDescription(textViewOriginalLanguage, originalLanguage);
+
+        Integer budget = movieDetail.getBudget();
+        setFormattedCurrency(textViewBudget, budget);
+
+        Integer revenue = movieDetail.getRevenue();
+        setFormattedCurrency(textViewRevenue, revenue);
+
+        String overview = movieDetail.getOverview();
+        setDescription(textViewOverview, overview);
+    }
+
+    private void setDescription(TextView textView, String data) {
+        if (data != null && !data.equals(""))
+            textView.setText(data);
+        else textView.setText(getString(R.string.default_description));
+    }
+
+    private void setGenres(TextView textViewGenres) {
         String genres;
         StringBuilder genresBuilder = new StringBuilder();
         if (movieDetail.getGenres().size() > 0) {
@@ -190,38 +341,14 @@ public class MovieDetailActivity extends AppCompatActivity {
             genres = genresBuilder.toString();
             textViewGenres.setText(genres);
         }
-
-        Integer runtime = movieDetail.getRuntime();
-        if (runtime != null && runtime != 0)
-            textViewRuntime.setText(runtime + " ph");
-        else textViewRuntime.setText("-");
-
-        String originalLanguage = movieDetail.getOriginalLanguage();
-        setDescription(textViewOriginalLanguage, originalLanguage);
-
-        Integer budget = movieDetail.getBudget();
-        if (budget != null && budget != 0) {
-            DecimalFormat formatter = new DecimalFormat("#,###");
-            String budgetFormatted = "$";
-            budgetFormatted += formatter.format(budget);
-            textViewBudget.setText(budgetFormatted);
-        } else textViewBudget.setText("-");
-
-        Integer revenue = movieDetail.getRevenue();
-        if (revenue != null && revenue != 0) {
-            DecimalFormat formatter = new DecimalFormat("#,###");
-            String revenueFormatted = "$";
-            revenueFormatted += formatter.format(revenue);
-            textViewRevenue.setText(revenueFormatted);
-        } else textViewRevenue.setText("-");
-
-        String overview = movieDetail.getOverview();
-        setDescription(textViewOverview, overview);
     }
 
-    private void setDescription(TextView textView, String data) {
-        if (data != null && !data.equals(""))
-            textView.setText(data);
-        else textView.setText(getString(R.string.default_description));
+    private void setFormattedCurrency(TextView textViewCurrency, Integer data) {
+        if (data != null && data != 0) {
+            DecimalFormat formatter = new DecimalFormat("#,###");
+            String revenueFormatted = "$";
+            revenueFormatted += formatter.format(data);
+            textViewCurrency.setText(revenueFormatted);
+        } else textViewCurrency.setText("-");
     }
 }

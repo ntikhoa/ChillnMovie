@@ -12,10 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChillnMovie"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.EditMovieActivity"></activity>
-        <activity android:name=".view.MovieDetailActivity"/>
-        <activity android:name=".view.MovieActivity" />
-        <activity android:name=".view.MainActivity">
+        <activity android:name=".view.TrailerPlayerActivity"/>
+        <activity
+            android:name=".view.EditMovieActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.MovieDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.MovieActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

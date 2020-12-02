@@ -128,15 +128,10 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAddToDb"
+    <include
+        android:id="@+id/layoutEditorMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        android:clickable="true"
-        android:contentDescription="@string/add_to_database"
-        android:focusable="true"
-        app:backgroundTint="@color/colorOnPrimary"
-        app:srcCompat="@drawable/ic_add" />
+        layout="@layout/editor_menu_layout"
+        android:layout_gravity="bottom|end"/>
 </FrameLayout>
