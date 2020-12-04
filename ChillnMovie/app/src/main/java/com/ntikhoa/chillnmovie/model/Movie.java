@@ -10,8 +10,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Movie {
-    public static String path = "https://image.tmdb.org/t/p/w500";
+public class  Movie {
+    public static final String path = "https://image.tmdb.org/t/p/w500";
     public static final String MEDIA_TYPE = "movie";
     public static final String TIME_WINDOW = "day";
     public static final int POPULAR = 1;

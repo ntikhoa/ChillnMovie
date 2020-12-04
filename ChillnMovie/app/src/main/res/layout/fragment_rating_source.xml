@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparentBlackA0"
+    android:clickable="true"
+    android:focusable="true"
+    tools:context=".view.RatingSourceFragment">
+
+    <include
+        android:id="@+id/chillnMovie"
+        layout="@layout/rating_layout"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageChillnMovie"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/logo"
+        app:layout_constraintBottom_toBottomOf="@+id/chillnMovie"
+        app:layout_constraintStart_toEndOf="@+id/chillnMovie"
+        app:layout_constraintTop_toTopOf="@+id/chillnMovie"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <include
+        android:id="@+id/imdb"
+        layout="@layout/rating_layout"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chillnMovie" />
+
+    <ImageView
+        android:id="@+id/imageIMDb"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:padding="16dp"
+        android:src="@drawable/imdb"
+        app:layout_constraintBottom_toBottomOf="@+id/imdb"
+        app:layout_constraintEnd_toStartOf="@+id/imdb"
+        app:layout_constraintTop_toTopOf="@+id/imdb" />
+
+    <include
+        android:id="@+id/metacritic"
+        layout="@layout/rating_layout"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imdb" />
+
+    <ImageView
+        android:id="@+id/imageMetacritic"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:padding="16dp"
+        android:src="@drawable/metacritic"
+        app:layout_constraintBottom_toBottomOf="@+id/metacritic"
+        app:layout_constraintStart_toEndOf="@+id/metacritic"
+        app:layout_constraintTop_toTopOf="@+id/metacritic" />
+
+    <include
+        android:id="@+id/theMovieDb"
+        layout="@layout/rating_layout"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/metacritic" />
+
+    <ImageView
+        android:id="@+id/imageTMDb"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:padding="16dp"
+        android:src="@drawable/tmdb"
+        app:layout_constraintBottom_toBottomOf="@+id/theMovieDb"
+        app:layout_constraintEnd_toStartOf="@+id/theMovieDb"
+        app:layout_constraintTop_toTopOf="@+id/theMovieDb" />
+
+    <include
+        android:id="@+id/rottenTomatoes"
+        layout="@layout/rating_layout"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/theMovieDb" />
+
+    <ImageView
+        android:id="@+id/imageRottenTomatoes"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:padding="16dp"
+        android:src="@drawable/rotten_tomatoes"
+        app:layout_constraintBottom_toBottomOf="@+id/rottenTomatoes"
+        app:layout_constraintStart_toEndOf="@+id/rottenTomatoes"
+        app:layout_constraintTop_toTopOf="@+id/rottenTomatoes" />
+
+    <include
+        android:id="@+id/tvCom"
+        layout="@layout/rating_layout"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rottenTomatoes" />
+
+    <ImageView
+        android:id="@+id/imageTvcom"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:padding="16dp"
+        android:src="@drawable/tvcom"
+        app:layout_constraintBottom_toBottomOf="@+id/tvCom"
+        app:layout_constraintEnd_toStartOf="@+id/tvCom"
+        app:layout_constraintTop_toTopOf="@+id/tvCom" />
+
+    <include
+        android:id="@+id/filmAffinity"
+        layout="@layout/rating_layout"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCom" />
+
+    <ImageView
+        android:id="@+id/imageFilmAffinity"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:padding="16dp"
+        android:src="@drawable/film_affinity"
+        app:layout_constraintBottom_toBottomOf="@+id/filmAffinity"
+        app:layout_constraintStart_toEndOf="@+id/filmAffinity"
+        app:layout_constraintTop_toTopOf="@+id/filmAffinity" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

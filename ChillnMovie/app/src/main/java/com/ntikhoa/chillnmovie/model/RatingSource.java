@@ -1,5 +1,6 @@
 package com.ntikhoa.chillnmovie.model;
 
+import com.google.firebase.firestore.Exclude;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -10,6 +11,9 @@ public class RatingSource {
     @SerializedName("metacritic")
     @Expose
     private Integer metacritic;
+    @SerializedName("theMovieDb")
+    @Expose
+    private Double theMovieDb;
     @SerializedName("rottenTomatoes")
     @Expose
     private Integer rottenTomatoes;

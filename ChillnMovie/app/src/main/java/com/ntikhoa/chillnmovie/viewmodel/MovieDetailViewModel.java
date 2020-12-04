@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.ntikhoa.chillnmovie.model.Caster;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
+import com.ntikhoa.chillnmovie.model.RatingSource;
 import com.ntikhoa.chillnmovie.repository.MovieDetailRepository;
 
 import java.util.List;

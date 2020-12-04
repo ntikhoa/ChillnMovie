@@ -36,6 +36,8 @@ public class MovieDetailRepository {
     private MutableLiveData<RatingSource> MLDratingSource;
     private Application application;
     private String videoKey;
+
+    private RetrofitTMDbClient tmDbClient;
     private FirebaseFirestore db;
 
     public MovieDetailRepository(Application application) {
@@ -43,14 +45,15 @@ public class MovieDetailRepository {
         MLDmovieDetail = new MutableLiveData<>();
         MLDcaster = new MutableLiveData<>();
         MLDratingSource = new MutableLiveData<>();
+
         db = FirebaseFirestore.getInstance();
+        tmDbClient = RetrofitTMDbClient.getInstance();
     }
 
     private MutableLiveData<MovieDetail> getMovieDetailFromTMDb(Integer id) {
         getVideo(id);
 
-        RetrofitTMDbClient.getInstance()
-                .getMovieAPI()
+        tmDbClient.getMovieAPI()
                 .getMovieDetail(id,
                         application.getString(R.string.TMDb_API_key),
                         application.getString(R.string.lang_vietnamese))
@@ -97,8 +100,7 @@ public class MovieDetailRepository {
     }
 
     private void getVideo(Integer id) {
-        RetrofitTMDbClient.getInstance()
-                .getMovieAPI()
+        tmDbClient.getMovieAPI()
                 .getVideo(id, application.getString(R.string.TMDb_API_key))
                 .enqueue(new Callback<VideoDBResponse>() {
                     @Override
@@ -123,8 +125,7 @@ public class MovieDetailRepository {
     }
 
     public MutableLiveData<List<Caster>> getMLDcaster(Integer id) {
-        RetrofitTMDbClient.getInstance()
-                .getMovieAPI()
+        tmDbClient.getMovieAPI()
                 .getCaster(id, application.getString(R.string.TMDb_API_key))
                 .enqueue(new Callback<CreditDBresponse>() {
                     @Override
@@ -140,27 +141,6 @@ public class MovieDetailRepository {
                     }
                 });
         return MLDcaster;
-    }
-
-    public MutableLiveData<RatingSource> getMLDratingSource(String id) {
-        RetrofitIMDbClient.getInstance()
-                .getAPI()
-                .getRatingSource(application.getString(R.string.IMDb_API_key),
-                        id)
-                .enqueue(new Callback<RatingSource>() {
-                    @Override
-                    public void onResponse(Call<RatingSource> call, Response<RatingSource> response) {
-                        if (response.isSuccessful()) {
-                            MLDratingSource.postValue(response.body());
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<RatingSource> call, Throwable t) {
-                        showMessage(t.getMessage());
-                    }
-                });
-        return MLDratingSource;
     }
 
     public void addToFirestore(MovieDetail movieDetail) {

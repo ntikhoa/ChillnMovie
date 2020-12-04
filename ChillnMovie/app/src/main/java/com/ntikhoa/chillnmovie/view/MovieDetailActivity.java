@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.facebook.shimmer.Shimmer;
@@ -54,6 +56,8 @@ public class MovieDetailActivity extends AppCompatActivity {
     private MaterialButton btnPlayTrailer;
 
     private TextView textViewTitle;
+    private ProgressBar pbRating;
+    private TextView textViewRating;
 
     private TextView textViewDesTitle;
     private TextView textViewOriginalTitle;
@@ -88,6 +92,33 @@ public class MovieDetailActivity extends AppCompatActivity {
         initComp();
         loadData();
 
+        setOnClickFAB();
+
+        btnPlayTrailer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (movieDetail != null) {
+                    Intent intent = new Intent(getApplicationContext(), TrailerPlayerActivity.class);
+                    intent.putExtra(TrailerPlayerActivity.EXTRA_TRAILER_KEY, movieDetail.getTrailer_key());
+                    startActivity(intent);
+                }
+            }
+        });
+
+        pbRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RatingSourceFragment fragment = new RatingSourceFragment();
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.add(R.id.fragmentContainer, fragment);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.addToBackStack(null);
+                ft.commit();
+            }
+        });
+    }
+
+    private void setOnClickFAB() {
         fabExpand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,17 +150,6 @@ public class MovieDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 viewModel.addToDatabase(movieDetail);
-            }
-        });
-
-        btnPlayTrailer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (movieDetail != null) {
-                    Intent intent = new Intent(getApplicationContext(), TrailerPlayerActivity.class);
-                    intent.putExtra(TrailerPlayerActivity.EXTRA_TRAILER_KEY, movieDetail.getTrailer_key());
-                    startActivity(intent);
-                }
             }
         });
     }
@@ -194,6 +214,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         imageViewBackdrop = findViewById(R.id.imageViewBackdrop);
         textViewTitle = findViewById(R.id.editTextTitle);
         btnPlayTrailer = findViewById(R.id.btnPlayTrailer);
+        View root = findViewById(R.id.ratingView);
+        pbRating = root.findViewById(R.id.progressBarRating);
+        textViewRating = root.findViewById(R.id.textViewRating);
     }
 
     private void initDescriptionView() {
@@ -237,6 +260,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 setBackground(movieDetail);
                 setBackdropImage(movieDetail);
                 setTextInfo(movieDetail);
+                setRating(movieDetail);
             }
         });
 
@@ -287,6 +311,24 @@ public class MovieDetailActivity extends AppCompatActivity {
                 .placeholder(drawable)
                 .into(imageViewBackdrop);
         textViewTitle.setText(movieDetail.getTitle());
+    }
+
+    private void setRating(MovieDetail movieDetail) {
+        double rating = movieDetail.getVoteAverage();
+
+        if (rating >= 8.0d) {
+            pbRating.setProgressDrawable(ContextCompat.getDrawable(getApplicationContext() ,R.drawable.circle_green));
+        } else if (rating >= 5.0d) {
+            pbRating.setProgressDrawable(ContextCompat.getDrawable(getApplicationContext() ,R.drawable.circle_yellow));
+        } else {
+            pbRating.setProgressDrawable(ContextCompat.getDrawable(getApplicationContext() ,R.drawable.circle_red));
+        }
+        //when setProgressDrawable manually, have to add this line
+        pbRating.setProgress(1);
+        pbRating.setMax(10);
+        pbRating.setProgress((int) rating);
+        String ratingFormatted = String.format("%.1f", rating);
+        textViewRating.setText(ratingFormatted);
     }
 
     private void setTextInfo(MovieDetail movieDetail) {

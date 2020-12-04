@@ -13,6 +13,9 @@
     <color name="colorPrimaryVariantTransparent">#50F57C00</color>
     <color name="colorOnPrimary">#FFCC80</color>
 
+    <color name="colorFerrari">#FF2800</color>
+    <color name="FireBrick">#B22222</color>
+
     <color name="colorShimmerBase">#F3F3F3</color>
     <color name="colorShimmerHighlight">#C3C3C3</color>
     <color name="transparentBlack80">#80000000</color>
