@@ -1,6 +1,8 @@
 package com.ntikhoa.chillnmovie.repository;
 
 import android.app.Application;
+import android.app.ProgressDialog;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
@@ -8,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.model.RatingSource;
 import com.ntikhoa.chillnmovie.service.RetrofitIMDbClient;
+import com.ntikhoa.chillnmovie.view.MainActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,7 +42,9 @@ public class RatingSourceRepository {
 
                     @Override
                     public void onFailure(Call<RatingSource> call, Throwable t) {
+                        Log.d("RatingSourceRepository", "onFailure: ");
                         showMessage(t.getMessage());
+
                     }
                 });
         return MLDratingSource;

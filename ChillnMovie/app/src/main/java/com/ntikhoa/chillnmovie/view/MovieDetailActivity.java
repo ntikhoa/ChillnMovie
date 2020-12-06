@@ -108,12 +108,16 @@ public class MovieDetailActivity extends AppCompatActivity {
         pbRating.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RatingSourceFragment fragment = new RatingSourceFragment();
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.add(R.id.fragmentContainer, fragment);
-                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                ft.addToBackStack(null);
-                ft.commit();
+                if (movieDetail != null &&
+                        movieDetail.getImdbId()!= null &&
+                        !movieDetail.getImdbId().isEmpty()) {
+                    RatingSourceFragment fragment = new RatingSourceFragment(movieDetail.getImdbId(), movieDetail.getVoteAverage());
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    ft.add(R.id.fragmentContainer, fragment);
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                    ft.addToBackStack(null);
+                    ft.commit();
+                }
             }
         });
     }
@@ -317,11 +321,11 @@ public class MovieDetailActivity extends AppCompatActivity {
         double rating = movieDetail.getVoteAverage();
 
         if (rating >= 8.0d) {
-            pbRating.setProgressDrawable(ContextCompat.getDrawable(getApplicationContext() ,R.drawable.circle_green));
+            pbRating.setProgressDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.circle_green));
         } else if (rating >= 5.0d) {
-            pbRating.setProgressDrawable(ContextCompat.getDrawable(getApplicationContext() ,R.drawable.circle_yellow));
+            pbRating.setProgressDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.circle_yellow));
         } else {
-            pbRating.setProgressDrawable(ContextCompat.getDrawable(getApplicationContext() ,R.drawable.circle_red));
+            pbRating.setProgressDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.circle_red));
         }
         //when setProgressDrawable manually, have to add this line
         pbRating.setProgress(1);

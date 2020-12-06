@@ -7,40 +7,30 @@ import com.google.gson.annotations.SerializedName;
 public class RatingSource {
     @SerializedName("imDb")
     @Expose
-    private Double imDb;
+    private String imDb; //10
     @SerializedName("metacritic")
     @Expose
-    private Integer metacritic;
+    private String metacritic; //100
     @SerializedName("theMovieDb")
     @Expose
-    private Double theMovieDb;
+    private String theMovieDb; //10
     @SerializedName("rottenTomatoes")
     @Expose
-    private Integer rottenTomatoes;
-    @SerializedName("tV_com")
-    @Expose
-    private Double tV_com;
-    @SerializedName("filmAffinity")
-    @Expose
-    private Double filmAffinity;
+    private String rottenTomatoes; //100
 
-    public Double getImDb() {
+    public String getImDb() {
         return imDb;
     }
 
-    public Integer getMetacritic() {
+    public String getMetacritic() {
         return metacritic;
     }
 
-    public Integer getRottenTomatoes() {
+    public String getRottenTomatoes() {
         return rottenTomatoes;
     }
 
-    public Double gettV_com() {
-        return tV_com;
-    }
-
-    public Double getFilmAffinity() {
-        return filmAffinity;
+    public String getTheMovieDb() {
+        return theMovieDb;
     }
 }

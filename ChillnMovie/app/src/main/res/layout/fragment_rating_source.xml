@@ -7,15 +7,25 @@
     android:background="@color/transparentBlackA0"
     android:clickable="true"
     android:focusable="true"
+    android:padding="16dp"
     tools:context=".view.RatingSourceFragment">
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <include
         android:id="@+id/chillnMovie"
         layout="@layout/rating_layout"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/imdb"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/imageChillnMovie"
@@ -32,8 +42,8 @@
         layout="@layout/rating_layout"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chillnMovie" />
+        app:layout_constraintBottom_toTopOf="@+id/metacritic"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
         android:id="@+id/imageIMDb"
@@ -50,8 +60,9 @@
         layout="@layout/rating_layout"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imdb" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageMetacritic"
@@ -98,41 +109,5 @@
         app:layout_constraintBottom_toBottomOf="@+id/rottenTomatoes"
         app:layout_constraintStart_toEndOf="@+id/rottenTomatoes"
         app:layout_constraintTop_toTopOf="@+id/rottenTomatoes" />
-
-    <include
-        android:id="@+id/tvCom"
-        layout="@layout/rating_layout"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rottenTomatoes" />
-
-    <ImageView
-        android:id="@+id/imageTvcom"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:padding="16dp"
-        android:src="@drawable/tvcom"
-        app:layout_constraintBottom_toBottomOf="@+id/tvCom"
-        app:layout_constraintEnd_toStartOf="@+id/tvCom"
-        app:layout_constraintTop_toTopOf="@+id/tvCom" />
-
-    <include
-        android:id="@+id/filmAffinity"
-        layout="@layout/rating_layout"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCom" />
-
-    <ImageView
-        android:id="@+id/imageFilmAffinity"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:padding="16dp"
-        android:src="@drawable/film_affinity"
-        app:layout_constraintBottom_toBottomOf="@+id/filmAffinity"
-        app:layout_constraintStart_toEndOf="@+id/filmAffinity"
-        app:layout_constraintTop_toTopOf="@+id/filmAffinity" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
