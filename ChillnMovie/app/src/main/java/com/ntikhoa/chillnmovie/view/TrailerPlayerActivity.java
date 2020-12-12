@@ -21,7 +21,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 public class TrailerPlayerActivity extends AppCompatActivity {
     public static final String EXTRA_TRAILER_KEY = "trailer key";
     private static final String SAVED_START_TIME = "start time";
-    public static final String SAVED_FIRST_LOAD = "first load";
+    private static final String SAVED_FIRST_LOAD = "first load";
 
     private YouTubePlayerView trailerView;
 

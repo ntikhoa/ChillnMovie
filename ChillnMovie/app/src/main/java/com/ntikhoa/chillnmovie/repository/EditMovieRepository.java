@@ -7,22 +7,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.ntikhoa.chillnmovie.R;
-import com.ntikhoa.chillnmovie.model.Caster;
-import com.ntikhoa.chillnmovie.model.CreditDBresponse;
 import com.ntikhoa.chillnmovie.model.CollectionName;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
-import com.ntikhoa.chillnmovie.model.RatingSource;
 import com.ntikhoa.chillnmovie.model.Video;
 import com.ntikhoa.chillnmovie.model.VideoDBResponse;
-import com.ntikhoa.chillnmovie.service.RetrofitIMDbClient;
 import com.ntikhoa.chillnmovie.service.RetrofitTMDbClient;
-import com.ntikhoa.chillnmovie.view.MovieDetailActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,27 +31,31 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MovieDetailRepository {
+public class EditMovieRepository {
     private MutableLiveData<MovieDetail> MLDmovieDetail;
-    private MutableLiveData<List<Caster>> MLDcaster;
-    private MutableLiveData<RatingSource> MLDratingSource;
     private Application application;
     private String videoKey;
+
+    private final MutableLiveData<Boolean> isTrendingExist;
+    private final MutableLiveData<Boolean> isNowPlayingExist;
+    private final MutableLiveData<Boolean> isUpcomingExist;
+
 
     private RetrofitTMDbClient tmDbClient;
     private FirebaseFirestore db;
 
-    public MovieDetailRepository(Application application) {
+
+    public EditMovieRepository(Application application) {
         this.application = application;
         MLDmovieDetail = new MutableLiveData<>();
-        MLDcaster = new MutableLiveData<>();
-        MLDratingSource = new MutableLiveData<>();
+        isTrendingExist = new MutableLiveData<>();
+        isNowPlayingExist = new MutableLiveData<>();
+        isUpcomingExist = new MutableLiveData<>();
 
         db = FirebaseFirestore.getInstance();
         tmDbClient = RetrofitTMDbClient.getInstance();
     }
 
-    //repeat with EditMovieRepository
     private MutableLiveData<MovieDetail> getMovieDetailFromTMDb(Integer id) {
         getVideo(id);
 
@@ -80,7 +81,6 @@ public class MovieDetailRepository {
         return MLDmovieDetail;
     }
 
-    //repeat with EditMovieRepository
     public MutableLiveData<MovieDetail> getMLDmovieDetail(Integer id) {
         db.collection(CollectionName.MOVIE_DETAIL)
                 .document(String.valueOf(id))
@@ -105,7 +105,6 @@ public class MovieDetailRepository {
         return MLDmovieDetail;
     }
 
-    //repeat with EditMovieRepository
     private void getVideo(Integer id) {
         tmDbClient.getMovieAPI()
                 .getVideo(id, application.getString(R.string.TMDb_API_key))
@@ -131,26 +130,6 @@ public class MovieDetailRepository {
                 });
     }
 
-    public MutableLiveData<List<Caster>> getMLDcaster(Integer id) {
-        tmDbClient.getMovieAPI()
-                .getCaster(id, application.getString(R.string.TMDb_API_key))
-                .enqueue(new Callback<CreditDBresponse>() {
-                    @Override
-                    public void onResponse(Call<CreditDBresponse> call, Response<CreditDBresponse> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            MLDcaster.postValue(response.body().casters);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<CreditDBresponse> call, Throwable t) {
-                        showMessage(t.getMessage());
-                    }
-                });
-        return MLDcaster;
-    }
-
-    //repeat with EditMovieRepository
     public void addToFirestore(MovieDetail movieDetail) {
         if (movieDetail != null) {
             int id = movieDetail.getId();
@@ -168,6 +147,90 @@ public class MovieDetailRepository {
         }
     }
 
+    public void addToCategoryList(MovieDetail movieDetail, String collectionPath) {
+        if (movieDetail != null) {
+            int id = movieDetail.getId();
+            Movie movie = new Movie(movieDetail);
+            db.collection(collectionPath)
+                    .document(String.valueOf(id))
+                    .set(movie)
+                    .addOnSuccessListener(onSuccessListener)
+                    .addOnFailureListener(onFailureListener);
+            Date current = new Date();
+            String currentStr = new SimpleDateFormat("yyyy-MM-dd").format(current);
+            Map<String, Object> map = new HashMap<>();
+            map.put("updated_date", currentStr);
+            db.collection(collectionPath)
+                    .document(String.valueOf(id))
+                    .update(map)
+                    .addOnSuccessListener(onSuccessListener)
+                    .addOnFailureListener(onFailureListener);
+        }
+    }
+
+    public void removeFromCategoryList(MovieDetail movieDetail, String collectionPath) {
+        if (movieDetail != null) {
+            int id = movieDetail.getId();
+            Movie movie = new Movie(movieDetail);
+            db.collection(collectionPath)
+                    .document(String.valueOf(id))
+                    .delete();
+        }
+    }
+
+
+    public MutableLiveData<Boolean> isTrendingExist(Integer id) {
+        db.collection(CollectionName.MOVIE_TRENDING)
+                .document(String.valueOf(id))
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            isTrendingExist.postValue(documentSnapshot.exists());
+                        }
+                    }
+                });
+
+        return isTrendingExist;
+    }
+
+    public MutableLiveData<Boolean> isNowPlayingExist(Integer id) {
+        db.collection(CollectionName.MOVIE_UPCOMING)
+                .document(String.valueOf(id))
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            isNowPlayingExist.postValue(documentSnapshot.exists());
+                        }
+                    }
+                });
+
+        return isNowPlayingExist;
+    }
+
+    public MutableLiveData<Boolean> isUpcomingExist(Integer id) {
+        db.collection(CollectionName.MOVIE_NOW_PLAYING)
+                .document(String.valueOf(id))
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            isUpcomingExist.postValue(documentSnapshot.exists());
+                        }
+                    }
+                });
+
+        return isUpcomingExist;
+    }
+
+
     private void showMessage(String message) {
         Toast.makeText(application.getApplicationContext(),
                 message,
@@ -184,7 +247,7 @@ public class MovieDetailRepository {
     private final OnFailureListener onFailureListener = new OnFailureListener() {
         @Override
         public void onFailure(@NonNull Exception e) {
-            Log.d(MovieDetailActivity.TAG, "addToFireStore: " + e.getMessage());
+            Log.d("EditMovieRepository: ", "addToFireStore: " + e.getMessage());
         }
     };
 }

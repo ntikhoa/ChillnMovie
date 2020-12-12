@@ -23,11 +23,11 @@ public class RatingSourceFragment extends Fragment {
     private String imdbId;
     private Double chillnMovieRating;
 
-    public static final int UNIT_10 = 1;
-    public static final int UNIT_100 = 10;
+    private static final int UNIT_10 = 1;
+    private static final int UNIT_100 = 10;
 
-    public static final Double GREEN_RATING = 8.0d;
-    public static final Double YELLOW_RATING = 5.0d;
+    private static final Double GREEN_RATING = 8.0d;
+    private static final Double YELLOW_RATING = 5.0d;
 
     private RatingSourceViewModel viewModel;
 

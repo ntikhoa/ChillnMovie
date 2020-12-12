@@ -7,11 +7,11 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.ntikhoa.chillnmovie.model.Movie;
-import com.ntikhoa.chillnmovie.repository.FrontPageRepository;
+import com.ntikhoa.chillnmovie.repository.EditorFrontPageRepository;
 
 import java.util.List;
 
-public class FrontPageViewModel extends AndroidViewModel {
+public class EditorFrontPageViewModel extends AndroidViewModel {
 
     private final MutableLiveData<List<Movie>> MLDtrendingMovie;
     private final MutableLiveData<List<Movie>> MLDpopularMovie;
@@ -19,9 +19,9 @@ public class FrontPageViewModel extends AndroidViewModel {
     private final MutableLiveData<List<Movie>> MLDnowPlayingMovie;
     private final MutableLiveData<List<Movie>> MLDtopRatedMovie;
 
-    public FrontPageViewModel(@NonNull Application application) {
+    public EditorFrontPageViewModel(@NonNull Application application) {
         super(application);
-        FrontPageRepository repository = new FrontPageRepository(application);
+        EditorFrontPageRepository repository = new EditorFrontPageRepository(application);
         MLDtrendingMovie = repository.getMLDtrendingMovie();
         MLDpopularMovie = repository.getMLDpopularMovie();
         MLDupcomingMovie = repository.getMLDupcomingMovie();

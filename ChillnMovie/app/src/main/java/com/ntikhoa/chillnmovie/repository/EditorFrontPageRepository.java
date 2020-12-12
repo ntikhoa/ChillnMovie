@@ -17,7 +17,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FrontPageRepository {
+public class EditorFrontPageRepository {
     MutableLiveData<List<Movie>> MLDtrendingMovie;
     MutableLiveData<List<Movie>> MLDpopularMovie;
     MutableLiveData<List<Movie>> MLDupcomingMovie;
@@ -26,7 +26,7 @@ public class FrontPageRepository {
 
     Application application;
 
-    public FrontPageRepository(Application application) {
+    public EditorFrontPageRepository(Application application) {
         this.application = application;
         MLDpopularMovie = new MutableLiveData<>();
         MLDupcomingMovie = new MutableLiveData<>();

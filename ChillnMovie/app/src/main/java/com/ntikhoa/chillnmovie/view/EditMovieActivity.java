@@ -24,11 +24,15 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.model.CollectionName;
 import com.ntikhoa.chillnmovie.model.Genre;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
+import com.ntikhoa.chillnmovie.repository.EditMovieRepository;
+import com.ntikhoa.chillnmovie.viewmodel.EditMovieViewModel;
 import com.ntikhoa.chillnmovie.viewmodel.MovieDetailViewModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -38,10 +42,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class EditMovieActivity extends AppCompatActivity {
-    private static final String TAG = "EditMovieActivity";
     public static final String EXTRA_ID = "tmdb_movie_id";
 
-    private MovieDetailViewModel viewModel;
+    private EditMovieViewModel viewModel;
 
     private EditText editTextTitle;
     private EditText editTextOriginalTitle;
@@ -61,6 +64,10 @@ public class EditMovieActivity extends AppCompatActivity {
     private MaterialButton btnPlayTrailer;
     private ImageButton btnHelp;
 
+    private MaterialCheckBox checkBoxTrending;
+    private MaterialCheckBox checkBoxUpcoming;
+    private MaterialCheckBox checkBoxNowPlaying;
+
     private String[] listGenres;
     private boolean[] checkedGenres;
     private ArrayList<Integer> indexGenres = new ArrayList<>();
@@ -76,7 +83,7 @@ public class EditMovieActivity extends AppCompatActivity {
 
         initComponent();
         loadData();
-        
+
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,6 +124,20 @@ public class EditMovieActivity extends AppCompatActivity {
     }
 
     private void initComponent() {
+        initViewModel();
+        initEditText();
+        initBtn();
+        initCheckBox();
+        initGenresList();
+    }
+
+    private void initViewModel() {
+        viewModel = new ViewModelProvider(this,
+                ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()))
+                .get(EditMovieViewModel.class);
+    }
+
+    private void initEditText() {
         editTextTitle = findViewById(R.id.editTextTitle);
         editTextOriginalTitle = findViewById(R.id.editTextOriginalTitle);
         editTextStatus = findViewById(R.id.editTextStatus);
@@ -128,19 +149,25 @@ public class EditMovieActivity extends AppCompatActivity {
         editTextBudget = findViewById(R.id.editTextBudget);
         editTextRevenue = findViewById(R.id.editTextRevenue);
         editTextOverview = findViewById(R.id.editTextOverview);
+    }
 
+    private void initBtn() {
         btnSave = findViewById(R.id.btnSave);
         btnCancel = findViewById(R.id.btnCancel);
         btnEditGenres = findViewById(R.id.btnEditGenres);
         btnPlayTrailer = findViewById(R.id.btnPlayTrailer);
         btnHelp = findViewById(R.id.btnHelp);
+    }
 
+    private void initCheckBox() {
+        checkBoxTrending = findViewById(R.id.checkboxTrending);
+        checkBoxNowPlaying = findViewById(R.id.checkboxNowPlaying);
+        checkBoxUpcoming = findViewById(R.id.checkboxUpcoming);
+    }
+
+    private void initGenresList() {
         listGenres = getResources().getStringArray(R.array.genres);
         checkedGenres = new boolean[listGenres.length];
-
-        viewModel = new ViewModelProvider(this,
-                ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()))
-                .get(MovieDetailViewModel.class);
     }
 
     private void loadData() {
@@ -150,6 +177,7 @@ public class EditMovieActivity extends AppCompatActivity {
                     EditMovieActivity.this.movieDetail = movieDetail;
                     setBackground(movieDetail);
                     fetchData(movieDetail);
+                    fetchCheckBox(movieDetail.getId());
                 });
     }
 
@@ -185,6 +213,33 @@ public class EditMovieActivity extends AppCompatActivity {
 
         String overview = movieDetail.getOverview();
         fetchViewString(editTextOverview, overview);
+    }
+
+    private void fetchCheckBox(Integer id) {
+        viewModel.isTrendingExist(movieDetail.getId())
+                .observe(this, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean isExist) {
+                        checkBoxTrending.setChecked(isExist);
+                    }
+                });
+
+        viewModel.isNowPlayingExist(movieDetail.getId())
+                .observe(this, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean isExist) {
+                        checkBoxNowPlaying.setChecked(isExist);
+                    }
+                });
+
+
+        viewModel.isUpcomingExist(movieDetail.getId())
+                .observe(this, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean isExist) {
+                        checkBoxUpcoming.setChecked(isExist);
+                    }
+                });
     }
 
     private void fetchViewString(EditText editText, String data) {
@@ -280,8 +335,23 @@ public class EditMovieActivity extends AppCompatActivity {
         movieDetail.setOverview(overview);
         movieDetail.setGenres(newGenres);
 
-        viewModel.addToDatabase(movieDetail);
+        addToDatabase(movieDetail);
         finish();
+    }
+
+    private void addToDatabase(MovieDetail movieDetail) {
+        viewModel.addToDatabase(movieDetail);
+        if (checkBoxTrending.isChecked()) {
+            viewModel.addToCategoryList(movieDetail, CollectionName.MOVIE_TRENDING);
+        } else viewModel.removeFromCategoryList(movieDetail, CollectionName.MOVIE_TRENDING);
+
+        if (checkBoxUpcoming.isChecked()) {
+            viewModel.addToCategoryList(movieDetail, CollectionName.MOVIE_UPCOMING);
+        } else viewModel.removeFromCategoryList(movieDetail, CollectionName.MOVIE_UPCOMING);
+
+        if (checkBoxNowPlaying.isChecked()) {
+            viewModel.addToCategoryList(movieDetail, CollectionName.MOVIE_NOW_PLAYING);
+        } else viewModel.removeFromCategoryList(movieDetail, CollectionName.MOVIE_NOW_PLAYING);
     }
 
     private boolean validate(String date) {

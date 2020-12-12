@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class  Movie {
+public class Movie {
     public static final String path = "https://image.tmdb.org/t/p/w500";
     public static final String MEDIA_TYPE = "movie";
     public static final String TIME_WINDOW = "day";
@@ -75,6 +75,9 @@ public class  Movie {
         }
     };
 
+    public Movie() {
+    }
+
     public Movie(MovieDetail movieDetail) {
         this.title = movieDetail.getTitle();
         this.posterPath = movieDetail.getPosterPath();
@@ -97,7 +100,6 @@ public class  Movie {
         return backdropPath;
     }
 
-    @Exclude
     public Integer getId() {
         return id;
     }

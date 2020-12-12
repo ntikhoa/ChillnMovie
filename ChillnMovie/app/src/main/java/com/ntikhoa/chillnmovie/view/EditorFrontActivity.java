@@ -17,33 +17,33 @@ import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.adapter.MovieAdapter;
 import com.ntikhoa.chillnmovie.adapter.MoviePagerAdapter;
 import com.ntikhoa.chillnmovie.model.Movie;
-import com.ntikhoa.chillnmovie.viewmodel.FrontPageViewModel;
+import com.ntikhoa.chillnmovie.viewmodel.EditorFrontPageViewModel;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
-    FrontPageViewModel viewModel;
+public class EditorFrontActivity extends AppCompatActivity {
+    private EditorFrontPageViewModel viewModel;
 
-    MoviePagerAdapter trendingMovieAdapter;
-    ViewPager2 viewPagerTrendingMovie;
-    TabLayout tabLayout;
+    private MoviePagerAdapter trendingMovieAdapter;
+    private ViewPager2 viewPagerTrendingMovie;
+    private TabLayout tabLayout;
 
-    MovieAdapter popularMovieAdapter;
-    RecyclerView recyclerViewPopularMovie;
+    private MovieAdapter popularMovieAdapter;
+    private RecyclerView recyclerViewPopularMovie;
 
-    MovieAdapter nowPlayingMovieAdapter;
-    RecyclerView recyclerViewNowPlayingMovie;
+    private MovieAdapter nowPlayingMovieAdapter;
+    private RecyclerView recyclerViewNowPlayingMovie;
 
-    MovieAdapter upcomingMovieAdapter;
-    RecyclerView recyclerViewUpcomingMovie;
+    private MovieAdapter upcomingMovieAdapter;
+    private RecyclerView recyclerViewUpcomingMovie;
 
-    MovieAdapter topRatedMovieAdapter;
-    RecyclerView recyclerViewTopRatedMovie;
+    private MovieAdapter topRatedMovieAdapter;
+    private RecyclerView recyclerViewTopRatedMovie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_editor_front);
 
         initComponent();
         loadData();
@@ -52,38 +52,38 @@ public class MainActivity extends AppCompatActivity {
     private void initComponent() {
         viewModel = new ViewModelProvider(this,
                 ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()))
-                .get(FrontPageViewModel.class);
+                .get(EditorFrontPageViewModel.class);
 
         viewPagerTrendingMovie = findViewById(R.id.viewPagerTrending);
-        trendingMovieAdapter = new MoviePagerAdapter(MainActivity.this);
+        trendingMovieAdapter = new MoviePagerAdapter(EditorFrontActivity.this);
         viewPagerTrendingMovie.setAdapter(trendingMovieAdapter);
 
         tabLayout = findViewById(R.id.tabs);
         new TabLayoutMediator(tabLayout, viewPagerTrendingMovie, (tab, position) -> {
         }).attach();
 
-        recyclerViewPopularMovie = findViewById(R.id.recyclerViewPopularMovie);
+        recyclerViewPopularMovie = findViewById(R.id.recyclerViewTrendingMovie);
         recyclerViewPopularMovie.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        popularMovieAdapter = new MovieAdapter(MainActivity.this);
+        popularMovieAdapter = new MovieAdapter(EditorFrontActivity.this);
         recyclerViewPopularMovie.setAdapter(popularMovieAdapter);
 
         recyclerViewNowPlayingMovie = findViewById(R.id.recyclerViewNowPlaying);
         recyclerViewNowPlayingMovie.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        nowPlayingMovieAdapter = new MovieAdapter(MainActivity.this);
+        nowPlayingMovieAdapter = new MovieAdapter(EditorFrontActivity.this);
         recyclerViewNowPlayingMovie.setAdapter(nowPlayingMovieAdapter);
 
         recyclerViewUpcomingMovie = findViewById(R.id.recyclerViewUpcoming);
         recyclerViewUpcomingMovie.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        upcomingMovieAdapter = new MovieAdapter(MainActivity.this);
+        upcomingMovieAdapter = new MovieAdapter(EditorFrontActivity.this);
         recyclerViewUpcomingMovie.setAdapter(upcomingMovieAdapter);
 
         recyclerViewTopRatedMovie = findViewById(R.id.recyclerViewTopRated);
         recyclerViewTopRatedMovie.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        topRatedMovieAdapter = new MovieAdapter(MainActivity.this);
+        topRatedMovieAdapter = new MovieAdapter(EditorFrontActivity.this);
         recyclerViewTopRatedMovie.setAdapter(topRatedMovieAdapter);
     }
 
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
     public void onClickSeeMore(View view) {
         Intent intent = new Intent(this, MovieActivity.class);
         switch (view.getId()){
-            case R.id.textViewMorePopular:
+            case R.id.textViewMoreTrending:
                 intent.putExtra(MovieActivity.EXTRA_CATEGORY, Movie.POPULAR);
                 break;
             case R.id.textViewMoreNowPlaying:

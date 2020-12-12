@@ -15,7 +15,7 @@ import java.util.List;
 
 public class MovieDetailViewModel extends AndroidViewModel {
 
-    MovieDetailRepository repository;
+    private MovieDetailRepository repository;
 
     public MovieDetailViewModel(@NonNull Application application) {
         super(application);
@@ -33,4 +33,5 @@ public class MovieDetailViewModel extends AndroidViewModel {
     public void addToDatabase(MovieDetail movieDetail) {
         repository.addToFirestore(movieDetail);
     }
+
 }
