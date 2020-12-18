@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChillnMovie"
         android:usesCleartextTraffic="true">
+        <activity android:name=".view.SignUpActivity"></activity>
         <activity
             android:name=".view.LoginActivity"
             android:screenOrientation="portrait">

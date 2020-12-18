@@ -47,7 +47,7 @@
         <item>Phim Tài Liệu</item>
         <item>Phim Chính Kịch</item>
         <item>Phim Gia Đình</item>
-        <item>Phim Giả Tượng</item>
+        <item>Phim Giả Tưởng</item>
         <item>Phim Lịch Sử</item>
         <item>Phim Kinh Dị</item>
         <item>Phim Nhạc</item>
@@ -64,4 +64,5 @@
 
     <string name="help">youtube.com/watch?v=8iUGUKLoQwE</string>
     <string name="test_video">Test Video</string>
+    <string name="register"><u><i>Register</i></u></string>
 </resources>
