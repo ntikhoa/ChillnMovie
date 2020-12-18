@@ -79,6 +79,7 @@ public class Movie {
     }
 
     public Movie(MovieDetail movieDetail) {
+        this.id = movieDetail.getId();
         this.title = movieDetail.getTitle();
         this.posterPath = movieDetail.getPosterPath();
         this.backdropPath = movieDetail.getBackdropPath();

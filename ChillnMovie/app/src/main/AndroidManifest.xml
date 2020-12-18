@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChillnMovie"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.MenuActivity"
+        <activity
+            android:name=".view.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +21,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".view.MenuActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".view.TrailerPlayerActivity" />
         <activity
             android:name=".view.EditMovieActivity"
@@ -32,7 +36,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.EditorFrontActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
