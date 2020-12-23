@@ -12,7 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChillnMovie"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.SignUpActivity"></activity>
+        <activity android:name=".view.RateMovieActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".view.CreateUserProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.SignUpActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.LoginActivity"
             android:screenOrientation="portrait">

@@ -8,4 +8,5 @@ public class CollectionName {
     public static final String MOVIE_TRENDING = "movie_trending";
     public static final String MOVIE_CHILL_N_MOVIE_RECOMMEND = "movie_chillnmovie";
 
+    public static final String USER_PROFILE = "user_profile";
 }

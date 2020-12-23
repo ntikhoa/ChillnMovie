@@ -13,9 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.adapter.MovieAdapter;
 import com.ntikhoa.chillnmovie.model.Movie;
+import com.ntikhoa.chillnmovie.model.MovieRate;
 import com.ntikhoa.chillnmovie.viewmodel.HomePageViewModel;
 
 import java.util.List;

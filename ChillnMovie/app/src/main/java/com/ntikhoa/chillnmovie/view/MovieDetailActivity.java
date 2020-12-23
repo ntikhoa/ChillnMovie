@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -54,6 +55,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private MovieDetail movieDetail;
 
     private MaterialButton btnPlayTrailer;
+    private ImageButton btnRateMovie;
 
     private TextView textViewTitle;
     private ProgressBar pbRating;
@@ -109,7 +111,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (movieDetail != null &&
-                        movieDetail.getImdbId()!= null &&
+                        movieDetail.getImdbId() != null &&
                         !movieDetail.getImdbId().isEmpty()) {
                     RatingSourceFragment fragment = new RatingSourceFragment(movieDetail.getImdbId(), movieDetail.getVoteAverage());
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -117,6 +119,17 @@ public class MovieDetailActivity extends AppCompatActivity {
                     ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                     ft.addToBackStack(null);
                     ft.commit();
+                }
+            }
+        });
+
+        btnRateMovie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (movieDetail != null) {
+                    Intent intent = new Intent(MovieDetailActivity.this, RateMovieActivity.class);
+                    intent.putExtra(RateMovieActivity.EXTRA_ID, movieDetail.getId());
+                    startActivity(intent);
                 }
             }
         });
@@ -218,6 +231,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         imageViewBackdrop = findViewById(R.id.imageViewBackdrop);
         textViewTitle = findViewById(R.id.editTextTitle);
         btnPlayTrailer = findViewById(R.id.btnPlayTrailer);
+        btnRateMovie = findViewById(R.id.btnRate);
         View root = findViewById(R.id.ratingView);
         pbRating = root.findViewById(R.id.progressBarRating);
         textViewRating = root.findViewById(R.id.textViewRating);

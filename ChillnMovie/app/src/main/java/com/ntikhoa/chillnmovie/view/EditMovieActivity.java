@@ -2,21 +2,15 @@ package com.ntikhoa.chillnmovie.view;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -31,14 +25,11 @@ import com.ntikhoa.chillnmovie.model.CollectionName;
 import com.ntikhoa.chillnmovie.model.Genre;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
-import com.ntikhoa.chillnmovie.repository.EditMovieRepository;
 import com.ntikhoa.chillnmovie.viewmodel.EditMovieViewModel;
-import com.ntikhoa.chillnmovie.viewmodel.MovieDetailViewModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class EditMovieActivity extends AppCompatActivity {
@@ -145,15 +136,15 @@ public class EditMovieActivity extends AppCompatActivity {
         textViewGenres = findViewById(R.id.textViewGenres);
         editTextTrailer = findViewById(R.id.editTextTrailer);
         editTextRuntime = findViewById(R.id.editTextRuntime);
-        editTextOriginalLanguage = findViewById(R.id.editTextOriginalLanguage);
+        editTextOriginalLanguage = findViewById(R.id.editTextCountry);
         editTextBudget = findViewById(R.id.editTextBudget);
         editTextRevenue = findViewById(R.id.editTextRevenue);
         editTextOverview = findViewById(R.id.editTextOverview);
     }
 
     private void initBtn() {
-        btnSave = findViewById(R.id.btnSave);
-        btnCancel = findViewById(R.id.btnCancel);
+        btnSave = findViewById(R.id.btnSubmit);
+        btnCancel = findViewById(R.id.btnSkip);
         btnEditGenres = findViewById(R.id.btnEditGenres);
         btnPlayTrailer = findViewById(R.id.btnPlayTrailer);
         btnHelp = findViewById(R.id.btnHelp);

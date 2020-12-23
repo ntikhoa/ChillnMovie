@@ -8,17 +8,24 @@ public class UserAccount {
 
     public static final int ADMIN = 0;
     public static final int EDITOR = 1;
-    public static final int USER = 3;
+    public static final int USER = 2;
 
+    private String email;
     private String name;
     private String birthdate;
     private String country;
-    private String userId;
     private String avatarPath;
+    private String startDate;
     private int gender;
     private int typeAccount;
 
-    private UserAccount() {
+    public UserAccount() {
+    }
+
+    public UserAccount(String email, String startDate, int mode) {
+        this.email = email;
+        this.typeAccount = mode;
+        this.startDate = startDate;
     }
 
     public String getName() {
@@ -45,8 +52,11 @@ public class UserAccount {
         return typeAccount;
     }
 
-    @Exclude
-    public String getUserId() {
-        return userId;
+    public String getEmail() {
+        return email;
+    }
+
+    public String getStartDate() {
+        return startDate;
     }
 }
