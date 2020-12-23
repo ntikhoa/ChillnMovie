@@ -113,7 +113,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 if (movieDetail != null &&
                         movieDetail.getImdbId() != null &&
                         !movieDetail.getImdbId().isEmpty()) {
-                    RatingSourceFragment fragment = new RatingSourceFragment(movieDetail.getImdbId(), movieDetail.getVoteAverage());
+                    RatingSourceFragment fragment = new RatingSourceFragment(movieDetail.getImdbId(), movieDetail.getId());
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                     ft.add(R.id.fragmentContainer, fragment);
                     ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);

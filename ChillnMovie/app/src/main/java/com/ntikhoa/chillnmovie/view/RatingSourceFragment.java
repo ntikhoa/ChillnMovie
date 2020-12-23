@@ -16,12 +16,13 @@ import android.widget.TextView;
 
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
+import com.ntikhoa.chillnmovie.model.MovieRate;
 import com.ntikhoa.chillnmovie.model.RatingSource;
 import com.ntikhoa.chillnmovie.viewmodel.RatingSourceViewModel;
 
 public class RatingSourceFragment extends Fragment {
     private String imdbId;
-    private Double chillnMovieRating;
+    private Integer id;
 
     private static final int UNIT_10 = 1;
     private static final int UNIT_100 = 10;
@@ -36,6 +37,15 @@ public class RatingSourceFragment extends Fragment {
     private ProgressBar pbRatingChillnMovie;
     private TextView tvRatingChillnMovie;
 
+    private ProgressBar pbVisualEffect;
+    private TextView tvVisualEffect;
+
+    private ProgressBar pbPlot;
+    private TextView tvPlot;
+
+    private ProgressBar pbSoundEffect;
+    private TextView tvSoundEffect;
+
     private ProgressBar pbRatingIMDb;
     private TextView tvRatingIMDb;
 
@@ -48,9 +58,9 @@ public class RatingSourceFragment extends Fragment {
     private ProgressBar pbRatingRottenTomatoes;
     private TextView tvRatingRottenTomatoes;
 
-    public RatingSourceFragment(String imdbId, Double rating) {
+    public RatingSourceFragment(String imdbId, Integer id) {
         this.imdbId = imdbId;
-        this.chillnMovieRating = rating;
+        this.id = id;
     }
 
     @Override
@@ -73,6 +83,18 @@ public class RatingSourceFragment extends Fragment {
         pbRatingChillnMovie = chillnMovie.findViewById(R.id.progressBarRating);
         tvRatingChillnMovie = chillnMovie.findViewById(R.id.textViewRating);
 
+        View visualEffect = root.findViewById(R.id.visualEffect);
+        pbVisualEffect = visualEffect.findViewById(R.id.progressBarRating);
+        tvVisualEffect = visualEffect.findViewById(R.id.textViewRating);
+
+        View plot = root.findViewById(R.id.plot);
+        pbPlot = plot.findViewById(R.id.progressBarRating);
+        tvPlot = plot.findViewById(R.id.textViewRating);
+
+        View soundEffect = root.findViewById(R.id.soundEffect);
+        pbSoundEffect = soundEffect.findViewById(R.id.progressBarRating);
+        tvSoundEffect = soundEffect.findViewById(R.id.textViewRating);
+
         View imdb = root.findViewById(R.id.imdb);
         pbRatingIMDb = imdb.findViewById(R.id.progressBarRating);
         tvRatingIMDb = imdb.findViewById(R.id.textViewRating);
@@ -91,9 +113,16 @@ public class RatingSourceFragment extends Fragment {
     }
 
     private void loadData() {
-        setRating(chillnMovieRating, pbRatingChillnMovie, tvRatingChillnMovie, UNIT_10);
-
         progressBar.setVisibility(View.VISIBLE);
+
+        viewModel.getMLDmovieRate(id)
+                .observe(this, new Observer<MovieRate>() {
+                    @Override
+                    public void onChanged(MovieRate movieRate) {
+                        fetchChillnMovieData(movieRate);
+                    }
+                });
+
         viewModel.getMLDratingSource(imdbId)
                 .observe(this, new Observer<RatingSource>() {
                     @Override
@@ -134,6 +163,12 @@ public class RatingSourceFragment extends Fragment {
         }
     }
 
+    private void fetchChillnMovieData(MovieRate movieRate) {
+        setRating(movieRate.getVoteAverage(), pbRatingChillnMovie, tvRatingChillnMovie, UNIT_10);
+        setRating(movieRate.getVisualEffectVoteAverage(), pbVisualEffect, tvVisualEffect, UNIT_10);
+        setRating(movieRate.getPlotVoteAverage(), pbPlot, tvPlot, UNIT_10);
+        setRating(movieRate.getSoundEffectVoteAverage(), pbSoundEffect, tvSoundEffect, UNIT_10);
+    }
 
     private void setRating(double rating, ProgressBar pbRating, TextView tvRating, int UNIT) {
 

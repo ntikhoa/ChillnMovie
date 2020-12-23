@@ -15,6 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,26 +23,54 @@
     <include
         android:id="@+id/chillnMovie"
         layout="@layout/rating_layout"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:layout_constraintBottom_toTopOf="@+id/imdb"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintEnd_toEndOf="@+id/imageChillnMovie"
+        app:layout_constraintStart_toStartOf="@+id/imageChillnMovie"
+        app:layout_constraintTop_toBottomOf="@+id/imageChillnMovie" />
+
+    <include
+        android:id="@+id/visualEffect"
+        layout="@layout/rating_small_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/plot" />
+
+    <include
+        android:id="@+id/plot"
+        layout="@layout/rating_small_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/chillnMovie"
+        app:layout_constraintStart_toStartOf="@+id/chillnMovie"
+        app:layout_constraintTop_toBottomOf="@+id/chillnMovie" />
+
+    <include
+        android:id="@+id/soundEffect"
+        layout="@layout/rating_small_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/plot" />
 
     <ImageView
         android:id="@+id/imageChillnMovie"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:src="@drawable/logo"
-        app:layout_constraintBottom_toBottomOf="@+id/chillnMovie"
-        app:layout_constraintStart_toEndOf="@+id/chillnMovie"
-        app:layout_constraintTop_toTopOf="@+id/chillnMovie"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <include
         android:id="@+id/imdb"
         layout="@layout/rating_layout"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         app:layout_constraintBottom_toTopOf="@+id/metacritic"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -58,11 +87,10 @@
     <include
         android:id="@+id/metacritic"
         layout="@layout/rating_layout"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toTopOf="@+id/theMovieDb"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/imageMetacritic"
@@ -77,10 +105,10 @@
     <include
         android:id="@+id/theMovieDb"
         layout="@layout/rating_layout"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/metacritic" />
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toTopOf="@+id/rottenTomatoes"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
         android:id="@+id/imageTMDb"
@@ -95,10 +123,10 @@
     <include
         android:id="@+id/rottenTomatoes"
         layout="@layout/rating_layout"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/theMovieDb" />
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/imageRottenTomatoes"
@@ -109,5 +137,38 @@
         app:layout_constraintBottom_toBottomOf="@+id/rottenTomatoes"
         app:layout_constraintStart_toEndOf="@+id/rottenTomatoes"
         app:layout_constraintTop_toTopOf="@+id/rottenTomatoes" />
+
+    <TextView
+        android:id="@+id/labelVisualEffect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="@string/visual_effect"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/visualEffect"
+        app:layout_constraintStart_toStartOf="@+id/visualEffect"
+        app:layout_constraintTop_toBottomOf="@+id/visualEffect" />
+
+    <TextView
+        android:id="@+id/labelPlot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/plot"
+        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="@+id/plot"
+        app:layout_constraintStart_toStartOf="@+id/plot"
+        app:layout_constraintTop_toBottomOf="@+id/plot" />
+
+    <TextView
+        android:id="@+id/labelSoundEffect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sound_effect"
+        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="@+id/soundEffect"
+        app:layout_constraintStart_toStartOf="@+id/soundEffect"
+        app:layout_constraintTop_toBottomOf="@+id/soundEffect" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.ntikhoa.chillnmovie.model.MovieRate;
 import com.ntikhoa.chillnmovie.model.RatingSource;
 import com.ntikhoa.chillnmovie.repository.RatingSourceRepository;
 
@@ -19,5 +20,9 @@ public class RatingSourceViewModel extends AndroidViewModel {
 
     public MutableLiveData<RatingSource> getMLDratingSource(String id) {
         return repository.getMLDratingSource(id);
+    }
+
+    public MutableLiveData<MovieRate> getMLDmovieRate(Integer id) {
+        return repository.getMLDmovieRate(id);
     }
 }
