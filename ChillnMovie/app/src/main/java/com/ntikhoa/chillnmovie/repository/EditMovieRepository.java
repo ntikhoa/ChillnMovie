@@ -17,6 +17,7 @@ import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.model.CollectionName;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
+import com.ntikhoa.chillnmovie.model.MovieRate;
 import com.ntikhoa.chillnmovie.model.Video;
 import com.ntikhoa.chillnmovie.model.VideoDBResponse;
 import com.ntikhoa.chillnmovie.service.RetrofitTMDbClient;
@@ -41,8 +42,8 @@ public class EditMovieRepository {
     private final MutableLiveData<Boolean> isUpcomingExist;
 
 
-    private RetrofitTMDbClient tmDbClient;
-    private FirebaseFirestore db;
+    private final RetrofitTMDbClient tmDbClient;
+    private final FirebaseFirestore db;
 
 
     public EditMovieRepository(Application application) {
@@ -69,6 +70,8 @@ public class EditMovieRepository {
                         if (response.isSuccessful()) {
                             MovieDetail movieDetail = response.body();
                             movieDetail.setTrailer_key(videoKey);
+                            movieDetail.setVoteCount(1);
+                            addToMovieRate(movieDetail);
                             MLDmovieDetail.postValue(response.body());
                         }
                     }
@@ -79,6 +82,13 @@ public class EditMovieRepository {
                     }
                 });
         return MLDmovieDetail;
+    }
+
+    private void addToMovieRate(MovieDetail movieDetail) {
+        MovieRate movieRate = new MovieRate(movieDetail.getVoteAverage());
+        db.collection(CollectionName.MOVIE_RATE)
+                .document(String.valueOf(movieDetail.getId()))
+                .set(movieRate);
     }
 
     public MutableLiveData<MovieDetail> getMLDmovieDetail(Integer id) {

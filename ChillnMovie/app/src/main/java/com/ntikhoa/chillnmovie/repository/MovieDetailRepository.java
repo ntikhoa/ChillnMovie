@@ -17,6 +17,7 @@ import com.ntikhoa.chillnmovie.model.CreditDBresponse;
 import com.ntikhoa.chillnmovie.model.CollectionName;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
+import com.ntikhoa.chillnmovie.model.MovieRate;
 import com.ntikhoa.chillnmovie.model.RatingSource;
 import com.ntikhoa.chillnmovie.model.Video;
 import com.ntikhoa.chillnmovie.model.VideoDBResponse;
@@ -37,7 +38,6 @@ import retrofit2.Response;
 public class MovieDetailRepository {
     private MutableLiveData<MovieDetail> MLDmovieDetail;
     private MutableLiveData<List<Caster>> MLDcaster;
-    private MutableLiveData<RatingSource> MLDratingSource;
     private Application application;
     private String videoKey;
 
@@ -48,7 +48,6 @@ public class MovieDetailRepository {
         this.application = application;
         MLDmovieDetail = new MutableLiveData<>();
         MLDcaster = new MutableLiveData<>();
-        MLDratingSource = new MutableLiveData<>();
 
         db = FirebaseFirestore.getInstance();
         tmDbClient = RetrofitTMDbClient.getInstance();
@@ -68,6 +67,8 @@ public class MovieDetailRepository {
                         if (response.isSuccessful()) {
                             MovieDetail movieDetail = response.body();
                             movieDetail.setTrailer_key(videoKey);
+                            movieDetail.setVoteCount(1);
+                            addToMovieRate(movieDetail);
                             MLDmovieDetail.postValue(response.body());
                         }
                     }
@@ -173,6 +174,13 @@ public class MovieDetailRepository {
                 message,
                 Toast.LENGTH_LONG)
                 .show();
+    }
+
+    private void addToMovieRate(MovieDetail movieDetail) {
+        MovieRate movieRate = new MovieRate(movieDetail.getVoteAverage());
+        db.collection(CollectionName.MOVIE_RATE)
+                .document(String.valueOf(movieDetail.getId()))
+                .set(movieRate);
     }
 
     private final OnSuccessListener<Void> onSuccessListener = new OnSuccessListener<Void>() {

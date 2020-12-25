@@ -41,9 +41,6 @@ public class MovieDetail {
     @SerializedName("poster_path")
     @Expose
     private String posterPath;
-    @SerializedName("production_companies")
-    @Expose
-    private List<ProductionCompany> productionCompanies;
     @SerializedName("release_date")
     @Expose
     private String releaseDate;
@@ -70,6 +67,10 @@ public class MovieDetail {
     private Integer voteCount;
 
     private String trailer_key;
+
+    public void setVoteCount(Integer voteCount) {
+        this.voteCount = voteCount;
+    }
 
     public void setGenres(List<Genre> genres) {
         this.genres = genres;
@@ -121,10 +122,6 @@ public class MovieDetail {
 
     public Double getPopularity() {
         return popularity;
-    }
-
-    public List<ProductionCompany> getProductionCompanies() {
-        return productionCompanies;
     }
 
     public String getReleaseDate() {
@@ -193,32 +190,5 @@ public class MovieDetail {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-}
-
-class ProductionCompany {
-    @SerializedName("id")
-    @Expose
-    private Integer id;
-    @SerializedName("name")
-    @Expose
-    private String name;
-    @SerializedName("logo_path")
-    @Expose
-    private String logoPath;
-    @SerializedName("origin_country")
-    @Expose
-    private String originCountry;
-
-    public String getName() {
-        return name;
-    }
-
-    public String getLogoPath() {
-        return logoPath;
-    }
-
-    public String getOriginCountry() {
-        return originCountry;
     }
 }

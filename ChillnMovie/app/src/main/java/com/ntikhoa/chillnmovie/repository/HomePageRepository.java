@@ -15,7 +15,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.ntikhoa.chillnmovie.model.CollectionName;
 import com.ntikhoa.chillnmovie.model.Movie;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HomePageRepository {
     private Application application;
