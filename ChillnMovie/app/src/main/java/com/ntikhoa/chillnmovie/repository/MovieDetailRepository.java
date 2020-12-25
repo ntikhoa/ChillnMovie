@@ -11,6 +11,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.model.Caster;
 import com.ntikhoa.chillnmovie.model.CreditDBresponse;
@@ -19,6 +21,7 @@ import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
 import com.ntikhoa.chillnmovie.model.MovieRate;
 import com.ntikhoa.chillnmovie.model.RatingSource;
+import com.ntikhoa.chillnmovie.model.UserRate;
 import com.ntikhoa.chillnmovie.model.Video;
 import com.ntikhoa.chillnmovie.model.VideoDBResponse;
 import com.ntikhoa.chillnmovie.service.RetrofitIMDbClient;
@@ -38,6 +41,7 @@ import retrofit2.Response;
 public class MovieDetailRepository {
     private MutableLiveData<MovieDetail> MLDmovieDetail;
     private MutableLiveData<List<Caster>> MLDcaster;
+    private MutableLiveData<List<UserRate>> MLDuserRate;
     private Application application;
     private String videoKey;
 
@@ -48,6 +52,7 @@ public class MovieDetailRepository {
         this.application = application;
         MLDmovieDetail = new MutableLiveData<>();
         MLDcaster = new MutableLiveData<>();
+        MLDuserRate = new MutableLiveData<>();
 
         db = FirebaseFirestore.getInstance();
         tmDbClient = RetrofitTMDbClient.getInstance();
@@ -167,6 +172,21 @@ public class MovieDetailRepository {
                     .addOnSuccessListener(onSuccessListener)
                     .addOnFailureListener(onFailureListener);
         }
+    }
+
+    public MutableLiveData<List<UserRate>> getMLDuserRate(Integer id) {
+        db.collection(CollectionName.MOVIE_RATE)
+                .document(String.valueOf(id))
+                .collection(CollectionName.USER_RATE)
+                .orderBy("updated_date", Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        MLDuserRate.postValue(queryDocumentSnapshots.toObjects(UserRate.class));
+                    }
+                });
+        return MLDuserRate;
     }
 
     private void showMessage(String message) {

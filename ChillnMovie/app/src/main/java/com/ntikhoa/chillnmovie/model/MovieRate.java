@@ -1,5 +1,7 @@
 package com.ntikhoa.chillnmovie.model;
 
+import com.google.firebase.firestore.auth.User;
+
 public class MovieRate {
     private Integer voteCount;
     private Double voteAverage;
@@ -7,7 +9,8 @@ public class MovieRate {
     private Double visualEffectVoteAverage;
     private Double soundEffectVoteAverage;
 
-    public MovieRate() {}
+    public MovieRate() {
+    }
 
     public MovieRate(Double voteAverage) {
         this.voteCount = 1;
@@ -35,5 +38,25 @@ public class MovieRate {
 
     public Double getSoundEffectVoteAverage() {
         return soundEffectVoteAverage;
+    }
+
+    public void vote(double plotVote, double visualEffectVote, double soundEffectVote) {
+        plotVoteAverage = (plotVoteAverage * voteCount + plotVote) / (voteCount + 1);
+        visualEffectVoteAverage = (visualEffectVoteAverage * voteCount + visualEffectVote) / (voteCount + 1);
+        soundEffectVoteAverage = (soundEffectVoteAverage * voteCount + soundEffectVote) / (voteCount + 1);
+
+        voteAverage = (plotVoteAverage + visualEffectVoteAverage + soundEffectVoteAverage) / 3;
+        voteCount += 1;
+    }
+
+    public void updateVote(UserRate oldUserRate, UserRate newUserRate) {
+        double plot = newUserRate.getPlotVote() - oldUserRate.getPlotVote();
+        plotVoteAverage = (plotVoteAverage * voteCount + plot) / voteCount;
+        double visualEffect = newUserRate.getVisualEffectVote() - oldUserRate.getVisualEffectVote();
+        visualEffectVoteAverage = (visualEffectVoteAverage * voteCount + visualEffect) / voteCount;
+        double soundEffect = newUserRate.getSoundEffectVote() - oldUserRate.getSoundEffectVote();
+        soundEffectVoteAverage = (soundEffectVoteAverage * voteCount + soundEffect) / voteCount;
+
+        voteAverage = (plotVoteAverage + visualEffectVoteAverage + soundEffectVoteAverage) / 3;
     }
 }

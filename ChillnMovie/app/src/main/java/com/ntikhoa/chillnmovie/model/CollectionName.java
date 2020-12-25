@@ -9,6 +9,7 @@ public class CollectionName {
     public static final String MOVIE_CHILL_N_MOVIE_RECOMMEND = "movie_chillnmovie";
 
     public static final String MOVIE_RATE = "movie_rate";
+    public static final String USER_RATE = "user_rate";
 
     public static final String USER_PROFILE = "user_profile";
 }

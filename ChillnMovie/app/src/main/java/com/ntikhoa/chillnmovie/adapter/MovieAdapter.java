@@ -57,8 +57,6 @@ public class MovieAdapter extends ListAdapter<Movie, MovieAdapter.MovieViewHolde
                     .placeholder(drawable)
                     .into(holder.imageViewPoster);
 
-//            holder.textViewTitle.setText(movie.getTitle());
-
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -74,6 +74,8 @@ public class MovieDetailActivity extends AppCompatActivity {
                 if (movieDetail != null) {
                     Intent intent = new Intent(MovieDetailActivity.this, RateMovieActivity.class);
                     intent.putExtra(RateMovieActivity.EXTRA_ID, movieDetail.getId());
+                    intent.putExtra(RateMovieActivity.EXTRA_POSTER_PATH, movieDetail.getPosterPath());
+                    intent.putExtra(RateMovieActivity.EXTRA_TITLE, movieDetail.getTitle());
                     startActivity(intent);
                 }
             }
