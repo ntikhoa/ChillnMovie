@@ -20,57 +20,15 @@
             android:background="@color/transparentBlack80"
             android:padding="16dp">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView"
+            <FrameLayout
+                android:id="@+id/fragmentMovieHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/imageViewBackdrop"
-                    android:layout_width="match_parent"
-                    android:layout_height="280dp"
-                    android:contentDescription="@string/backdrop_image"
-                    android:scaleType="centerCrop"
-                    tools:src="@drawable/logo" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|start"
-                    android:background="@color/transparentBlack50"
-                    android:orientation="horizontal">
-
-                    <include
-                        android:id="@+id/ratingView"
-                        layout="@layout/user_rating_layout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                    <TextView
-                        android:id="@+id/editTextTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textStyle="bold"
-                        android:padding="8dp"
-                        android:layout_gravity="center_vertical"
-                        app:layout_constraintBottom_toBottomOf="@+id/cardView"
-                        app:layout_constraintStart_toStartOf="@+id/cardView"
-                        tools:text="The SpongeBob Movie: Sponge on the Run" />
-                </LinearLayout>
-
-<!--                <include-->
-<!--                    android:id="@+id/progressBar"-->
-<!--                    layout="@layout/user_rating_layout"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="bottom|start" />-->
-            </androidx.cardview.widget.CardView>
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_height="280dp"
+                tools:background="@color/white"/>
 
             <ImageButton
                 android:id="@+id/btnAddMovie"
@@ -81,7 +39,7 @@
                 android:contentDescription="@string/add_to_favorite_list_button"
                 app:layout_constraintEnd_toStartOf="@id/btnRate"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView" />
+                app:layout_constraintTop_toBottomOf="@+id/fragmentMovieHeader" />
 
             <ImageButton
                 android:id="@+id/btnRate"
@@ -133,19 +91,22 @@
                 app:layout_constraintTop_toBottomOf="@+id/labelTopBilledCaster"
                 tools:layout_height="150dp" />
 
-            <include
-                android:id="@+id/layout_description"
-                layout="@layout/movie_detail_layout"
+            <FrameLayout
+                android:id="@+id/fragmentMovieInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@id/recyclerViewCaster" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recyclerViewCaster"
+                tools:layout_height="500dp"
+                tools:background="@color/white"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <include
-        android:id="@+id/layoutEditorMenu"
-        layout="@layout/editor_menu_layout"
+    <FrameLayout
+        android:id="@+id/fragmentEditorMenu"
+        tools:background="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end" />

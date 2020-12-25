@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragmentMovieHeader"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp">
+
+    <ImageView
+        android:id="@+id/imageViewBackdrop"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:contentDescription="@string/backdrop_image"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/logo" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:background="@color/transparentBlack50"
+        android:orientation="horizontal">
+
+        <include
+            android:id="@+id/ratingView"
+            layout="@layout/user_rating_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/editTextTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/fragmentMovieHeader"
+            app:layout_constraintStart_toStartOf="@+id/fragmentMovieHeader"
+            tools:text="The SpongeBob Movie: Sponge on the Run" />
+    </LinearLayout>
+
+    <!--                <include-->
+    <!--                    android:id="@+id/progressBar"-->
+    <!--                    layout="@layout/user_rating_layout"-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_gravity="bottom|start" />-->
+</androidx.cardview.widget.CardView>

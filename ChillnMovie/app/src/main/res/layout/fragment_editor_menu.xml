@@ -30,7 +30,8 @@
         app:layout_constraintBottom_toTopOf="@+id/fabExpand"
         app:layout_constraintEnd_toEndOf="@+id/fabExpand"
         app:srcCompat="@drawable/ic_edit"
-        app:tint="@color/white" />
+        app:tint="@color/white"
+        tools:visibility="visible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
@@ -43,7 +44,8 @@
         app:layout_constraintBottom_toTopOf="@+id/fabEdit"
         app:layout_constraintEnd_toEndOf="@+id/fabEdit"
         app:srcCompat="@drawable/ic_add"
-        app:tint="@color/white" />
+        app:tint="@color/white"
+        tools:visibility="visible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabRefresh"
@@ -56,6 +58,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/fabExpand"
         app:layout_constraintEnd_toStartOf="@+id/fabExpand"
         app:srcCompat="@drawable/ic_refresh"
-        app:tint="@color/white" />
+        app:tint="@color/white"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
