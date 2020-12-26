@@ -24,9 +24,11 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.adapter.CasterAdapter;
+import com.ntikhoa.chillnmovie.adapter.UserRateAdapter;
 import com.ntikhoa.chillnmovie.model.Caster;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
+import com.ntikhoa.chillnmovie.model.UserRate;
 import com.ntikhoa.chillnmovie.viewmodel.MovieDetailViewModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -42,6 +44,9 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewCaster;
     private CasterAdapter casterAdapter;
+
+    private RecyclerView recyclerViewUserRate;
+    private UserRateAdapter userRateAdapter;
 
     private int id;
     private MovieDetail movieDetail;
@@ -100,6 +105,12 @@ public class MovieDetailActivity extends AppCompatActivity {
                 new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         casterAdapter = new CasterAdapter(this);
         recyclerViewCaster.setAdapter(casterAdapter);
+
+        recyclerViewUserRate = findViewById(R.id.recyclerViewUserRate);
+        recyclerViewUserRate.setLayoutManager(
+                new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        userRateAdapter = new UserRateAdapter();
+        recyclerViewUserRate.setAdapter(userRateAdapter);
     }
 
     private void initGeneralView() {
@@ -126,6 +137,13 @@ public class MovieDetailActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<Caster> casters) {
                 casterAdapter.submitList(casters);
+            }
+        });
+
+        viewModel.getMLDuserRate(id).observe(this, new Observer<List<UserRate>>() {
+            @Override
+            public void onChanged(List<UserRate> userRates) {
+                userRateAdapter.submitList(userRates);
             }
         });
     }
