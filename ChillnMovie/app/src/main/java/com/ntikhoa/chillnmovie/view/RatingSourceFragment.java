@@ -165,9 +165,9 @@ public class RatingSourceFragment extends Fragment {
 
     private void fetchChillnMovieData(MovieRate movieRate) {
         setRating(movieRate.getVoteAverage(), pbRatingChillnMovie, tvRatingChillnMovie, UNIT_10);
-        setRating(movieRate.getVisualEffectVoteAverage(), pbVisualEffect, tvVisualEffect, UNIT_10);
+        setRating(movieRate.getVisualVoteAverage(), pbVisualEffect, tvVisualEffect, UNIT_10);
         setRating(movieRate.getPlotVoteAverage(), pbPlot, tvPlot, UNIT_10);
-        setRating(movieRate.getSoundEffectVoteAverage(), pbSoundEffect, tvSoundEffect, UNIT_10);
+        setRating(movieRate.getAudioVoteAverage(), pbSoundEffect, tvSoundEffect, UNIT_10);
     }
 
     private void setRating(double rating, ProgressBar pbRating, TextView tvRating, int UNIT) {

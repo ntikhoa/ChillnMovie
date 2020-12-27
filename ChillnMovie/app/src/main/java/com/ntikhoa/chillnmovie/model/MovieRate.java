@@ -6,8 +6,8 @@ public class MovieRate {
     private Integer voteCount;
     private Double voteAverage;
     private Double plotVoteAverage;
-    private Double visualEffectVoteAverage;
-    private Double soundEffectVoteAverage;
+    private Double visualVoteAverage;
+    private Double audioVoteAverage;
 
     public MovieRate() {
     }
@@ -16,8 +16,8 @@ public class MovieRate {
         this.voteCount = 1;
         this.voteAverage = voteAverage;
         this.plotVoteAverage = voteAverage;
-        this.visualEffectVoteAverage = voteAverage;
-        this.soundEffectVoteAverage = voteAverage;
+        this.visualVoteAverage = voteAverage;
+        this.audioVoteAverage = voteAverage;
     }
 
     public Integer getVoteCount() {
@@ -32,20 +32,20 @@ public class MovieRate {
         return plotVoteAverage;
     }
 
-    public Double getVisualEffectVoteAverage() {
-        return visualEffectVoteAverage;
+    public Double getVisualVoteAverage() {
+        return visualVoteAverage;
     }
 
-    public Double getSoundEffectVoteAverage() {
-        return soundEffectVoteAverage;
+    public Double getAudioVoteAverage() {
+        return audioVoteAverage;
     }
 
-    public void vote(double plotVote, double visualEffectVote, double soundEffectVote) {
+    public void vote(double plotVote, double visualVote, double audioVote) {
         plotVoteAverage = (plotVoteAverage * voteCount + plotVote) / (voteCount + 1);
-        visualEffectVoteAverage = (visualEffectVoteAverage * voteCount + visualEffectVote) / (voteCount + 1);
-        soundEffectVoteAverage = (soundEffectVoteAverage * voteCount + soundEffectVote) / (voteCount + 1);
+        visualVoteAverage = (visualVoteAverage * voteCount + visualVote) / (voteCount + 1);
+        audioVoteAverage = (audioVoteAverage * voteCount + audioVote) / (voteCount + 1);
 
-        voteAverage = (plotVoteAverage + visualEffectVoteAverage + soundEffectVoteAverage) / 3;
+        voteAverage = (plotVoteAverage + visualVoteAverage + audioVoteAverage) / 3;
         voteCount += 1;
     }
 
@@ -53,10 +53,10 @@ public class MovieRate {
         double plot = newUserRate.getPlotVote() - oldUserRate.getPlotVote();
         plotVoteAverage = (plotVoteAverage * voteCount + plot) / voteCount;
         double visualEffect = newUserRate.getVisualEffectVote() - oldUserRate.getVisualEffectVote();
-        visualEffectVoteAverage = (visualEffectVoteAverage * voteCount + visualEffect) / voteCount;
+        visualVoteAverage = (visualVoteAverage * voteCount + visualEffect) / voteCount;
         double soundEffect = newUserRate.getSoundEffectVote() - oldUserRate.getSoundEffectVote();
-        soundEffectVoteAverage = (soundEffectVoteAverage * voteCount + soundEffect) / voteCount;
+        audioVoteAverage = (audioVoteAverage * voteCount + soundEffect) / voteCount;
 
-        voteAverage = (plotVoteAverage + visualEffectVoteAverage + soundEffectVoteAverage) / 3;
+        voteAverage = (plotVoteAverage + visualVoteAverage + audioVoteAverage) / 3;
     }
 }

@@ -42,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         if (mAuth.getCurrentUser() != null) {
             Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 
@@ -78,7 +79,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 viewModel.login(email, password);
                 if (mAuth.getCurrentUser() != null) {
-                    Toast.makeText(getApplicationContext(), mAuth.getCurrentUser().getUid(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                    startActivity(intent);
+                    finish();
                 } else {
                     textViewError.setVisibility(View.VISIBLE);
                 }
@@ -109,11 +112,5 @@ public class LoginActivity extends AppCompatActivity {
 
         textViewError = findViewById(R.id.textViewError);
         textViewRegister = findViewById(R.id.textViewRegister);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //mAuth.signOut();
     }
 }

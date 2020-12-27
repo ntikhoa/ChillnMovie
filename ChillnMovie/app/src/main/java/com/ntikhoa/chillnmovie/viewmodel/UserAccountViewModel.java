@@ -1,6 +1,7 @@
 package com.ntikhoa.chillnmovie.viewmodel;
 
 import android.app.Application;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -22,5 +23,9 @@ public class UserAccountViewModel extends AndroidViewModel {
 
     public MutableLiveData<Boolean> signUp(String email, String password) {
         return repository.signUp(email, password);
+    }
+
+    public void uploadAvatar(Uri imageUri, String userId) {
+        repository.uploadAvatar(imageUri, userId);
     }
 }

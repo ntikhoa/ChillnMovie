@@ -28,6 +28,10 @@ public class UserAccount {
         this.startDate = startDate;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }

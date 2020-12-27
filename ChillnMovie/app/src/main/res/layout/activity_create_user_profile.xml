@@ -65,8 +65,6 @@
         android:textColorHint="@color/transparentBlack50"
         app:boxStrokeColor="@color/colorPrimaryVariant"
         app:boxStrokeWidth="2dp"
-        app:helperText="@string/require"
-        app:helperTextTextColor="@color/colorPrimaryVariant"
         app:hintTextAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -76,8 +74,8 @@
             android:id="@+id/editTextUserName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryVariant"
-            tools:text="Ntikhoa" />
+            android:text="@string/anonymous"
+            android:textColor="@color/colorPrimaryVariant" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -131,16 +129,6 @@
             tools:text="2000-08-26" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSubmit"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/submit"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <RadioGroup
         android:id="@+id/radioGroupGender"
         android:layout_width="wrap_content"
@@ -174,10 +162,33 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:text="@string/other"
-            android:checked="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/black" />
 
     </RadioGroup>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSubmit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/submit"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btnSkip" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSkip"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/skip"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnSubmit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="@color/colorPrimaryVariant"
+        app:strokeWidth="2dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

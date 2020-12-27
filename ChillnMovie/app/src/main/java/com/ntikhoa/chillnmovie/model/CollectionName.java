@@ -12,4 +12,6 @@ public class CollectionName {
     public static final String USER_RATE = "user_rate";
 
     public static final String USER_PROFILE = "user_profile";
+
+    public static final String IMAGE_AVATAR = "avatar/";
 }
