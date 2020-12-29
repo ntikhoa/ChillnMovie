@@ -44,6 +44,8 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+        //for testing purposes
+        //viewModel.login("ntikhoa@gmail.com", "khoa123456");
     }
 
     @Override

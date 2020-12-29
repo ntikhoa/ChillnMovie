@@ -5,6 +5,7 @@ import com.google.firebase.firestore.Exclude;
 public class UserAccount {
     public static final int MALE = 0;
     public static final int FEMALE = 1;
+    public static final int OTHER = 2;
 
     public static final int ADMIN = 0;
     public static final int EDITOR = 1;
@@ -26,6 +27,22 @@ public class UserAccount {
         this.email = email;
         this.typeAccount = mode;
         this.startDate = startDate;
+    }
+
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
+    }
+
+    public void setGender(int gender) {
+        this.gender = gender;
     }
 
     public void setName(String name) {

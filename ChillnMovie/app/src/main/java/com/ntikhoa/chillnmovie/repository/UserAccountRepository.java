@@ -25,6 +25,8 @@ import com.ntikhoa.chillnmovie.model.UserAccount;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserAccountRepository {
     private final Application application;
@@ -110,6 +112,17 @@ public class UserAccountRepository {
                         showMessage(exception.getMessage());
                     }
                 });
+    }
+
+    public void createUserProfile(UserAccount userAccount, String userId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("birthdate", userAccount.getBirthdate());
+        map.put("country", userAccount.getCountry());
+        map.put("gender", userAccount.getGender());
+        map.put("name", userAccount.getName());
+        db.collection(CollectionName.USER_PROFILE)
+                .document(userId)
+                .update(map);
     }
 
     private void updateUserAccountAvatar(String userId, String downloadUrl) {

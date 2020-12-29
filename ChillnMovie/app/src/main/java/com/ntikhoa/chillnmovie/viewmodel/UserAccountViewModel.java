@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.ntikhoa.chillnmovie.model.UserAccount;
 import com.ntikhoa.chillnmovie.repository.UserAccountRepository;
 
 public class UserAccountViewModel extends AndroidViewModel {
@@ -27,5 +28,9 @@ public class UserAccountViewModel extends AndroidViewModel {
 
     public void uploadAvatar(Uri imageUri, String userId) {
         repository.uploadAvatar(imageUri, userId);
+    }
+
+    public void createUserProfile(UserAccount userAccount, String userId) {
+        repository.createUserProfile(userAccount, userId);
     }
 }

@@ -281,7 +281,7 @@ public class EditMovieActivity extends AppCompatActivity {
 
         String releaseDate = editTextReleaseDate.getText().toString();
         if (!releaseDate.isEmpty() && !validate(releaseDate)) {
-            editTextReleaseDate.setError("Unvalidated");
+            editTextReleaseDate.setError("Invalid input");
             return;
         }
 

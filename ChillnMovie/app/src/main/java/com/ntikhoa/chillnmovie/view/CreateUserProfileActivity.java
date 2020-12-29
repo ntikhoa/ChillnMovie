@@ -9,12 +9,16 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.model.UserAccount;
 import com.ntikhoa.chillnmovie.viewmodel.UserAccountViewModel;
 
 public class CreateUserProfileActivity extends AppCompatActivity {
@@ -26,12 +30,17 @@ public class CreateUserProfileActivity extends AppCompatActivity {
     private EditText editTextUserName;
     private EditText editTextCountry;
     private EditText editTextBirthdate;
+    private RadioGroup radioGroupGender;
 
     private MaterialButton btnSubmit, btnSkip;
+
+    int gender = -1;
 
     private Uri imageUri;
 
     private UserAccountViewModel viewModel;
+
+    private String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +60,9 @@ public class CreateUserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (imageUri != null) {
-                    viewModel.uploadAvatar(imageUri, auth.getUid());
-
+                    viewModel.uploadAvatar(imageUri, uid);
                 }
+                createUserProfile();
                 finish();
             }
         });
@@ -67,6 +76,67 @@ public class CreateUserProfileActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_IMAGE);
             }
         });
+
+        radioGroupGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.radioMale:
+                        gender = UserAccount.MALE;
+                        break;
+                    case R.id.radioFemale:
+                        gender = UserAccount.FEMALE;
+                        break;
+                    case R.id.radioOther:
+                        gender = UserAccount.OTHER;
+                        break;
+                }
+            }
+        });
+    }
+
+    private void createUserProfile() {
+        String name = editTextUserName.getText().toString();
+        if (name.trim().length() > 16) {
+            editTextUserName.setError("Max length 16");
+            return;
+        }
+        String country = editTextCountry.getText().toString();
+
+        String birthdate = editTextBirthdate.getText().toString();
+        if (!validate(birthdate.trim())) {
+            editTextBirthdate.setError("Invalid input");
+            return;
+        }
+
+        UserAccount userAccount = new UserAccount();
+        userAccount.setName(name);
+        userAccount.setCountry(country);
+        userAccount.setBirthdate(birthdate);
+        userAccount.setGender(gender);
+
+        viewModel.createUserProfile(userAccount, uid);
+    }
+
+    private boolean validate(String date) {
+        String[] t = date.split("-");
+        if (t.length != 3)
+            return false;
+        int year = Integer.parseInt(t[0]);
+        int month = Integer.parseInt(t[1]);
+        int day = Integer.parseInt(t[2]);
+        if (month < 10 && !t[1].contains("0"))
+            return false;
+        if (day < 10 && !t[2].contains("0"))
+            return false;
+        if (year < 1900)
+            return false;
+        if (month < 1 || month > 12)
+            return false;
+        if (day < 1 || day > 31)
+            return false;
+
+        return true;
     }
 
     @Override
@@ -94,6 +164,10 @@ public class CreateUserProfileActivity extends AppCompatActivity {
 
         btnSkip = findViewById(R.id.btnSkip);
         btnSubmit = findViewById(R.id.btnSubmit);
+
+        radioGroupGender = findViewById(R.id.radioGroupGender);
+
+        //uid = auth.getCurrentUser().getUid();
     }
 
     @Override
