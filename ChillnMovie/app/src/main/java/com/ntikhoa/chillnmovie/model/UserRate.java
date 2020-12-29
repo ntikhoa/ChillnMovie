@@ -62,16 +62,4 @@ public class UserRate {
     public void setComment(String comment) {
         this.comment = comment;
     }
-
-    public static final DiffUtil.ItemCallback<UserRate> CALLBACK = new DiffUtil.ItemCallback<UserRate>() {
-        @Override
-        public boolean areItemsTheSame(@NonNull UserRate oldItem, @NonNull UserRate newItem) {
-            return oldItem.userId == newItem.userId;
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull UserRate oldItem, @NonNull UserRate newItem) {
-            return oldItem.userId.equals(newItem.userId);
-        }
-    };
 }

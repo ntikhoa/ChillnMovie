@@ -1,24 +1,36 @@
 package com.ntikhoa.chillnmovie.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.shimmer.Shimmer;
+import com.facebook.shimmer.ShimmerDrawable;
 import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.model.Movie;
+import com.ntikhoa.chillnmovie.model.RateJoinUser;
 import com.ntikhoa.chillnmovie.model.UserRate;
+import com.squareup.picasso.Picasso;
 
 import java.text.Format;
 import java.util.Formatter;
 
-public class UserRateAdapter extends ListAdapter<UserRate, UserRateAdapter.RateViewHolder> {
-    public UserRateAdapter() {
-        super(UserRate.CALLBACK);
+public class UserRateAdapter extends ListAdapter<RateJoinUser, UserRateAdapter.RateViewHolder> {
+
+    private Context context;
+
+    public UserRateAdapter(Context context) {
+        super(RateJoinUser.CALLBACK);
+        this.context = context;
     }
 
     @NonNull
@@ -31,19 +43,38 @@ public class UserRateAdapter extends ListAdapter<UserRate, UserRateAdapter.RateV
 
     @Override
     public void onBindViewHolder(@NonNull RateViewHolder holder, int position) {
-        UserRate userRate = getItem(position);
-        if (userRate != null) {
-            holder.textViewUserName.setText("Quí Bửu");
-            holder.textViewRateDate.setText(userRate.getRateDate());
+        RateJoinUser rateJoinUser = getItem(position);
+        if (rateJoinUser != null) {
+            holder.textViewUserName.setText(rateJoinUser.getUserAccount().getName());
+            holder.textViewRateDate.setText(rateJoinUser.getUserRate().getRateDate());
 
-            Integer plot = userRate.getPlotVote();
-            Integer visualEffect = userRate.getVisualEffectVote();
-            Integer soundEffect = userRate.getSoundEffectVote();
+            Integer plot = rateJoinUser.getUserRate().getPlotVote();
+            Integer visualEffect = rateJoinUser.getUserRate().getVisualEffectVote();
+            Integer soundEffect = rateJoinUser.getUserRate().getSoundEffectVote();
             Double average = (plot + visualEffect + soundEffect) / 3d;
             String avgStr = String.format("%.1f", average);
             holder.textViewRate.setText(avgStr);
 
-            holder.textViewComment.setText(userRate.getComment());
+            holder.textViewComment.setText(rateJoinUser.getUserRate().getComment());
+
+
+
+
+            Shimmer shimmer = new Shimmer.ColorHighlightBuilder()
+                    .setBaseColor(ContextCompat.getColor(context, R.color.colorShimmerBase))
+                    .setBaseAlpha(1)
+                    .setHighlightColor(ContextCompat.getColor(context, R.color.colorShimmerHighlight))
+                    .setHighlightAlpha(1)
+                    .setDropoff(50)
+                    .setDuration(500)
+                    .build();
+            ShimmerDrawable drawable = new ShimmerDrawable();
+            drawable.setShimmer(shimmer);
+
+            String path = rateJoinUser.getUserAccount().getAvatarPath();
+            Picasso.get().load(path)
+                    .placeholder(drawable)
+                    .into(holder.imageViewAvatar);
         }
     }
 
@@ -53,6 +84,7 @@ public class UserRateAdapter extends ListAdapter<UserRate, UserRateAdapter.RateV
         private TextView textViewRateDate;
         private Button textViewRate;
         private TextView textViewComment;
+        private ImageView imageViewAvatar;
 
         public RateViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -60,6 +92,7 @@ public class UserRateAdapter extends ListAdapter<UserRate, UserRateAdapter.RateV
             textViewRateDate = itemView.findViewById(R.id.textViewRateDate);
             textViewComment = itemView.findViewById(R.id.textViewComment);
             textViewRate = itemView.findViewById(R.id.textViewRate);
+            imageViewAvatar = itemView.findViewById(R.id.imageViewAvatar);
         }
     }
 }

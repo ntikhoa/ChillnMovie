@@ -28,11 +28,13 @@ import com.ntikhoa.chillnmovie.adapter.UserRateAdapter;
 import com.ntikhoa.chillnmovie.model.Caster;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
+import com.ntikhoa.chillnmovie.model.RateJoinUser;
 import com.ntikhoa.chillnmovie.model.UserRate;
 import com.ntikhoa.chillnmovie.viewmodel.MovieDetailViewModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieDetailActivity extends AppCompatActivity {
@@ -109,7 +111,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         recyclerViewUserRate = findViewById(R.id.recyclerViewUserRate);
         recyclerViewUserRate.setLayoutManager(
                 new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-        userRateAdapter = new UserRateAdapter();
+        userRateAdapter = new UserRateAdapter(this);
         recyclerViewUserRate.setAdapter(userRateAdapter);
     }
 
@@ -140,10 +142,10 @@ public class MovieDetailActivity extends AppCompatActivity {
             }
         });
 
-        viewModel.getMLDuserRate(id).observe(this, new Observer<List<UserRate>>() {
+        viewModel.getMLDuserRate(id).observe(this, new Observer<List<RateJoinUser>>() {
             @Override
-            public void onChanged(List<UserRate> userRates) {
-                userRateAdapter.submitList(userRates);
+            public void onChanged(List<RateJoinUser> rateJoinUsers) {
+                userRateAdapter.submitList(rateJoinUsers);
             }
         });
     }

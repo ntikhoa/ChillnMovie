@@ -1,14 +1,17 @@
 package com.ntikhoa.chillnmovie.repository;
 
 import android.app.Application;
+import android.provider.Telephony;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -20,7 +23,9 @@ import com.ntikhoa.chillnmovie.model.CollectionName;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
 import com.ntikhoa.chillnmovie.model.MovieRate;
+import com.ntikhoa.chillnmovie.model.RateJoinUser;
 import com.ntikhoa.chillnmovie.model.RatingSource;
+import com.ntikhoa.chillnmovie.model.UserAccount;
 import com.ntikhoa.chillnmovie.model.UserRate;
 import com.ntikhoa.chillnmovie.model.Video;
 import com.ntikhoa.chillnmovie.model.VideoDBResponse;
@@ -29,6 +34,7 @@ import com.ntikhoa.chillnmovie.service.RetrofitTMDbClient;
 import com.ntikhoa.chillnmovie.view.MovieDetailActivity;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +47,7 @@ import retrofit2.Response;
 public class MovieDetailRepository {
     private MutableLiveData<MovieDetail> MLDmovieDetail;
     private MutableLiveData<List<Caster>> MLDcaster;
-    private MutableLiveData<List<UserRate>> MLDuserRate;
+    private MutableLiveData<List<RateJoinUser>> MLDuserRate;
     private Application application;
     private String videoKey;
 
@@ -174,7 +180,7 @@ public class MovieDetailRepository {
         }
     }
 
-    public MutableLiveData<List<UserRate>> getMLDuserRate(Integer id) {
+    public MutableLiveData<List<RateJoinUser>> getMLDuserRate(Integer id) {
         db.collection(CollectionName.MOVIE_RATE)
                 .document(String.valueOf(id))
                 .collection(CollectionName.USER_RATE)
@@ -183,7 +189,22 @@ public class MovieDetailRepository {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        MLDuserRate.postValue(queryDocumentSnapshots.toObjects(UserRate.class));
+                        List<RateJoinUser> rateJoinUsers = new ArrayList<>();
+                        List<UserRate> userRates = queryDocumentSnapshots.toObjects(UserRate.class);
+                        for (int i = 0; i < userRates.size(); i++) {
+                            int index = i;
+                            db.collection(CollectionName.USER_PROFILE)
+                                    .document(userRates.get(i).getUserId())
+                                    .get()
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                            UserAccount userAccount = documentSnapshot.toObject(UserAccount.class);
+                                            rateJoinUsers.add(new RateJoinUser(userAccount, userRates.get(index)));
+                                        }
+                                    });
+                        }
+                        MLDuserRate.postValue(rateJoinUsers);
                     }
                 });
         return MLDuserRate;

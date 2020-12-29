@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.ntikhoa.chillnmovie.model.Caster;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
+import com.ntikhoa.chillnmovie.model.RateJoinUser;
 import com.ntikhoa.chillnmovie.model.UserRate;
 import com.ntikhoa.chillnmovie.repository.MovieDetailRepository;
 
@@ -34,7 +35,7 @@ public class MovieDetailViewModel extends AndroidViewModel {
         repository.addToFirestore(movieDetail);
     }
 
-    public MutableLiveData<List<UserRate>> getMLDuserRate(Integer id) {
+    public MutableLiveData<List<RateJoinUser>> getMLDuserRate(Integer id) {
         return repository.getMLDuserRate(id);
     }
 }
