@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.adapter.CasterAdapter;
 import com.ntikhoa.chillnmovie.adapter.UserRateAdapter;
@@ -55,6 +56,9 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     private MaterialButton btnPlayTrailer;
     private ImageButton btnRateMovie;
+    private ImageButton btnAddToFavorite;
+
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,9 +91,19 @@ public class MovieDetailActivity extends AppCompatActivity {
                 }
             }
         });
+
+        btnAddToFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (auth.getCurrentUser() != null) {
+                    viewModel.addToFavorite(auth.getCurrentUser().getUid());
+                }
+            }
+        });
     }
 
     private void initComp() {
+        auth = FirebaseAuth.getInstance();
         initViewModel();
         initRecyclerView();
         initGeneralView();
@@ -119,6 +133,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         fragmentContainer = findViewById(R.id.fragmentContainer);
         btnPlayTrailer = findViewById(R.id.btnPlayTrailer);
         btnRateMovie = findViewById(R.id.btnRate);
+        btnAddToFavorite = findViewById(R.id.btnAddMovie);
     }
 
     private void loadData() {
@@ -142,10 +157,19 @@ public class MovieDetailActivity extends AppCompatActivity {
             }
         });
 
-        viewModel.getMLDuserRate(id).observe(this, new Observer<List<RateJoinUser>>() {
+        viewModel.getMLDuserRate(id).observe(this, new Observer<List<UserRate>>() {
             @Override
-            public void onChanged(List<RateJoinUser> rateJoinUsers) {
-                userRateAdapter.submitList(rateJoinUsers);
+            public void onChanged(List<UserRate> userRates) {
+                for (int i = 0; i < userRates.size(); i++) {
+                    List<RateJoinUser> rateJoinUsers = new ArrayList<>();
+                    viewModel.getMLDrateJoinUser(userRates.get(i)).observe(MovieDetailActivity.this, new Observer<RateJoinUser>() {
+                        @Override
+                        public void onChanged(RateJoinUser rateJoinUser) {
+                            rateJoinUsers.add(rateJoinUser);
+                            userRateAdapter.submitList(rateJoinUsers);
+                        }
+                    });
+                }
             }
         });
     }

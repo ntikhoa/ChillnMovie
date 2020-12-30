@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -47,7 +48,9 @@ import retrofit2.Response;
 public class MovieDetailRepository {
     private MutableLiveData<MovieDetail> MLDmovieDetail;
     private MutableLiveData<List<Caster>> MLDcaster;
-    private MutableLiveData<List<RateJoinUser>> MLDuserRate;
+    private MutableLiveData<List<UserRate>> MLDuserRate;
+    private MutableLiveData<RateJoinUser> MLDrateJoinUser;
+
     private Application application;
     private String videoKey;
 
@@ -59,6 +62,7 @@ public class MovieDetailRepository {
         MLDmovieDetail = new MutableLiveData<>();
         MLDcaster = new MutableLiveData<>();
         MLDuserRate = new MutableLiveData<>();
+        MLDrateJoinUser = new MutableLiveData<>();
 
         db = FirebaseFirestore.getInstance();
         tmDbClient = RetrofitTMDbClient.getInstance();
@@ -180,34 +184,34 @@ public class MovieDetailRepository {
         }
     }
 
-    public MutableLiveData<List<RateJoinUser>> getMLDuserRate(Integer id) {
+    public MutableLiveData<List<UserRate>> getMLDuserRate(Integer id) {
         db.collection(CollectionName.MOVIE_RATE)
                 .document(String.valueOf(id))
                 .collection(CollectionName.USER_RATE)
-                .orderBy("updated_date", Query.Direction.DESCENDING)
+                .orderBy("rateDate", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<RateJoinUser> rateJoinUsers = new ArrayList<>();
-                        List<UserRate> userRates = queryDocumentSnapshots.toObjects(UserRate.class);
-                        for (int i = 0; i < userRates.size(); i++) {
-                            int index = i;
-                            db.collection(CollectionName.USER_PROFILE)
-                                    .document(userRates.get(i).getUserId())
-                                    .get()
-                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                            UserAccount userAccount = documentSnapshot.toObject(UserAccount.class);
-                                            rateJoinUsers.add(new RateJoinUser(userAccount, userRates.get(index)));
-                                        }
-                                    });
-                        }
-                        MLDuserRate.postValue(rateJoinUsers);
+                        MLDuserRate.postValue(queryDocumentSnapshots.toObjects(UserRate.class));
                     }
                 });
         return MLDuserRate;
+    }
+
+    public MutableLiveData<RateJoinUser> getMLDrateJoinUser(UserRate userRate) {
+        db.collection(CollectionName.USER_PROFILE)
+                .document(userRate.getUserId())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        UserAccount userAccount = documentSnapshot.toObject(UserAccount.class);
+                        RateJoinUser rateJoinUser = new RateJoinUser(userAccount, userRate);
+                        MLDrateJoinUser.postValue(rateJoinUser);
+                    }
+                });
+        return MLDrateJoinUser;
     }
 
     private void showMessage(String message) {
@@ -222,6 +226,11 @@ public class MovieDetailRepository {
         db.collection(CollectionName.MOVIE_RATE)
                 .document(String.valueOf(movieDetail.getId()))
                 .set(movieRate);
+    }
+
+    public void addToFavorite(String userId) {
+//        db.collection(CollectionName.USER_FAVORITE)
+//                .document(userId)
     }
 
     private final OnSuccessListener<Void> onSuccessListener = new OnSuccessListener<Void>() {

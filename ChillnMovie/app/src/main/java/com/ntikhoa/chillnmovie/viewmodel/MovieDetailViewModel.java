@@ -35,7 +35,15 @@ public class MovieDetailViewModel extends AndroidViewModel {
         repository.addToFirestore(movieDetail);
     }
 
-    public MutableLiveData<List<RateJoinUser>> getMLDuserRate(Integer id) {
+    public MutableLiveData<List<UserRate>> getMLDuserRate(Integer id) {
         return repository.getMLDuserRate(id);
+    }
+
+    public MutableLiveData<RateJoinUser> getMLDrateJoinUser(UserRate userRates) {
+        return repository.getMLDrateJoinUser(userRates);
+    }
+
+    public void addToFavorite(String userId) {
+        repository.addToFavorite(userId);
     }
 }

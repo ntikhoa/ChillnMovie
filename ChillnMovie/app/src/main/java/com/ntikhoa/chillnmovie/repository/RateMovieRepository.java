@@ -62,8 +62,7 @@ public class RateMovieRepository {
     public void addUserRate(Integer movieId, UserRate userRate) {
         Date current = new Date();
         String currentStr = new SimpleDateFormat("yyyy-MM-dd").format(current);
-        Map<String, Object> map = new HashMap<>();
-        map.put("updated_date", currentStr);
+        userRate.setRateDate(currentStr);
         db.collection(CollectionName.MOVIE_RATE)
                 .document(String.valueOf(movieId))
                 .collection(CollectionName.USER_RATE)
@@ -71,12 +70,6 @@ public class RateMovieRepository {
                 .set(userRate)
                 .addOnSuccessListener(onSuccessListener)
                 .addOnFailureListener(onFailureListener);
-
-        db.collection(CollectionName.MOVIE_RATE)
-                .document(String.valueOf(movieId))
-                .collection(CollectionName.USER_RATE)
-                .document(userRate.getUserId())
-                .update(map);
     }
 
     public MutableLiveData<UserRate> getMLDuserRate(Integer movieId, String userId) {

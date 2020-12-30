@@ -13,5 +13,7 @@ public class CollectionName {
 
     public static final String USER_PROFILE = "user_profile";
 
+    public static final String USER_FAVORITE = "user_favorite";
+
     public static final String IMAGE_AVATAR = "avatar/";
 }
