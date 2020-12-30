@@ -9,4 +9,11 @@ ChillnMovie has to type of end users: editors and users. Editors is control the 
 reviews for the film, Editor can also add a movies in different categories.
 # Architecture
 # Preview
-### 1. Login and Signup
+## 1. Login and Signup
+![](Preview/Login.png)
+![](Preview/Signup.png)
+![](Preview/CreateUserProfile.png)
+![](Preview/CreateUserProfile1.png)
+
+## 2. Home Page
+![](Preview/HomePage.png)
