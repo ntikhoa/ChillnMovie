@@ -50,7 +50,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="false"
-            android:text="ntikhoa123@gmail.com"
             android:textColor="@color/transparentBlack50"
             tools:text="ntikhoa123@gmail.com" />
     </com.google.android.material.textfield.TextInputLayout>

@@ -30,6 +30,7 @@ public class CreateUserProfileActivity extends AppCompatActivity {
     private EditText editTextUserName;
     private EditText editTextCountry;
     private EditText editTextBirthdate;
+    private EditText editTextEmail;
     private RadioGroup radioGroupGender;
 
     private MaterialButton btnSubmit, btnSkip;
@@ -162,12 +163,15 @@ public class CreateUserProfileActivity extends AppCompatActivity {
         editTextCountry = findViewById(R.id.editTextCountry);
         editTextBirthdate = findViewById(R.id.editTextBirthdate);
 
+        editTextEmail = findViewById(R.id.editTextEmail);
+        editTextEmail.setText(auth.getCurrentUser().getEmail());
+
         btnSkip = findViewById(R.id.btnSkip);
         btnSubmit = findViewById(R.id.btnSubmit);
 
         radioGroupGender = findViewById(R.id.radioGroupGender);
 
-        //uid = auth.getCurrentUser().getUid();
+        uid = auth.getCurrentUser().getUid();
     }
 
     @Override
