@@ -15,22 +15,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerDrawable;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.ntikhoa.chillnmovie.R;
-import com.ntikhoa.chillnmovie.model.Movie;
-import com.ntikhoa.chillnmovie.model.RateJoinUser;
+import com.ntikhoa.chillnmovie.model.CollectionName;
+import com.ntikhoa.chillnmovie.model.UserAccount;
 import com.ntikhoa.chillnmovie.model.UserRate;
 import com.squareup.picasso.Picasso;
 
-import java.text.Format;
-import java.util.Formatter;
-
-public class UserRateAdapter extends ListAdapter<RateJoinUser, UserRateAdapter.RateViewHolder> {
+public class UserRateAdapter extends ListAdapter<UserRate, UserRateAdapter.RateViewHolder> {
 
     private Context context;
+    FirebaseFirestore db;
 
     public UserRateAdapter(Context context) {
-        super(RateJoinUser.CALLBACK);
+        super(UserRate.CALLBACK);
         this.context = context;
+
+        db = FirebaseFirestore.getInstance();
     }
 
     @NonNull
@@ -43,38 +46,51 @@ public class UserRateAdapter extends ListAdapter<RateJoinUser, UserRateAdapter.R
 
     @Override
     public void onBindViewHolder(@NonNull RateViewHolder holder, int position) {
-        RateJoinUser rateJoinUser = getItem(position);
-        if (rateJoinUser != null) {
-            holder.textViewUserName.setText(rateJoinUser.getUserAccount().getName());
-            holder.textViewRateDate.setText(rateJoinUser.getUserRate().getRateDate());
+        UserRate userRate = getItem(position);
+        if (userRate != null) {
+            db.collection(CollectionName.USER_PROFILE)
+                    .document(userRate.getUserId())
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            UserAccount userAccount = documentSnapshot.toObject(UserAccount.class);
 
-            Integer plot = rateJoinUser.getUserRate().getPlotVote();
-            Integer visualEffect = rateJoinUser.getUserRate().getVisualEffectVote();
-            Integer soundEffect = rateJoinUser.getUserRate().getSoundEffectVote();
+                            holder.textViewUserName.setText(userAccount.getName());
+                            Shimmer shimmer = new Shimmer.ColorHighlightBuilder()
+                                    .setBaseColor(ContextCompat.getColor(context, R.color.colorShimmerBase))
+                                    .setBaseAlpha(1)
+                                    .setHighlightColor(ContextCompat.getColor(context, R.color.colorShimmerHighlight))
+                                    .setHighlightAlpha(1)
+                                    .setDropoff(50)
+                                    .setDuration(500)
+                                    .build();
+                            ShimmerDrawable drawable = new ShimmerDrawable();
+                            drawable.setShimmer(shimmer);
+
+                            String path = userAccount.getAvatarPath();
+                            Picasso.get().load(path)
+                                    .placeholder(drawable)
+                                    .into(holder.imageViewAvatar);
+                        }
+                    });
+
+            holder.textViewRateDate.setText(userRate.getRateDate());
+
+            Integer plot = userRate.getPlotVote();
+            Integer visualEffect = userRate.getVisualEffectVote();
+            Integer soundEffect = userRate.getSoundEffectVote();
             Double average = (plot + visualEffect + soundEffect) / 3d;
             String avgStr = String.format("%.1f", average);
             holder.textViewRate.setText(avgStr);
 
-            holder.textViewComment.setText(rateJoinUser.getUserRate().getComment());
-
-
-
-
-            Shimmer shimmer = new Shimmer.ColorHighlightBuilder()
-                    .setBaseColor(ContextCompat.getColor(context, R.color.colorShimmerBase))
-                    .setBaseAlpha(1)
-                    .setHighlightColor(ContextCompat.getColor(context, R.color.colorShimmerHighlight))
-                    .setHighlightAlpha(1)
-                    .setDropoff(50)
-                    .setDuration(500)
-                    .build();
-            ShimmerDrawable drawable = new ShimmerDrawable();
-            drawable.setShimmer(shimmer);
-
-            String path = rateJoinUser.getUserAccount().getAvatarPath();
-            Picasso.get().load(path)
-                    .placeholder(drawable)
-                    .into(holder.imageViewAvatar);
+            String comment = userRate.getComment();
+            if (comment.length() < 200)
+                holder.textViewComment.setText(userRate.getComment());
+            else {
+                String limit = comment.substring(0, 200) + " ...";
+                holder.textViewComment.setText(limit);
+            }
         }
     }
 

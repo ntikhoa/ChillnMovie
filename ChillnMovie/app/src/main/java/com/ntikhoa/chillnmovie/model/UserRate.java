@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 
 import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.auth.User;
 
 public class UserRate {
     private Integer plotVote;
@@ -62,4 +63,16 @@ public class UserRate {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+    public static final DiffUtil.ItemCallback<UserRate> CALLBACK = new DiffUtil.ItemCallback<UserRate>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull UserRate oldItem, @NonNull UserRate newItem) {
+            return oldItem.getUserId().equals(newItem.getUserId());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull UserRate oldItem, @NonNull UserRate newItem) {
+            return false;
+        }
+    };
 }

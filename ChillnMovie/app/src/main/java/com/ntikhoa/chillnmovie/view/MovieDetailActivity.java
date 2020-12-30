@@ -1,7 +1,6 @@
 package com.ntikhoa.chillnmovie.view;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,13 +14,10 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.adapter.CasterAdapter;
@@ -29,7 +25,6 @@ import com.ntikhoa.chillnmovie.adapter.UserRateAdapter;
 import com.ntikhoa.chillnmovie.model.Caster;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
-import com.ntikhoa.chillnmovie.model.RateJoinUser;
 import com.ntikhoa.chillnmovie.model.UserRate;
 import com.ntikhoa.chillnmovie.viewmodel.MovieDetailViewModel;
 import com.squareup.picasso.Picasso;
@@ -160,16 +155,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         viewModel.getMLDuserRate(id).observe(this, new Observer<List<UserRate>>() {
             @Override
             public void onChanged(List<UserRate> userRates) {
-                for (int i = 0; i < userRates.size(); i++) {
-                    List<RateJoinUser> rateJoinUsers = new ArrayList<>();
-                    viewModel.getMLDrateJoinUser(userRates.get(i)).observe(MovieDetailActivity.this, new Observer<RateJoinUser>() {
-                        @Override
-                        public void onChanged(RateJoinUser rateJoinUser) {
-                            rateJoinUsers.add(rateJoinUser);
-                            userRateAdapter.submitList(rateJoinUsers);
-                        }
-                    });
-                }
+                userRateAdapter.submitList(userRates);
             }
         });
     }
