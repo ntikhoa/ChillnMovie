@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -26,7 +27,9 @@ import com.ntikhoa.chillnmovie.model.VideoDBResponse;
 import com.ntikhoa.chillnmovie.service.RetrofitTMDbClient;
 import com.ntikhoa.chillnmovie.view.MovieDetailActivity;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -198,9 +201,10 @@ public class MovieDetailRepository {
                 .set(movieRate);
     }
 
-    public void addToFavorite(String userId) {
-//        db.collection(CollectionName.USER_FAVORITE)
-//                .document(userId)
+    public void addToFavorite(String userId, Integer movieId) {
+        db.collection(CollectionName.USER_FAVORITE)
+                .document(userId)
+                .update("favorite_list", FieldValue.arrayUnion(movieId));
     }
 
     private final OnSuccessListener<Void> onSuccessListener = new OnSuccessListener<Void>() {

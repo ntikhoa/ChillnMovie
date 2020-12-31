@@ -18,8 +18,8 @@ public class UserAccountViewModel extends AndroidViewModel {
         repository = new UserAccountRepository(application);
     }
 
-    public void login(String email, String password) {
-        repository.login(email, password);
+    public MutableLiveData<Boolean> login(String email, String password) {
+        return repository.login(email, password);
     }
 
     public MutableLiveData<Boolean> signUp(String email, String password) {
@@ -33,4 +33,16 @@ public class UserAccountViewModel extends AndroidViewModel {
     public void createUserProfile(UserAccount userAccount, String userId) {
         repository.createUserProfile(userAccount, userId);
     }
+
+    public MutableLiveData<Boolean> initUserData(String uid, String email) {
+        return repository.initUserData(uid, email);
+    }
+
+//    public void initUserProfile(String uid, String email) {
+//        repository.initUserProfile(uid, email);
+//    }
+//
+//    public void initUserFavoriteList(String uid){
+//        repository.initUserFavoriteList(uid);
+//    }
 }

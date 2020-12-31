@@ -91,7 +91,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (auth.getCurrentUser() != null) {
-                    viewModel.addToFavorite(auth.getCurrentUser().getUid());
+                    viewModel.addToFavorite(auth.getCurrentUser().getUid(), id);
                 }
             }
         });

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.viewmodel.UserAccountViewModel;
 
@@ -63,9 +64,25 @@ public class SignUpActivity extends AppCompatActivity {
                             @Override
                             public void onChanged(Boolean isSuccess) {
                                 if (isSuccess) {
-                                    Intent intent = new Intent(getApplicationContext(), CreateUserProfileActivity.class);
-                                    startActivity(intent);
-                                    finish();
+                                    FirebaseAuth auth = FirebaseAuth.getInstance();
+                                    FirebaseUser user = auth.getCurrentUser();
+                                    String uid = user.getUid();
+                                    String email = user.getEmail();
+                                    viewModel.initUserData(uid, email)
+                                            .observe(SignUpActivity.this, new Observer<Boolean>() {
+                                                @Override
+                                                public void onChanged(Boolean success) {
+                                                    if (success) {
+                                                        Intent intent = new Intent(getApplicationContext(), CreateUserProfileActivity.class);
+                                                        intent.putExtra(CreateUserProfileActivity.UID, uid);
+                                                        intent.putExtra(CreateUserProfileActivity.EMAIL, email);
+                                                        auth.signOut();
+                                                        startActivity(intent);
+
+                                                        finish();
+                                                    }
+                                                }
+                                            });
                                 } else {
                                     textViewError.setText("Email is already exist!");
                                     textViewError.setVisibility(View.VISIBLE);

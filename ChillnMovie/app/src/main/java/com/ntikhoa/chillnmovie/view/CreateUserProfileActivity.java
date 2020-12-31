@@ -23,8 +23,8 @@ import com.ntikhoa.chillnmovie.viewmodel.UserAccountViewModel;
 
 public class CreateUserProfileActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE = 1;
-
-    private FirebaseAuth auth;
+    public static final String UID = "uid";
+    public static final String EMAIL = "email";
 
     private ImageView imageViewAvatar;
     private EditText editTextUserName;
@@ -42,13 +42,17 @@ public class CreateUserProfileActivity extends AppCompatActivity {
     private UserAccountViewModel viewModel;
 
     private String uid;
+    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_user_profile);
 
+        loadData();
         initComponent();
+
+        editTextEmail.setText(email);
 
         btnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +98,11 @@ public class CreateUserProfileActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void loadData() {
+        uid = getIntent().getStringExtra(UID);
+        email = getIntent().getStringExtra(EMAIL);
     }
 
     private void createUserProfile() {
@@ -156,33 +165,27 @@ public class CreateUserProfileActivity extends AppCompatActivity {
                 ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()))
                 .get(UserAccountViewModel.class);
 
-        auth = FirebaseAuth.getInstance();
-
         imageViewAvatar = findViewById(R.id.imageViewAvatar);
         editTextUserName = findViewById(R.id.editTextUserName);
         editTextCountry = findViewById(R.id.editTextCountry);
         editTextBirthdate = findViewById(R.id.editTextBirthdate);
-
         editTextEmail = findViewById(R.id.editTextEmail);
-        editTextEmail.setText(auth.getCurrentUser().getEmail());
 
         btnSkip = findViewById(R.id.btnSkip);
         btnSubmit = findViewById(R.id.btnSubmit);
 
         radioGroupGender = findViewById(R.id.radioGroupGender);
-
-        uid = auth.getCurrentUser().getUid();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        auth.signOut();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        auth.signOut();
-    }
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        auth.signOut();
+//    }
+//
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        auth.signOut();
+//    }
 }

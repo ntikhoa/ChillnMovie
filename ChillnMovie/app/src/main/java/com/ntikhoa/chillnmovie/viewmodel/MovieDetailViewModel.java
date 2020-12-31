@@ -38,7 +38,7 @@ public class MovieDetailViewModel extends AndroidViewModel {
         return repository.getMLDuserRate(id);
     }
 
-    public void addToFavorite(String userId) {
-        repository.addToFavorite(userId);
+    public void addToFavorite(String userId, Integer movieId) {
+        repository.addToFavorite(userId, movieId);
     }
 }

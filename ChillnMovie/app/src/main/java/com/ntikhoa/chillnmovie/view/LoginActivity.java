@@ -2,6 +2,7 @@ package com.ntikhoa.chillnmovie.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -79,14 +80,18 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                viewModel.login(email, password);
-                if (mAuth.getCurrentUser() != null) {
-                    Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    textViewError.setVisibility(View.VISIBLE);
-                }
+                viewModel.login(email, password).observe(LoginActivity.this, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean success) {
+                        if (success) {
+                            Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            textViewError.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
             }
         });
 
