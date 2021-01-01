@@ -22,19 +22,11 @@ public class RateMovieViewModel extends AndroidViewModel {
         repository = new RateMovieRepository(application);
     }
 
-    public MutableLiveData<MovieRate> getMLDmovieRate(Integer id) {
-        return repository.getMLDmovieRate(id);
-    }
+//    public MutableLiveData<UserRate> getMLDuserRate(Integer movieId, String userId) {
+//        return repository.getMLDuserRate(movieId, userId);
+//    }
 
-    public void addUserRate(Integer movieId, UserRate userRate) {
-        repository.addUserRate(movieId, userRate);
-    }
-
-    public MutableLiveData<UserRate> getMLDuserRate(Integer movieId, String userId) {
-        return repository.getMLDuserRate(movieId, userId);
-    }
-
-    public void updateMovieRate(Integer movieId, MovieRate movieRate) {
-        repository.updateMovieRate(movieId, movieRate);
+    public MutableLiveData<Boolean> rateMovie(Integer id, UserRate newUserRate) {
+        return repository.rateMovie(id, newUserRate);
     }
 }

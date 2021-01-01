@@ -5,15 +5,20 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.firestore.Transaction;
+import com.google.firebase.firestore.auth.User;
 import com.ntikhoa.chillnmovie.model.CollectionName;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
 import com.ntikhoa.chillnmovie.model.MovieRate;
@@ -28,6 +33,7 @@ import java.util.Map;
 public class RateMovieRepository {
     private final MutableLiveData<MovieRate> MLDmovieRate;
     private final MutableLiveData<UserRate> MLDuserRate;
+    private final MutableLiveData<Boolean> success;
     private final Application application;
     private final FirebaseFirestore db;
 
@@ -36,7 +42,124 @@ public class RateMovieRepository {
         db = FirebaseFirestore.getInstance();
         MLDmovieRate = new MutableLiveData<>();
         MLDuserRate = new MutableLiveData<>();
+
+        success = new MutableLiveData<>();
     }
+
+    public MutableLiveData<Boolean> rateMovie(Integer id, UserRate newUserRate) {
+        db.runTransaction(new Transaction.Function<Void>() {
+
+            @Nullable
+            @Override
+            public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
+                DocumentReference movieRateRef = db.collection(CollectionName.MOVIE_RATE)
+                        .document(String.valueOf(id));
+                MovieRate movieRate = transaction.get(movieRateRef).toObject(MovieRate.class);
+
+                DocumentReference userRateRef = movieRateRef.collection(CollectionName.USER_RATE)
+                        .document(newUserRate.getUserId());
+                UserRate userRate = transaction.get(userRateRef).toObject(UserRate.class);
+
+                DocumentReference movieTrendingRef = db.collection(CollectionName.MOVIE_TRENDING)
+                        .document(String.valueOf(id));
+                boolean cc = transaction.get(movieTrendingRef).exists();
+
+                DocumentReference movieUpcomingRef = db.collection(CollectionName.MOVIE_UPCOMING)
+                        .document(String.valueOf(id));
+                boolean cc1 = transaction.get(movieUpcomingRef).exists();
+
+                DocumentReference movieNowPlayingRef = db.collection(CollectionName.MOVIE_NOW_PLAYING)
+                        .document(String.valueOf(id));
+                boolean cc2 = transaction.get(movieNowPlayingRef).exists();
+
+                if (userRate != null) {
+                    movieRate.updateVote(userRate, newUserRate);
+                } else
+                    movieRate.vote(newUserRate);
+
+                addUserRate(id, newUserRate, transaction);
+                updateMovieRate(id, movieRate, transaction);
+                //updateMovieCategory(id, movieRate, transaction);
+
+                Map<String, Object> map = new HashMap<>();
+                map.put("voteAverage", movieRate.getVoteAverage());
+                map.put("voteCount", movieRate.getVoteCount());
+
+                if (cc)
+                    transaction.update(movieTrendingRef, map);
+
+                if (cc1)
+                    transaction.update(movieUpcomingRef, map);
+
+                if (cc2)
+                    transaction.update(movieNowPlayingRef, map);
+
+                return null;
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                success.postValue(true);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                success.postValue(false);
+            }
+        });
+        return success;
+    }
+
+    private void addUserRate(Integer movieId, UserRate userRate, Transaction transaction) {
+        Date current = new Date();
+        String currentStr = new SimpleDateFormat("yyyy-MM-dd").format(current);
+        userRate.setRateDate(currentStr);
+
+        DocumentReference userRateRef = db.collection(CollectionName.MOVIE_RATE)
+                .document(String.valueOf(movieId))
+                .collection(CollectionName.USER_RATE)
+                .document(userRate.getUserId());
+        transaction.set(userRateRef, userRate);
+    }
+
+    private void updateMovieRate(Integer movieId, MovieRate movieRate, Transaction transaction) {
+        DocumentReference movieRateRef = db.collection(CollectionName.MOVIE_RATE)
+                .document(String.valueOf(movieId));
+        transaction.set(movieRateRef, movieRate);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("voteAverage", movieRate.getVoteAverage());
+        map.put("voteCount", movieRate.getVoteCount());
+
+        DocumentReference movieRef = db.collection(CollectionName.MOVIE)
+                .document(String.valueOf(movieId));
+        transaction.update(movieRef, map);
+
+        DocumentReference movieDetailRef = db.collection(CollectionName.MOVIE_DETAIL)
+                .document(String.valueOf(movieId));
+        transaction.update(movieDetailRef, map);
+    }
+
+//    private void updateMovieCategory(Integer movieId, MovieRate movieRate, Transaction transaction) throws FirebaseFirestoreException {
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("voteAverage", movieRate.getVoteAverage());
+//        map.put("voteCount", movieRate.getVoteCount());
+//
+//        DocumentReference movieTrendingRef = db.collection(CollectionName.MOVIE_TRENDING)
+//                .document(String.valueOf(movieId));
+//        if (transaction.get(movieTrendingRef).exists())
+//            transaction.update(movieTrendingRef, map);
+//
+//        DocumentReference movieUpcomingRef = db.collection(CollectionName.MOVIE_UPCOMING)
+//                .document(String.valueOf(movieId));
+//        if (transaction.get(movieUpcomingRef).exists())
+//            transaction.update(movieUpcomingRef, map);
+//
+//        DocumentReference movieNowPlayingRef = db.collection(CollectionName.MOVIE_NOW_PLAYING)
+//                .document(String.valueOf(movieId));
+//        if (transaction.get(movieNowPlayingRef).exists())
+//            transaction.update(movieNowPlayingRef, map);
+//    }
 
     public MutableLiveData<MovieRate> getMLDmovieRate(Integer id) {
         db.collection(CollectionName.MOVIE_RATE)
@@ -57,70 +180,6 @@ public class RateMovieRepository {
                     }
                 });
         return MLDmovieRate;
-    }
-
-    public void addUserRate(Integer movieId, UserRate userRate) {
-        Date current = new Date();
-        String currentStr = new SimpleDateFormat("yyyy-MM-dd").format(current);
-        userRate.setRateDate(currentStr);
-        db.collection(CollectionName.MOVIE_RATE)
-                .document(String.valueOf(movieId))
-                .collection(CollectionName.USER_RATE)
-                .document(userRate.getUserId())
-                .set(userRate)
-                .addOnSuccessListener(onSuccessListener)
-                .addOnFailureListener(onFailureListener);
-    }
-
-    public MutableLiveData<UserRate> getMLDuserRate(Integer movieId, String userId) {
-        db.collection(CollectionName.MOVIE_RATE)
-                .document(String.valueOf(movieId))
-                .collection(CollectionName.USER_RATE)
-                .document(userId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            if (task.getResult().exists()) {
-                                MLDuserRate.postValue(task.getResult().toObject(UserRate.class));
-                            } else MLDuserRate.postValue(null);
-                        }
-                    }
-                });
-        return MLDuserRate;
-    }
-
-    public void updateMovieRate(Integer movieId, MovieRate movieRate) {
-        db.collection(CollectionName.MOVIE_RATE)
-                .document(String.valueOf(movieId))
-                .set(movieRate)
-                .addOnSuccessListener(onSuccessListener)
-                .addOnFailureListener(onFailureListener);
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("voteAverage", movieRate.getVoteAverage());
-        map.put("voteCount", movieRate.getVoteCount());
-
-        updateAllCategory(movieId, map);
-    }
-
-    private void updateAllCategory(Integer movieId, Map<String, Object> map) {
-        db.collection(CollectionName.MOVIE)
-                .document(String.valueOf(movieId))
-                .update(map);
-        db.collection(CollectionName.MOVIE_DETAIL)
-                .document(String.valueOf(movieId))
-                .update(map);
-        db.collection(CollectionName.MOVIE_TRENDING)
-                .document(String.valueOf(movieId))
-                .update(map);
-        db.collection(CollectionName.MOVIE_UPCOMING)
-                .document(String.valueOf(movieId))
-                .update(map);
-        db.collection(CollectionName.MOVIE_NOW_PLAYING)
-                .document(String.valueOf(movieId))
-                .update(map);
     }
 
     private void showMessage(String message) {

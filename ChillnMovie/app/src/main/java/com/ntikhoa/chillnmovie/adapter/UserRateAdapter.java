@@ -78,8 +78,8 @@ public class UserRateAdapter extends ListAdapter<UserRate, UserRateAdapter.RateV
             holder.textViewRateDate.setText(userRate.getRateDate());
 
             Integer plot = userRate.getPlotVote();
-            Integer visualEffect = userRate.getVisualEffectVote();
-            Integer soundEffect = userRate.getSoundEffectVote();
+            Integer visualEffect = userRate.getVisualVote();
+            Integer soundEffect = userRate.getAudioVote();
             Double average = (plot + visualEffect + soundEffect) / 3d;
             String avgStr = String.format("%.1f", average);
             holder.textViewRate.setText(avgStr);

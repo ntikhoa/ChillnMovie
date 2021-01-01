@@ -1,7 +1,6 @@
 package com.ntikhoa.chillnmovie.view;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -16,13 +15,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.model.Movie;
-import com.ntikhoa.chillnmovie.model.MovieDetail;
-import com.ntikhoa.chillnmovie.model.MovieRate;
 import com.ntikhoa.chillnmovie.model.UserRate;
 import com.ntikhoa.chillnmovie.viewmodel.RateMovieViewModel;
 import com.squareup.picasso.Picasso;
@@ -37,17 +33,15 @@ public class RateMovieActivity extends AppCompatActivity {
     private RateMovieFragment plotFragment, visualEffectFragment, soundEffectFragment;
 
     private RateMovieViewModel viewModel;
-    private Button btn;
+    private Button btnNext;
     private TextView textViewTitle;
 
-    private int plotRate, visualEffectRate, soundEffectRate;
+    private int plotRate, visualRate, audioRate;
     private String comment;
 
     private int id;
     private String title;
     private String posterPath;
-
-    private UserRate userRate;
 
     FirebaseAuth auth;
 
@@ -60,7 +54,7 @@ public class RateMovieActivity extends AppCompatActivity {
         addRatingFragment();
         loadData();
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -79,30 +73,23 @@ public class RateMovieActivity extends AppCompatActivity {
             @Override
             public void onClick() {
                 plotRate = plotFragment.getRate();
-                visualEffectRate = visualEffectFragment.getRate();
-                soundEffectRate = soundEffectFragment.getRate();
+                visualRate = visualEffectFragment.getRate();
+                audioRate = soundEffectFragment.getRate();
                 comment = fragment.getComment();
 
-                viewModel.getMLDmovieRate(id)
-                        .observe(RateMovieActivity.this, new Observer<MovieRate>() {
-                            @Override
-                            public void onChanged(MovieRate movieRate) {
+                UserRate newUserRate = new UserRate(auth.getUid());
+                newUserRate.setPlotVote(plotRate);
+                newUserRate.setVisualVote(visualRate);
+                newUserRate.setAudioVote(audioRate);
+                newUserRate.setComment(comment);
 
-                                UserRate newUserRate = new UserRate(auth.getUid());
-                                newUserRate.setPlotVote(plotRate);
-                                newUserRate.setVisualEffectVote(visualEffectRate);
-                                newUserRate.setSoundEffectVote(soundEffectRate);
-                                newUserRate.setComment(comment);
-
-                                if (userRate != null) {
-                                    movieRate.updateVote(userRate, newUserRate);
-                                } else
-                                    movieRate.vote(plotRate, visualEffectRate, soundEffectRate);
-                                viewModel.addUserRate(id, newUserRate);
-                                viewModel.updateMovieRate(id, movieRate);
-                            }
-                        });
-                finish();
+                viewModel.rateMovie(id, newUserRate).observe(RateMovieActivity.this, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean success) {
+                        if (success)
+                            finish();
+                    }
+                });
             }
         });
     }
@@ -112,7 +99,7 @@ public class RateMovieActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this,
                 ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()))
                 .get(RateMovieViewModel.class);
-        btn = findViewById(R.id.btnNext);
+        btnNext = findViewById(R.id.btnNext);
         frameLayout = findViewById(R.id.fragmentContainer);
         textViewTitle = findViewById(R.id.textViewTitle);
     }
@@ -139,14 +126,6 @@ public class RateMovieActivity extends AppCompatActivity {
         posterPath = intent.getStringExtra(EXTRA_POSTER_PATH);
         textViewTitle.setText(title);
         setBackground();
-
-        viewModel.getMLDuserRate(id, auth.getUid())
-                .observe(this, new Observer<UserRate>() {
-                    @Override
-                    public void onChanged(UserRate userRate) {
-                        RateMovieActivity.this.userRate = userRate;
-                    }
-                });
     }
 
     private void setBackground() {

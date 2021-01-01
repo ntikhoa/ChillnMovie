@@ -8,8 +8,8 @@ import com.google.firebase.firestore.auth.User;
 
 public class UserRate {
     private Integer plotVote;
-    private Integer visualEffectVote;
-    private Integer soundEffectVote;
+    private Integer visualVote;
+    private Integer audioVote;
     private String comment;
     private String userId;
     private String rateDate;
@@ -36,12 +36,12 @@ public class UserRate {
         return plotVote;
     }
 
-    public Integer getVisualEffectVote() {
-        return visualEffectVote;
+    public Integer getVisualVote() {
+        return visualVote;
     }
 
-    public Integer getSoundEffectVote() {
-        return soundEffectVote;
+    public Integer getAudioVote() {
+        return audioVote;
     }
 
     public String getComment() {
@@ -52,12 +52,12 @@ public class UserRate {
         this.plotVote = plotVote;
     }
 
-    public void setVisualEffectVote(Integer visualEffectVote) {
-        this.visualEffectVote = visualEffectVote;
+    public void setVisualVote(Integer visualVote) {
+        this.visualVote = visualVote;
     }
 
-    public void setSoundEffectVote(Integer soundEffectVote) {
-        this.soundEffectVote = soundEffectVote;
+    public void setAudioVote(Integer audioVote) {
+        this.audioVote = audioVote;
     }
 
     public void setComment(String comment) {

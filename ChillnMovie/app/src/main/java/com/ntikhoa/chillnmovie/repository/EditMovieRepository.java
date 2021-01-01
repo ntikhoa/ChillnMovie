@@ -5,14 +5,18 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Transaction;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.model.CollectionName;
 import com.ntikhoa.chillnmovie.model.Movie;
@@ -34,13 +38,14 @@ import retrofit2.Response;
 
 public class EditMovieRepository {
     private MutableLiveData<MovieDetail> MLDmovieDetail;
-    private Application application;
+    private final Application application;
     private String videoKey;
 
     private final MutableLiveData<Boolean> isTrendingExist;
     private final MutableLiveData<Boolean> isNowPlayingExist;
     private final MutableLiveData<Boolean> isUpcomingExist;
 
+    private final MutableLiveData<Boolean> isSuccess;
 
     private final RetrofitTMDbClient tmDbClient;
     private final FirebaseFirestore db;
@@ -52,6 +57,8 @@ public class EditMovieRepository {
         isTrendingExist = new MutableLiveData<>();
         isNowPlayingExist = new MutableLiveData<>();
         isUpcomingExist = new MutableLiveData<>();
+
+        isSuccess = new MutableLiveData<>();
 
         db = FirebaseFirestore.getInstance();
         tmDbClient = RetrofitTMDbClient.getInstance();
@@ -71,8 +78,7 @@ public class EditMovieRepository {
                             MovieDetail movieDetail = response.body();
                             movieDetail.setTrailer_key(videoKey);
                             movieDetail.setVoteCount(1);
-                            addToMovieRate(movieDetail);
-                            MLDmovieDetail.postValue(response.body());
+                            MLDmovieDetail.postValue(movieDetail);
                         }
                     }
 
@@ -82,13 +88,6 @@ public class EditMovieRepository {
                     }
                 });
         return MLDmovieDetail;
-    }
-
-    private void addToMovieRate(MovieDetail movieDetail) {
-        MovieRate movieRate = new MovieRate(movieDetail.getVoteAverage());
-        db.collection(CollectionName.MOVIE_RATE)
-                .document(String.valueOf(movieDetail.getId()))
-                .set(movieRate);
     }
 
     public MutableLiveData<MovieDetail> getMLDmovieDetail(Integer id) {
@@ -140,52 +139,103 @@ public class EditMovieRepository {
                 });
     }
 
-    public void addToFirestore(MovieDetail movieDetail) {
-        if (movieDetail != null) {
-            int id = movieDetail.getId();
-            db.collection(CollectionName.MOVIE_DETAIL)
-                    .document(String.valueOf(id))
-                    .set(movieDetail)
-                    .addOnSuccessListener(onSuccessListener)
-                    .addOnFailureListener(onFailureListener);
-            Movie movie = new Movie(movieDetail);
-            db.collection(CollectionName.MOVIE)
-                    .document(String.valueOf(id))
-                    .set(movie)
-                    .addOnSuccessListener(onSuccessListener)
-                    .addOnFailureListener(onFailureListener);
-        }
+    public MutableLiveData<Boolean> updateToDatabase(
+            MovieDetail movieDetail,
+            boolean trending,
+            boolean upcoming,
+            boolean nowPlaying) {
+
+        db.runTransaction(new Transaction.Function<Void>() {
+            @Nullable
+            @Override
+            public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
+                int id = movieDetail.getId();
+                DocumentReference movieRateRef = db.collection(CollectionName.MOVIE_RATE)
+                        .document(String.valueOf(id));
+                if (!transaction.get(movieRateRef)
+                        .exists())
+                    initMovieRate(movieDetail, transaction);
+
+                updateMovie(movieDetail, transaction);
+                updateCategory(movieDetail, trending, upcoming, nowPlaying, transaction);
+                return null;
+            }
+        })
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        isSuccess.postValue(true);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        isSuccess.postValue(false);
+                    }
+                });
+        return isSuccess;
     }
 
-    public void addToCategoryList(MovieDetail movieDetail, String collectionPath) {
-        if (movieDetail != null) {
-            int id = movieDetail.getId();
-            Movie movie = new Movie(movieDetail);
-            db.collection(collectionPath)
-                    .document(String.valueOf(id))
-                    .set(movie)
-                    .addOnSuccessListener(onSuccessListener)
-                    .addOnFailureListener(onFailureListener);
-            Date current = new Date();
-            String currentStr = new SimpleDateFormat("yyyy-MM-dd").format(current);
-            Map<String, Object> map = new HashMap<>();
-            map.put("updated_date", currentStr);
-            db.collection(collectionPath)
-                    .document(String.valueOf(id))
-                    .update(map)
-                    .addOnSuccessListener(onSuccessListener)
-                    .addOnFailureListener(onFailureListener);
-        }
+    private void initMovieRate(MovieDetail movieDetail, Transaction transaction) throws FirebaseFirestoreException {
+        MovieRate movieRate = new MovieRate(movieDetail.getVoteAverage());
+        db.collection(CollectionName.MOVIE_RATE)
+                .document(String.valueOf(movieDetail.getId()))
+                .set(movieRate);
     }
 
-    public void removeFromCategoryList(MovieDetail movieDetail, String collectionPath) {
-        if (movieDetail != null) {
-            int id = movieDetail.getId();
-            Movie movie = new Movie(movieDetail);
-            db.collection(collectionPath)
-                    .document(String.valueOf(id))
-                    .delete();
-        }
+    private void updateMovie(MovieDetail movieDetail, Transaction transaction) {
+        int id = movieDetail.getId();
+
+        DocumentReference movieDetailRef = db.collection(CollectionName.MOVIE_DETAIL)
+                .document(String.valueOf(id));
+        transaction.set(movieDetailRef, movieDetail);
+
+        Movie movie = new Movie(movieDetail);
+        DocumentReference movieRef = db.collection(CollectionName.MOVIE)
+                .document(String.valueOf(id));
+        transaction.set(movieRef, movie);
+    }
+
+    private void updateCategory(
+            MovieDetail movieDetail,
+            boolean trending,
+            boolean upcoming,
+            boolean nowPlaying,
+            Transaction transaction) {
+
+        if (trending) {
+            addToCategoryList(movieDetail, CollectionName.MOVIE_TRENDING, transaction);
+        } else removeFromCategoryList(movieDetail, CollectionName.MOVIE_TRENDING, transaction);
+
+        if (upcoming) {
+            addToCategoryList(movieDetail, CollectionName.MOVIE_UPCOMING, transaction);
+        } else removeFromCategoryList(movieDetail, CollectionName.MOVIE_UPCOMING, transaction);
+
+        if (nowPlaying) {
+            addToCategoryList(movieDetail, CollectionName.MOVIE_NOW_PLAYING, transaction);
+        } else removeFromCategoryList(movieDetail, CollectionName.MOVIE_NOW_PLAYING, transaction);
+    }
+
+    private void addToCategoryList(MovieDetail movieDetail, String collectionPath, Transaction transaction) {
+        int id = movieDetail.getId();
+        Movie movie = new Movie(movieDetail);
+
+        DocumentReference collectionRef = db.collection(collectionPath)
+                .document(String.valueOf(id));
+        transaction.set(collectionRef, movie);
+
+        Date current = new Date();
+        String currentStr = new SimpleDateFormat("yyyy-MM-dd").format(current);
+        Map<String, Object> map = new HashMap<>();
+        map.put("updated_date", currentStr);
+        transaction.update(collectionRef, map);
+    }
+
+    private void removeFromCategoryList(MovieDetail movieDetail, String collectionPath, Transaction transaction) {
+        int id = movieDetail.getId();
+        DocumentReference collectionRef = db.collection(collectionPath)
+                .document(String.valueOf(id));
+        transaction.delete(collectionRef);
     }
 
 
@@ -202,7 +252,6 @@ public class EditMovieRepository {
                         }
                     }
                 });
-
         return isTrendingExist;
     }
 

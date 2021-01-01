@@ -5,15 +5,22 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Transaction;
+import com.google.firebase.firestore.WriteBatch;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.model.Caster;
 import com.ntikhoa.chillnmovie.model.CreditDBresponse;
@@ -37,14 +44,14 @@ import retrofit2.Response;
 
 public class MovieDetailRepository {
     private MutableLiveData<MovieDetail> MLDmovieDetail;
-    private MutableLiveData<List<Caster>> MLDcaster;
-    private MutableLiveData<List<UserRate>> MLDuserRate;
+    private final MutableLiveData<List<Caster>> MLDcaster;
+    private final MutableLiveData<List<UserRate>> MLDuserRate;
 
-    private Application application;
+    private final Application application;
     private String videoKey;
 
-    private RetrofitTMDbClient tmDbClient;
-    private FirebaseFirestore db;
+    private final RetrofitTMDbClient tmDbClient;
+    private final FirebaseFirestore db;
 
     public MovieDetailRepository(Application application) {
         this.application = application;
@@ -71,8 +78,7 @@ public class MovieDetailRepository {
                             MovieDetail movieDetail = response.body();
                             movieDetail.setTrailer_key(videoKey);
                             movieDetail.setVoteCount(1);
-                            addToMovieRate(movieDetail);
-                            MLDmovieDetail.postValue(response.body());
+                            MLDmovieDetail.postValue(movieDetail);
                         }
                     }
 
@@ -156,20 +162,53 @@ public class MovieDetailRepository {
 
     //repeat with EditMovieRepository
     public void addToFirestore(MovieDetail movieDetail) {
-        if (movieDetail != null) {
-            int id = movieDetail.getId();
-            db.collection(CollectionName.MOVIE_DETAIL)
-                    .document(String.valueOf(id))
-                    .set(movieDetail)
-                    .addOnSuccessListener(onSuccessListener)
-                    .addOnFailureListener(onFailureListener);
-            Movie movie = new Movie(movieDetail);
-            db.collection(CollectionName.MOVIE)
-                    .document(String.valueOf(id))
-                    .set(movie)
-                    .addOnSuccessListener(onSuccessListener)
-                    .addOnFailureListener(onFailureListener);
-        }
+        db.runTransaction(new Transaction.Function<Void>() {
+            @Nullable
+            @Override
+            public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
+                int id = movieDetail.getId();
+                DocumentReference movieRateRef = db.collection(CollectionName.MOVIE_RATE)
+                        .document(String.valueOf(id));
+                if (!transaction.get(movieRateRef)
+                        .exists())
+                    initMovieRate(movieDetail, transaction);
+
+                addMovie(movieDetail, transaction);
+                return null;
+            }
+        })
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        showMessage("Success");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showMessage(e.getMessage());
+                    }
+                });
+    }
+
+    private void initMovieRate(MovieDetail movieDetail, Transaction transaction) throws FirebaseFirestoreException {
+        MovieRate movieRate = new MovieRate(movieDetail.getVoteAverage());
+        db.collection(CollectionName.MOVIE_RATE)
+                .document(String.valueOf(movieDetail.getId()))
+                .set(movieRate);
+    }
+
+    private void addMovie(MovieDetail movieDetail, Transaction transaction) {
+        int id = movieDetail.getId();
+
+        DocumentReference movieDetailRef = db.collection(CollectionName.MOVIE_DETAIL)
+                .document(String.valueOf(id));
+        transaction.set(movieDetailRef, movieDetail);
+
+        Movie movie = new Movie(movieDetail);
+        DocumentReference movieRef = db.collection(CollectionName.MOVIE)
+                .document(String.valueOf(id));
+        transaction.set(movieRef, movie);
     }
 
     public MutableLiveData<List<UserRate>> getMLDuserRate(Integer id) {
@@ -207,9 +246,9 @@ public class MovieDetailRepository {
                 .update("favorite_list", FieldValue.arrayUnion(movieId));
     }
 
-    private final OnSuccessListener<Void> onSuccessListener = new OnSuccessListener<Void>() {
+    private final OnSuccessListener onSuccessListener = new OnSuccessListener() {
         @Override
-        public void onSuccess(Void aVoid) {
+        public void onSuccess(Object o) {
             Toast.makeText(application.getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
         }
     };

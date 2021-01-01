@@ -21,7 +21,6 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.ntikhoa.chillnmovie.R;
-import com.ntikhoa.chillnmovie.model.CollectionName;
 import com.ntikhoa.chillnmovie.model.Genre;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
@@ -78,7 +77,8 @@ public class EditMovieActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateData();
+                if (movieDetail != null)
+                    updateData();
             }
         });
 
@@ -92,7 +92,8 @@ public class EditMovieActivity extends AppCompatActivity {
         btnEditGenres.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editGenres();
+                if (movieDetail != null)
+                    editGenres();
             }
         });
 
@@ -106,10 +107,12 @@ public class EditMovieActivity extends AppCompatActivity {
         btnPlayTrailer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String videoKey = editTextTrailer.getText().toString();
-                Intent intent = new Intent(getApplicationContext(), TrailerPlayerActivity.class);
-                intent.putExtra(TrailerPlayerActivity.EXTRA_TRAILER_KEY, videoKey);
-                startActivity(intent);
+                if (movieDetail != null) {
+                    String videoKey = editTextTrailer.getText().toString();
+                    Intent intent = new Intent(getApplicationContext(), TrailerPlayerActivity.class);
+                    intent.putExtra(TrailerPlayerActivity.EXTRA_TRAILER_KEY, videoKey);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -278,7 +281,6 @@ public class EditMovieActivity extends AppCompatActivity {
         String status = editTextStatus.getText().toString();
         String videoKey = editTextTrailer.getText().toString();
 
-
         String releaseDate = editTextReleaseDate.getText().toString();
         if (!releaseDate.isEmpty() && !validate(releaseDate)) {
             editTextReleaseDate.setError("Invalid input");
@@ -326,24 +328,20 @@ public class EditMovieActivity extends AppCompatActivity {
         movieDetail.setOverview(overview);
         movieDetail.setGenres(newGenres);
 
-        addToDatabase(movieDetail);
-        finish();
+        viewModel.updateToDatabase(movieDetail,
+                checkBoxTrending.isChecked(),
+                checkBoxUpcoming.isChecked(),
+                checkBoxNowPlaying.isChecked())
+                .observe(this, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean success) {
+                        if (success) {
+                            finish();
+                        }
+                    }
+                });
     }
 
-    private void addToDatabase(MovieDetail movieDetail) {
-        viewModel.addToDatabase(movieDetail);
-        if (checkBoxTrending.isChecked()) {
-            viewModel.addToCategoryList(movieDetail, CollectionName.MOVIE_TRENDING);
-        } else viewModel.removeFromCategoryList(movieDetail, CollectionName.MOVIE_TRENDING);
-
-        if (checkBoxUpcoming.isChecked()) {
-            viewModel.addToCategoryList(movieDetail, CollectionName.MOVIE_UPCOMING);
-        } else viewModel.removeFromCategoryList(movieDetail, CollectionName.MOVIE_UPCOMING);
-
-        if (checkBoxNowPlaying.isChecked()) {
-            viewModel.addToCategoryList(movieDetail, CollectionName.MOVIE_NOW_PLAYING);
-        } else viewModel.removeFromCategoryList(movieDetail, CollectionName.MOVIE_NOW_PLAYING);
-    }
 
     private boolean validate(String date) {
         String[] t = date.split("-");

@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -67,9 +68,12 @@ public class MovieDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (movieDetail != null) {
-                    Intent intent = new Intent(getApplicationContext(), TrailerPlayerActivity.class);
-                    intent.putExtra(TrailerPlayerActivity.EXTRA_TRAILER_KEY, movieDetail.getTrailer_key());
-                    startActivity(intent);
+                    if (movieDetail.getTrailer_key() != null && !movieDetail.getTrailer_key().isEmpty()) {
+                        Intent intent = new Intent(getApplicationContext(), TrailerPlayerActivity.class);
+                        intent.putExtra(TrailerPlayerActivity.EXTRA_TRAILER_KEY, movieDetail.getTrailer_key());
+                        startActivity(intent);
+                    } else
+                        Toast.makeText(getApplicationContext(), "Trailer is not available", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -77,7 +81,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         btnRateMovie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (movieDetail != null) {
+                if (movieDetail != null && auth.getCurrentUser() != null) {
                     Intent intent = new Intent(MovieDetailActivity.this, RateMovieActivity.class);
                     intent.putExtra(RateMovieActivity.EXTRA_ID, movieDetail.getId());
                     intent.putExtra(RateMovieActivity.EXTRA_POSTER_PATH, movieDetail.getPosterPath());
@@ -90,7 +94,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         btnAddToFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (auth.getCurrentUser() != null) {
+                if (movieDetail != null && auth.getCurrentUser() != null) {
                     viewModel.addToFavorite(auth.getCurrentUser().getUid(), id);
                 }
             }
@@ -142,6 +146,9 @@ public class MovieDetailActivity extends AppCompatActivity {
                 setHeaderFragment(movieDetail);
                 setMovieInfoFragment(movieDetail);
                 setEditorMenu(movieDetail);
+
+                //for testing
+                //Toast.makeText(getApplicationContext(), String.valueOf(movieDetail.getId()), Toast.LENGTH_LONG).show();
             }
         });
 

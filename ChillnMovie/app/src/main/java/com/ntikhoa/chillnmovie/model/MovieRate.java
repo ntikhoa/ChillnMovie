@@ -40,7 +40,10 @@ public class MovieRate {
         return audioVoteAverage;
     }
 
-    public void vote(double plotVote, double visualVote, double audioVote) {
+    public void vote(UserRate userRate) {
+        double plotVote = userRate.getPlotVote();
+        double visualVote = userRate.getVisualVote();
+        double audioVote = userRate.getAudioVote();
         plotVoteAverage = (plotVoteAverage * voteCount + plotVote) / (voteCount + 1);
         visualVoteAverage = (visualVoteAverage * voteCount + visualVote) / (voteCount + 1);
         audioVoteAverage = (audioVoteAverage * voteCount + audioVote) / (voteCount + 1);
@@ -52,9 +55,9 @@ public class MovieRate {
     public void updateVote(UserRate oldUserRate, UserRate newUserRate) {
         double plot = newUserRate.getPlotVote() - oldUserRate.getPlotVote();
         plotVoteAverage = (plotVoteAverage * voteCount + plot) / voteCount;
-        double visualEffect = newUserRate.getVisualEffectVote() - oldUserRate.getVisualEffectVote();
+        double visualEffect = newUserRate.getVisualVote() - oldUserRate.getVisualVote();
         visualVoteAverage = (visualVoteAverage * voteCount + visualEffect) / voteCount;
-        double soundEffect = newUserRate.getSoundEffectVote() - oldUserRate.getSoundEffectVote();
+        double soundEffect = newUserRate.getAudioVote() - oldUserRate.getAudioVote();
         audioVoteAverage = (audioVoteAverage * voteCount + soundEffect) / voteCount;
 
         voteAverage = (plotVoteAverage + visualVoteAverage + audioVoteAverage) / 3;

@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+
 import com.ntikhoa.chillnmovie.model.MovieDetail;
 import com.ntikhoa.chillnmovie.repository.EditMovieRepository;
 
@@ -21,16 +22,12 @@ public class EditMovieViewModel extends AndroidViewModel {
         return repository.getMLDmovieDetail(id);
     }
 
-    public void addToDatabase(MovieDetail movieDetail) {
-        repository.addToFirestore(movieDetail);
-    }
-
-    public void addToCategoryList(MovieDetail movieDetail, String collectionPath) {
-        repository.addToCategoryList(movieDetail, collectionPath);
-    }
-
-    public void removeFromCategoryList(MovieDetail movieDetail, String collectionPath) {
-        repository.removeFromCategoryList(movieDetail, collectionPath);
+    public MutableLiveData<Boolean> updateToDatabase(
+            MovieDetail movieDetail,
+            boolean trending,
+            boolean upcoming,
+            boolean nowPlaying) {
+        return repository.updateToDatabase(movieDetail, trending, upcoming, nowPlaying);
     }
 
     public MutableLiveData<Boolean> isTrendingExist(Integer id) {
