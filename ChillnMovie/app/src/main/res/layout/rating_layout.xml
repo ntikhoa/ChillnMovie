@@ -20,7 +20,7 @@
         tools:progressDrawable="@drawable/circle_green" />
 
     <TextView
-        android:id="@+id/textViewRating"
+        android:id="@+id/textViewRate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"

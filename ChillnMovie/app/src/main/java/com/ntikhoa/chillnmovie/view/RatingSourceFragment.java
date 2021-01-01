@@ -81,35 +81,35 @@ public class RatingSourceFragment extends Fragment {
 
         View chillnMovie = root.findViewById(R.id.chillnMovie);
         pbRatingChillnMovie = chillnMovie.findViewById(R.id.progressBarRating);
-        tvRatingChillnMovie = chillnMovie.findViewById(R.id.textViewRating);
+        tvRatingChillnMovie = chillnMovie.findViewById(R.id.textViewRate);
 
         View visualEffect = root.findViewById(R.id.visualEffect);
         pbVisualEffect = visualEffect.findViewById(R.id.progressBarRating);
-        tvVisualEffect = visualEffect.findViewById(R.id.textViewRating);
+        tvVisualEffect = visualEffect.findViewById(R.id.textViewRate);
 
         View plot = root.findViewById(R.id.plot);
         pbPlot = plot.findViewById(R.id.progressBarRating);
-        tvPlot = plot.findViewById(R.id.textViewRating);
+        tvPlot = plot.findViewById(R.id.textViewRate);
 
         View soundEffect = root.findViewById(R.id.soundEffect);
         pbSoundEffect = soundEffect.findViewById(R.id.progressBarRating);
-        tvSoundEffect = soundEffect.findViewById(R.id.textViewRating);
+        tvSoundEffect = soundEffect.findViewById(R.id.textViewRate);
 
         View imdb = root.findViewById(R.id.imdb);
         pbRatingIMDb = imdb.findViewById(R.id.progressBarRating);
-        tvRatingIMDb = imdb.findViewById(R.id.textViewRating);
+        tvRatingIMDb = imdb.findViewById(R.id.textViewRate);
 
         View metacritic = root.findViewById(R.id.metacritic);
         pbRatingMetacritic = metacritic.findViewById(R.id.progressBarRating);
-        tvRatingMetacritic = metacritic.findViewById(R.id.textViewRating);
+        tvRatingMetacritic = metacritic.findViewById(R.id.textViewRate);
 
         View tmdb = root.findViewById(R.id.theMovieDb);
         pbRatingTMDb = tmdb.findViewById(R.id.progressBarRating);
-        tvRatingTMDb = tmdb.findViewById(R.id.textViewRating);
+        tvRatingTMDb = tmdb.findViewById(R.id.textViewRate);
 
         View rottenTomatoes = root.findViewById(R.id.rottenTomatoes);
         pbRatingRottenTomatoes = rottenTomatoes.findViewById(R.id.progressBarRating);
-        tvRatingRottenTomatoes = rottenTomatoes.findViewById(R.id.textViewRating);
+        tvRatingRottenTomatoes = rottenTomatoes.findViewById(R.id.textViewRate);
     }
 
     private void loadData() {

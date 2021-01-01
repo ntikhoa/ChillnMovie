@@ -3,64 +3,61 @@ package com.ntikhoa.chillnmovie.view;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.adapter.FavoriteAdapter;
+import com.ntikhoa.chillnmovie.viewmodel.FavoriteViewModel;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FavoriteFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.List;
+
 public class FavoriteFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public FavoriteFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FavoriteFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FavoriteFragment newInstance(String param1, String param2) {
-        FavoriteFragment fragment = new FavoriteFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private RecyclerView recyclerViewFavorite;
+    private FavoriteAdapter favoriteAdapter;
+    private FavoriteViewModel viewModel;
+    private FirebaseAuth auth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorite, container, false);
+        View root = inflater.inflate(R.layout.fragment_favorite, container, false);
+        initComponent(root);
+        if (auth.getCurrentUser() != null)
+            loadData(auth.getUid());
+        return root;
+    }
+
+    private void initComponent(View root) {
+        viewModel = new ViewModelProvider(this,
+                ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()))
+                .get(FavoriteViewModel.class);
+
+        auth = FirebaseAuth.getInstance();
+
+        recyclerViewFavorite = root.findViewById(R.id.recyclerViewFavorite);
+        recyclerViewFavorite.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext(),
+                LinearLayoutManager.VERTICAL, false));
+        favoriteAdapter = new FavoriteAdapter(getActivity());
+        recyclerViewFavorite.setAdapter(favoriteAdapter);
+    }
+
+    private void loadData(String userId) {
+        viewModel.getMLDmovieFavorite(userId)
+                .observe(this, new Observer<List<Integer>>() {
+                    @Override
+                    public void onChanged(List<Integer> integers) {
+                        favoriteAdapter.submitList(integers);
+                    }
+                });
     }
 }

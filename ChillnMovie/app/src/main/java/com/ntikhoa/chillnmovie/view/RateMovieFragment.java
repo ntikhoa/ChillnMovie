@@ -42,7 +42,7 @@ public class RateMovieFragment extends Fragment {
         btnIncrease = root.findViewById(R.id.btnIncrease);
         View include = root.findViewById(R.id.include);
         pbRating = include.findViewById(R.id.progressBarRating);
-        tvRating = include.findViewById(R.id.textViewRating);
+        tvRating = include.findViewById(R.id.textViewRate);
     }
 
     private void addListener() {

@@ -71,11 +71,9 @@ public class MovieAdapter extends ListAdapter<Movie, MovieAdapter.MovieViewHolde
     static class MovieViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView imageViewPoster;
-        //        public TextView textViewTitle;
         public MovieViewHolder(Context context, @NonNull View itemView) {
             super(itemView);
             imageViewPoster = itemView.findViewById(R.id.imageViewPoster);
-//            textViewTitle = itemView.findViewById(R.id.textViewTitle);
         }
     }
 }

@@ -62,10 +62,10 @@ public class MovieHeaderFragment extends Fragment {
 
     public void initComponent(View view) {
         imageViewBackdrop = view.findViewById(R.id.imageViewBackdrop);
-        textViewTitle = view.findViewById(R.id.editTextTitle);
+        textViewTitle = view.findViewById(R.id.textViewTitle);
         View root = view.findViewById(R.id.ratingView);
         pbRating = root.findViewById(R.id.progressBarRating);
-        textViewRating = root.findViewById(R.id.textViewRating);
+        textViewRating = root.findViewById(R.id.textViewRate);
     }
 
     private void setBackdropImage() {

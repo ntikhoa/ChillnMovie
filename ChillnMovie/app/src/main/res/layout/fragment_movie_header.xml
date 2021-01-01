@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="16dp"
+    android:layout_marginBottom="16dp"
     app:cardElevation="8dp">
 
     <ImageView
@@ -25,12 +26,12 @@
 
         <include
             android:id="@+id/ratingView"
-            layout="@layout/user_rating_layout"
+            layout="@layout/rating_small_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/editTextTitle"
+            android:id="@+id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -41,11 +42,4 @@
             app:layout_constraintStart_toStartOf="@+id/fragmentMovieHeader"
             tools:text="The SpongeBob Movie: Sponge on the Run" />
     </LinearLayout>
-
-    <!--                <include-->
-    <!--                    android:id="@+id/progressBar"-->
-    <!--                    layout="@layout/user_rating_layout"-->
-    <!--                    android:layout_width="wrap_content"-->
-    <!--                    android:layout_height="wrap_content"-->
-    <!--                    android:layout_gravity="bottom|start" />-->
 </androidx.cardview.widget.CardView>
