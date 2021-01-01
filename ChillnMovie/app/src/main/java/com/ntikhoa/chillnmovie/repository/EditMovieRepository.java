@@ -160,19 +160,17 @@ public class EditMovieRepository {
                 updateCategory(movieDetail, trending, upcoming, nowPlaying, transaction);
                 return null;
             }
-        })
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        isSuccess.postValue(true);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        isSuccess.postValue(false);
-                    }
-                });
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                isSuccess.postValue(true);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                isSuccess.postValue(false);
+            }
+        });
         return isSuccess;
     }
 

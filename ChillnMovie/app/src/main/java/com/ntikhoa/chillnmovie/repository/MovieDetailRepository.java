@@ -160,6 +160,22 @@ public class MovieDetailRepository {
         return MLDcaster;
     }
 
+    public MutableLiveData<List<UserRate>> getMLDuserRate(Integer id) {
+        db.collection(CollectionName.MOVIE_RATE)
+                .document(String.valueOf(id))
+                .collection(CollectionName.USER_RATE)
+                .orderBy("rateDate", Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        MLDuserRate.postValue(queryDocumentSnapshots.toObjects(UserRate.class));
+                    }
+                });
+        return MLDuserRate;
+    }
+
+
     //repeat with EditMovieRepository
     public void addToFirestore(MovieDetail movieDetail) {
         db.runTransaction(new Transaction.Function<Void>() {
@@ -176,19 +192,12 @@ public class MovieDetailRepository {
                 addMovie(movieDetail, transaction);
                 return null;
             }
-        })
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        showMessage("Success");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        showMessage(e.getMessage());
-                    }
-                });
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                showMessage("Success");
+            }
+        }).addOnFailureListener(onFailureListener);
     }
 
     private void initMovieRate(MovieDetail movieDetail, Transaction transaction) throws FirebaseFirestoreException {
@@ -211,35 +220,6 @@ public class MovieDetailRepository {
         transaction.set(movieRef, movie);
     }
 
-    public MutableLiveData<List<UserRate>> getMLDuserRate(Integer id) {
-        db.collection(CollectionName.MOVIE_RATE)
-                .document(String.valueOf(id))
-                .collection(CollectionName.USER_RATE)
-                .orderBy("rateDate", Query.Direction.DESCENDING)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        MLDuserRate.postValue(queryDocumentSnapshots.toObjects(UserRate.class));
-                    }
-                });
-        return MLDuserRate;
-    }
-
-    private void showMessage(String message) {
-        Toast.makeText(application.getApplicationContext(),
-                message,
-                Toast.LENGTH_LONG)
-                .show();
-    }
-
-    private void addToMovieRate(MovieDetail movieDetail) {
-        MovieRate movieRate = new MovieRate(movieDetail.getVoteAverage());
-        db.collection(CollectionName.MOVIE_RATE)
-                .document(String.valueOf(movieDetail.getId()))
-                .set(movieRate);
-    }
-
     public void addToFavorite(String userId, Integer movieId) {
         db.collection(CollectionName.USER_FAVORITE)
                 .document(userId)
@@ -258,4 +238,11 @@ public class MovieDetailRepository {
             Log.d(MovieDetailActivity.TAG, "addToFireStore: " + e.getMessage());
         }
     };
+
+    private void showMessage(String message) {
+        Toast.makeText(application.getApplicationContext(),
+                message,
+                Toast.LENGTH_LONG)
+                .show();
+    }
 }

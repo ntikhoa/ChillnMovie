@@ -30,12 +30,12 @@ public class MovieDetailViewModel extends AndroidViewModel {
         return repository.getMLDcaster(id);
     }
 
-    public void addToDatabase(MovieDetail movieDetail) {
-        repository.addToFirestore(movieDetail);
-    }
-
     public MutableLiveData<List<UserRate>> getMLDuserRate(Integer id) {
         return repository.getMLDuserRate(id);
+    }
+
+    public void addToDatabase(MovieDetail movieDetail) {
+        repository.addToFirestore(movieDetail);
     }
 
     public void addToFavorite(String userId, Integer movieId) {
