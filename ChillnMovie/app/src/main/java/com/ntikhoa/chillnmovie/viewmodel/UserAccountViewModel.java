@@ -26,23 +26,11 @@ public class UserAccountViewModel extends AndroidViewModel {
         return repository.signUp(email, password);
     }
 
-    public void uploadAvatar(Uri imageUri, String userId) {
-        repository.uploadAvatar(imageUri, userId);
+    public MutableLiveData<Boolean> createUserInfo(UserAccount userAccount, String userId) {
+        return repository.createUserInfo(userAccount, userId);
     }
 
-    public void createUserProfile(UserAccount userAccount, String userId) {
-        repository.createUserProfile(userAccount, userId);
+    public MutableLiveData<Boolean> uploadAvatar(Uri imageUri, String userId) {
+        return repository.uploadAvatar(imageUri, userId);
     }
-
-    public MutableLiveData<Boolean> initUserData(String uid, String email) {
-        return repository.initUserData(uid, email);
-    }
-
-//    public void initUserProfile(String uid, String email) {
-//        repository.initUserProfile(uid, email);
-//    }
-//
-//    public void initUserFavoriteList(String uid){
-//        repository.initUserFavoriteList(uid);
-//    }
 }

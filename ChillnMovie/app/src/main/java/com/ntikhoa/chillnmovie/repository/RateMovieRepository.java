@@ -62,15 +62,15 @@ public class RateMovieRepository {
 
                 DocumentReference movieTrendingRef = db.collection(CollectionName.MOVIE_TRENDING)
                         .document(String.valueOf(id));
-                boolean cc = transaction.get(movieTrendingRef).exists();
+                boolean isTrendingExist = transaction.get(movieTrendingRef).exists();
 
                 DocumentReference movieUpcomingRef = db.collection(CollectionName.MOVIE_UPCOMING)
                         .document(String.valueOf(id));
-                boolean cc1 = transaction.get(movieUpcomingRef).exists();
+                boolean isUpcomingExist = transaction.get(movieUpcomingRef).exists();
 
                 DocumentReference movieNowPlayingRef = db.collection(CollectionName.MOVIE_NOW_PLAYING)
                         .document(String.valueOf(id));
-                boolean cc2 = transaction.get(movieNowPlayingRef).exists();
+                boolean isNowPlayingExist = transaction.get(movieNowPlayingRef).exists();
 
                 if (userRate != null) {
                     movieRate.updateVote(userRate, newUserRate);
@@ -85,13 +85,13 @@ public class RateMovieRepository {
                 map.put("voteAverage", movieRate.getVoteAverage());
                 map.put("voteCount", movieRate.getVoteCount());
 
-                if (cc)
+                if (isTrendingExist)
                     transaction.update(movieTrendingRef, map);
 
-                if (cc1)
+                if (isUpcomingExist)
                     transaction.update(movieUpcomingRef, map);
 
-                if (cc2)
+                if (isNowPlayingExist)
                     transaction.update(movieNowPlayingRef, map);
 
                 return null;

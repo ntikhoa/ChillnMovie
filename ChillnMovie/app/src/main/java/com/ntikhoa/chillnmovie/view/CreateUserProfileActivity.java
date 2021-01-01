@@ -64,11 +64,7 @@ public class CreateUserProfileActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (imageUri != null) {
-                    viewModel.uploadAvatar(imageUri, uid);
-                }
                 createUserProfile();
-                finish();
             }
         });
 
@@ -125,7 +121,24 @@ public class CreateUserProfileActivity extends AppCompatActivity {
         userAccount.setBirthdate(birthdate);
         userAccount.setGender(gender);
 
-        viewModel.createUserProfile(userAccount, uid);
+        viewModel.createUserInfo(userAccount, uid)
+                .observe(this, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean success) {
+                        if (success) {
+                            if (imageUri != null) {
+                                viewModel.uploadAvatar(imageUri, uid)
+                                        .observe(CreateUserProfileActivity.this, new Observer<Boolean>() {
+                                            @Override
+                                            public void onChanged(Boolean success) {
+                                                if (success)
+                                                    finish();
+                                            }
+                                        });
+                            } else finish();
+                        }
+                    }
+                });
     }
 
     private boolean validate(String date) {
@@ -176,16 +189,4 @@ public class CreateUserProfileActivity extends AppCompatActivity {
 
         radioGroupGender = findViewById(R.id.radioGroupGender);
     }
-
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        auth.signOut();
-//    }
-//
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        auth.signOut();
-//    }
 }

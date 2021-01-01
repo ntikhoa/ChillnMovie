@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Transaction;
@@ -41,7 +42,10 @@ public class UserAccountRepository {
     private final FirebaseStorage storage;
     private final MutableLiveData<Boolean> isSignupSuccess;
     private final MutableLiveData<Boolean> isLoginSuccess;
-    private final MutableLiveData<Boolean> isInitSuccess;
+    private final MutableLiveData<Boolean> isCreateInfoSuccess;
+    private final MutableLiveData<Boolean> isUploadImageSuccess;
+
+    //login signup
 
     public UserAccountRepository(Application application) {
         this.application = application;
@@ -50,7 +54,8 @@ public class UserAccountRepository {
         storage = FirebaseStorage.getInstance();
         isSignupSuccess = new MutableLiveData<>();
         isLoginSuccess = new MutableLiveData<>();
-        isInitSuccess = new MutableLiveData<>();
+        isCreateInfoSuccess = new MutableLiveData<>();
+        isUploadImageSuccess = new MutableLiveData<>();
     }
 
     public MutableLiveData<Boolean> login(String email, String password) {
@@ -76,85 +81,63 @@ public class UserAccountRepository {
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
-                        isSignupSuccess.postValue(true);
+                        initUserData(authResult.getUser().getUid(), email);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(application, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show();
-                        isSignupSuccess.postValue(false);
-                    }
-                });
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                isSignupSuccess.postValue(false);
+            }
+        });
         return isSignupSuccess;
     }
 
-    public MutableLiveData<Boolean> initUserData(String uid, String email) {
-        Task taskInitUserProfile = initUserProfile(uid, email);
-        Task taskInitUserFavoriteList = initUserFavoriteList(uid);
-        Task combineTask = Tasks.whenAllSuccess(taskInitUserFavoriteList, taskInitUserProfile)
-                .addOnSuccessListener(new OnSuccessListener<List<Object>>() {
-                    @Override
-                    public void onSuccess(List<Object> objects) {
-                        isInitSuccess.postValue(true);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        isInitSuccess.postValue(false);
-                    }
-                });
-        return isInitSuccess;
+    private void initUserData(String uid, String email) {
+        db.runTransaction(new Transaction.Function<Void>() {
+            @Nullable
+            @Override
+            public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
+
+                initUserProfile(uid, email, transaction);
+                initUserFavoriteList(uid, transaction);
+                return null;
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                isSignupSuccess.postValue(true);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                isSignupSuccess.postValue(false);
+            }
+        });
     }
 
-
-    private Task initUserProfile(String uid, String email) {
+    private void initUserProfile(String uid, String email, Transaction transaction) {
         Date current = new Date();
         String currentStr = new SimpleDateFormat("yyyy-MM-dd").format(current);
         UserAccount userAccount = new UserAccount(email, currentStr, UserAccount.USER);
         userAccount.setName("Anonymous");
-        return db.collection(CollectionName.USER_PROFILE)
-                .document(uid)
-                .set(userAccount);
+        DocumentReference userProfileRef = db.collection(CollectionName.USER_PROFILE)
+                .document(uid);
+        transaction.set(userProfileRef, userAccount);
     }
 
-    private Task initUserFavoriteList(String uid) {
+    private void initUserFavoriteList(String uid, Transaction transaction) {
         Map<String, Object> map = new HashMap<>();
         List<String> favorite = new ArrayList<>();
         map.put("favorite_list", favorite);
-        return db.collection(CollectionName.USER_FAVORITE)
-                .document(uid)
-                .set(map);
+        DocumentReference userFavoriteRef = db.collection(CollectionName.USER_FAVORITE)
+                .document(uid);
+        transaction.set(userFavoriteRef, map);
     }
 
-    public void uploadAvatar(Uri imageUri, String userId) {
-        StorageReference avatarRef = storage.getReference().child(CollectionName.IMAGE_AVATAR + System.currentTimeMillis()
-                + "." + getFileExtension(imageUri));
 
-        avatarRef.putFile(imageUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        taskSnapshot.getMetadata().getReference().getDownloadUrl()
-                                .addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Uri> task) {
-                                        Uri downloadUri = task.getResult();
-                                        String downloadUrl = downloadUri.toString();
-                                        updateUserAccountAvatar(userId, downloadUrl);
-                                    }
-                                });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        showMessage(exception.getMessage());
-                    }
-                });
-    }
+    //create user profile
 
-    public void createUserProfile(UserAccount userAccount, String userId) {
+    public MutableLiveData<Boolean> createUserInfo(UserAccount userAccount, String userId) {
         Map<String, Object> map = new HashMap<>();
         map.put("birthdate", userAccount.getBirthdate());
         map.put("country", userAccount.getCountry());
@@ -162,13 +145,69 @@ public class UserAccountRepository {
         map.put("name", userAccount.getName());
         db.collection(CollectionName.USER_PROFILE)
                 .document(userId)
-                .update(map);
+                .update(map)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        isCreateInfoSuccess.postValue(true);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                isCreateInfoSuccess.postValue(false);
+            }
+        });
+        return isCreateInfoSuccess;
+    }
+
+    public MutableLiveData<Boolean> uploadAvatar(Uri imageUri, String userId) {
+        StorageReference avatarRef = storage.getReference().child(CollectionName.IMAGE_AVATAR + System.currentTimeMillis()
+                + "." + getFileExtension(imageUri));
+
+        avatarRef.putFile(imageUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        avatarRef.getDownloadUrl()
+                                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        updateUserAccountAvatar(userId, uri.toString());
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        isUploadImageSuccess.postValue(false);
+                                    }
+                                });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                isUploadImageSuccess.postValue(false);
+            }
+        });
+
+        return isUploadImageSuccess;
     }
 
     private void updateUserAccountAvatar(String userId, String downloadUrl) {
         db.collection(CollectionName.USER_PROFILE)
                 .document(userId)
-                .update("avatarPath", downloadUrl);
+                .update("avatarPath", downloadUrl)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        isUploadImageSuccess.postValue(true);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        isUploadImageSuccess.postValue(false);
+                    }
+                });
     }
 
     private String getFileExtension(Uri uri) {
