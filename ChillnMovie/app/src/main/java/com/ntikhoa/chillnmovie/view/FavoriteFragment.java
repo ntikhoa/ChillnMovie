@@ -1,11 +1,16 @@
 package com.ntikhoa.chillnmovie.view;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.adapter.FavoriteAdapter;
@@ -49,6 +55,8 @@ public class FavoriteFragment extends Fragment {
                 LinearLayoutManager.VERTICAL, false));
         favoriteAdapter = new FavoriteAdapter(getActivity());
         recyclerViewFavorite.setAdapter(favoriteAdapter);
+
+        new ItemTouchHelper(mItemTouchHelperCallback).attachToRecyclerView(recyclerViewFavorite);
     }
 
     private void loadData(String userId) {
@@ -60,4 +68,44 @@ public class FavoriteFragment extends Fragment {
                     }
                 });
     }
+
+    private ItemTouchHelper.SimpleCallback mItemTouchHelperCallback =
+            new ItemTouchHelper.SimpleCallback(
+                    0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
+                @Override
+                public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                @Override
+                public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
+                    builder.setTitle("Are you sure you want to remove this movie");
+                    builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            favoriteAdapter.notifyDataSetChanged();
+                        }
+                    });
+                    builder.setPositiveButton("Remove", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            List<Integer> currentList = favoriteAdapter.getCurrentList();
+                            viewModel.removeMovieFromFavorite(auth.getUid(),
+                                    Integer.parseInt(String.valueOf(currentList.get(viewHolder.getAdapterPosition()))));
+                            viewModel.getMLDmovieFavorite(auth.getUid())
+                                    .observe(getActivity(), new Observer<List<Integer>>() {
+                                        @Override
+                                        public void onChanged(List<Integer> integers) {
+                                            favoriteAdapter.submitList(integers);
+                                        }
+                                    });
+                        }
+                    });
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }
+            };
 }

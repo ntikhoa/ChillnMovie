@@ -223,12 +223,14 @@ public class MovieDetailRepository {
     public void addToFavorite(String userId, Integer movieId) {
         db.collection(CollectionName.USER_FAVORITE)
                 .document(userId)
-                .update("favorite_list", FieldValue.arrayUnion(movieId));
+                .update("favorite_list", FieldValue.arrayUnion(movieId))
+                .addOnSuccessListener(onSuccessListener)
+                .addOnFailureListener(onFailureListener);
     }
 
-    private final OnSuccessListener onSuccessListener = new OnSuccessListener() {
+    private final OnSuccessListener<Void> onSuccessListener = new OnSuccessListener<Void>() {
         @Override
-        public void onSuccess(Object o) {
+        public void onSuccess(Void o) {
             Toast.makeText(application.getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
         }
     };
