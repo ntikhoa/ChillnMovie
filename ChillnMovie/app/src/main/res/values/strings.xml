@@ -83,4 +83,7 @@
     <string name="comment">Comment</string>
     <string name="anonymous">Anonymous</string>
     <string name="skip">Skip</string>
+
+    <string name="review">Review</string>
+    <string name="user_rate">User Rate</string>
 </resources>

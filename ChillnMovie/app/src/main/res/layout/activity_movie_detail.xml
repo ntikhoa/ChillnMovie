@@ -102,14 +102,50 @@
                 tools:background="@color/white"
                 tools:layout_height="500dp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewUserRate"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardTabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="100dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragmentMovieInfo"
+                app:strokeColor="@color/colorPrimaryVariant"
+                app:strokeWidth="2dp">
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:tabBackground="@color/white"
+                    app:tabGravity="fill"
+                    app:tabIndicatorColor="@color/colorPrimaryVariant"
+                    app:tabIndicatorGravity="stretch"
+                    app:tabMaxWidth="0dp"
+                    app:tabMode="fixed"
+                    app:tabSelectedTextColor="@android:color/white"
+                    app:tabTextColor="@color/colorPrimaryVariant" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewPagerReview"
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/fragmentMovieInfo" />
+                app:layout_constraintTop_toBottomOf="@id/cardTabLayout" />
+
+            <!--            <androidx.recyclerview.widget.RecyclerView-->
+            <!--                android:id="@+id/recyclerViewUserRate"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="500dp"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@id/cardTabLayout" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
