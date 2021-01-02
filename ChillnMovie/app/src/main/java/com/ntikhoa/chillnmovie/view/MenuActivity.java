@@ -4,22 +4,33 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.model.UserAccount;
+import com.ntikhoa.chillnmovie.model.UserModeSingleton;
+import com.ntikhoa.chillnmovie.viewmodel.UserAccountViewModel;
 
 public class MenuActivity extends AppCompatActivity {
+
+    private int mode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+        mode = ((UserModeSingleton) getApplicationContext()).getMode();
+        //for testing purposes
+        Toast.makeText(this, String.valueOf(mode), Toast.LENGTH_LONG).show();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
@@ -30,6 +41,11 @@ public class MenuActivity extends AppCompatActivity {
         ft.commit();
 
         FloatingActionButton fabEditor = findViewById(R.id.fabEditor);
+        if (mode == UserAccount.EDITOR) {
+            fabEditor.setVisibility(View.VISIBLE);
+            fabEditor.setClickable(true);
+            fabEditor.setFocusable(true);
+        }
         fabEditor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

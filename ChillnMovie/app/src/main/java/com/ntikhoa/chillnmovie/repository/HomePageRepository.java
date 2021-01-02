@@ -115,7 +115,6 @@ public class HomePageRepository {
         return MLDtrending;
     }
 
-
     private void showMessage(String message) {
         Toast.makeText(application.getApplicationContext(),
                 message,

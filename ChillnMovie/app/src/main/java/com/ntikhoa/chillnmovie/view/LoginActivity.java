@@ -38,24 +38,11 @@ public class LoginActivity extends AppCompatActivity {
     private UserAccountViewModel viewModel;
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        if (mAuth.getCurrentUser() != null) {
-            Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-            startActivity(intent);
-            finish();
-        }
-        //for testing purposes
-        //viewModel.login("ntikhoa@gmail.com", "khoa123456");
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         initComponent();
-
         btnGuest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

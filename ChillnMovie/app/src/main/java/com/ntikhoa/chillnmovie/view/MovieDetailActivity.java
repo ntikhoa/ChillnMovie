@@ -26,6 +26,8 @@ import com.ntikhoa.chillnmovie.adapter.UserRateAdapter;
 import com.ntikhoa.chillnmovie.model.Caster;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
+import com.ntikhoa.chillnmovie.model.UserAccount;
+import com.ntikhoa.chillnmovie.model.UserModeSingleton;
 import com.ntikhoa.chillnmovie.model.UserRate;
 import com.ntikhoa.chillnmovie.viewmodel.MovieDetailViewModel;
 import com.squareup.picasso.Picasso;
@@ -56,10 +58,14 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
 
+    int mode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
+
+        mode = ((UserModeSingleton) getApplicationContext()).getMode();
 
         initComp();
         loadData();
@@ -145,7 +151,8 @@ public class MovieDetailActivity extends AppCompatActivity {
                 setBackground(movieDetail);
                 setHeaderFragment(movieDetail);
                 setMovieInfoFragment(movieDetail);
-                setEditorMenu(movieDetail);
+                if (mode == UserAccount.EDITOR)
+                    setEditorMenu(movieDetail);
 
                 //for testing
                 //Toast.makeText(getApplicationContext(), String.valueOf(movieDetail.getId()), Toast.LENGTH_LONG).show();

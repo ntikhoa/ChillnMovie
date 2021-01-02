@@ -33,4 +33,8 @@ public class UserAccountViewModel extends AndroidViewModel {
     public MutableLiveData<Boolean> uploadAvatar(Uri imageUri, String userId) {
         return repository.uploadAvatar(imageUri, userId);
     }
+
+    public MutableLiveData<Boolean> setUserMode(String userId) {
+        return repository.setUserMode(userId);
+    }
 }

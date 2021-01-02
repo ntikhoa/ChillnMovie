@@ -19,6 +19,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Transaction;
@@ -27,6 +28,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.ntikhoa.chillnmovie.model.CollectionName;
 import com.ntikhoa.chillnmovie.model.UserAccount;
+import com.ntikhoa.chillnmovie.model.UserModeSingleton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,6 +42,7 @@ public class UserAccountRepository {
     private final FirebaseAuth mAuth;
     private final FirebaseFirestore db;
     private final FirebaseStorage storage;
+    private final MutableLiveData<Integer> userMode;
     private final MutableLiveData<Boolean> isSignupSuccess;
     private final MutableLiveData<Boolean> isLoginSuccess;
     private final MutableLiveData<Boolean> isCreateInfoSuccess;
@@ -56,23 +59,46 @@ public class UserAccountRepository {
         isLoginSuccess = new MutableLiveData<>();
         isCreateInfoSuccess = new MutableLiveData<>();
         isUploadImageSuccess = new MutableLiveData<>();
+        userMode = new MutableLiveData<>();
     }
 
     public MutableLiveData<Boolean> login(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            isLoginSuccess.postValue(true);
-                        } else {
-                            Toast.makeText(application.getApplicationContext(), "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            isLoginSuccess.postValue(false);
-                        }
+                    public void onSuccess(AuthResult authResult) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        setUserMode(user.getUid());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        isLoginSuccess.postValue(false);
                     }
                 });
+
+        return isLoginSuccess;
+    }
+
+    public MutableLiveData<Boolean> setUserMode(String userId) {
+        db.collection(CollectionName.USER_PROFILE)
+                .document(userId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        String modeStr = documentSnapshot.get("typeAccount").toString();
+                        Integer mode = Integer.parseInt(modeStr);
+                        UserModeSingleton.getInstance().setMode(mode);
+                        isLoginSuccess.postValue(true);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                isLoginSuccess.postValue(false);
+            }
+        });
         return isLoginSuccess;
     }
 

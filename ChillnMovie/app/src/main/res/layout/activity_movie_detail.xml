@@ -27,8 +27,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:layout_height="280dp"
-                tools:background="@color/white"/>
+                tools:background="@color/white"
+                tools:layout_height="280dp" />
 
             <ImageButton
                 android:id="@+id/btnAddMovie"
@@ -38,7 +38,8 @@
                 android:contentDescription="@string/add_to_favorite_list_button"
                 app:layout_constraintEnd_toStartOf="@id/btnRate"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragmentMovieHeader" />
+                app:layout_constraintTop_toBottomOf="@+id/fragmentMovieHeader"
+                tools:layout_marginTop="16dp" />
 
             <ImageButton
                 android:id="@+id/btnRate"
@@ -98,25 +99,25 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/recyclerViewCaster"
-                tools:layout_height="500dp"
-                tools:background="@color/white"/>
+                tools:background="@color/white"
+                tools:layout_height="500dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewUserRate"
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@id/fragmentMovieInfo"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragmentMovieInfo" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
     <FrameLayout
         android:id="@+id/fragmentEditorMenu"
-        tools:background="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end" />
+        android:layout_gravity="bottom|end"
+        tools:background="@color/black" />
 </FrameLayout>

@@ -34,12 +34,14 @@ public class FavoriteRepository {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         String resultStr = documentSnapshot.get("favorite_list").toString();
                         resultStr = resultStr.substring(1, resultStr.length() - 1);
-                        String[] moviesStr = resultStr.split(", ");
-                        List<Integer> movies = new ArrayList<>();
-                        for (int i = 0; i < moviesStr.length; i++) {
-                            movies.add(Integer.parseInt(moviesStr[i]));
+                        if (!resultStr.isEmpty()) {
+                            String[] moviesStr = resultStr.split(", ");
+                            List<Integer> movies = new ArrayList<>();
+                            for (int i = 0; i < moviesStr.length; i++) {
+                                movies.add(Integer.parseInt(moviesStr[i]));
+                            }
+                            MLDmovieFavorite.postValue(movies);
                         }
-                        MLDmovieFavorite.postValue(movies);
                     }
                 });
         return MLDmovieFavorite;

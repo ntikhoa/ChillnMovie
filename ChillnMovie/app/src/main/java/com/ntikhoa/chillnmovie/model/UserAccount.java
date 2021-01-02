@@ -10,6 +10,7 @@ public class UserAccount {
     public static final int ADMIN = 0;
     public static final int EDITOR = 1;
     public static final int USER = 2;
+    public static final int GUEST = 3;
 
     private String email;
     private String name;
