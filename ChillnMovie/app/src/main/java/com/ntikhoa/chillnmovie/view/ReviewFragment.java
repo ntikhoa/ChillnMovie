@@ -1,49 +1,43 @@
 package com.ntikhoa.chillnmovie.view;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.model.UserRate;
+import com.ntikhoa.chillnmovie.viewmodel.UserRateViewModel;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ReviewFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ReviewFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String MOVIE_ID = "movie id";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Integer movieId;
 
-    public ReviewFragment() {
-        // Required empty public constructor
-    }
+    private UserRateViewModel viewModel;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ReviewFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ReviewFragment newInstance(String param1, String param2) {
+    private TextView textViewUserName;
+    private TextView textViewRateDate;
+    private Button textViewRate;
+    private TextView textViewComment;
+    private ImageView imageViewAvatar;
+
+    public static ReviewFragment newInstance(Integer movieId) {
         ReviewFragment fragment = new ReviewFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(MOVIE_ID, movieId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,8 +46,7 @@ public class ReviewFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            movieId = getArguments().getInt(MOVIE_ID);
         }
     }
 
@@ -61,6 +54,50 @@ public class ReviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_review, container, false);
+        View root = inflater.inflate(R.layout.user_rate_item, container, false);
+        initComponent(root);
+        loadData();
+        return root;
+    }
+
+    private void initComponent(View root) {
+        viewModel = new ViewModelProvider(getActivity(),
+                ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()))
+                .get(UserRateViewModel.class);
+
+        textViewUserName = root.findViewById(R.id.textViewUserName);
+        textViewRateDate = root.findViewById(R.id.textViewRateDate);
+        textViewComment = root.findViewById(R.id.textViewComment);
+        textViewRate = root.findViewById(R.id.textViewRate);
+        imageViewAvatar = root.findViewById(R.id.imageViewAvatar);
+
+        Drawable icVerify = ContextCompat.getDrawable(getActivity(), R.drawable.ic_check_circle);
+        textViewUserName.setCompoundDrawablesWithIntrinsicBounds(icVerify, null, null, null);
+        textViewUserName.setCompoundDrawablePadding(6); //6px = 8dp
+
+        //for testing
+        textViewUserName.setText("@realNtikhoa");
+        imageViewAvatar.setImageResource(R.drawable.shinobu);
+    }
+
+    private void loadData() {
+        viewModel.getMLDreview(movieId)
+                .observe(this, new Observer<UserRate>() {
+                    @Override
+                    public void onChanged(UserRate userRate) {
+                        textViewComment.setText(userRate.getComment());
+                        setUserRate(userRate);
+                        textViewRateDate.setText(userRate.getRateDate());
+                    }
+                });
+    }
+
+    private void setUserRate(UserRate userRate) {
+        Integer plot = userRate.getPlotVote();
+        Integer visualEffect = userRate.getVisualVote();
+        Integer soundEffect = userRate.getAudioVote();
+        Double average = (plot + visualEffect + soundEffect) / 3d;
+        String avgStr = String.format("%.1f", average);
+        textViewRate.setText(avgStr);
     }
 }

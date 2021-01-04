@@ -78,6 +78,8 @@ public class EditMovieRepository {
                             MovieDetail movieDetail = response.body();
                             movieDetail.setTrailer_key(videoKey);
                             movieDetail.setVoteCount(1);
+                            movieDetail.setBackdropPath(Movie.path + movieDetail.getBackdropPath());
+                            movieDetail.setPosterPath(Movie.path + movieDetail.getPosterPath());
                             MLDmovieDetail.postValue(movieDetail);
                         }
                     }

@@ -50,8 +50,7 @@ public class MoviePagedListAdapter extends PagedListAdapter<Movie, MoviePagedLis
             ShimmerDrawable drawable = new ShimmerDrawable();
             drawable.setShimmer(shimmer);
 
-            String path = Movie.path + movie.getBackdropPath();
-            Picasso.get().load(path)
+            Picasso.get().load(movie.getBackdropPath())
                     .placeholder(drawable)
                     .into(holder.imageViewBackdrop);
 

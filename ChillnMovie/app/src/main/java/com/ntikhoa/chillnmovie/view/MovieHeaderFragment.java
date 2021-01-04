@@ -69,7 +69,6 @@ public class MovieHeaderFragment extends Fragment {
     }
 
     private void setBackdropImage() {
-        String backdropUrl = Movie.path + backdropPath;
         Shimmer shimmer = new Shimmer.ColorHighlightBuilder()
                 .setBaseColor(ContextCompat.getColor(getActivity().getApplicationContext(),
                         R.color.colorShimmerBase))
@@ -83,7 +82,7 @@ public class MovieHeaderFragment extends Fragment {
         ShimmerDrawable drawable = new ShimmerDrawable();
         drawable.setShimmer(shimmer);
         Picasso.get()
-                .load(backdropUrl)
+                .load(backdropPath)
                 .placeholder(drawable)
                 .into(imageViewBackdrop);
         textViewTitle.setText(title);

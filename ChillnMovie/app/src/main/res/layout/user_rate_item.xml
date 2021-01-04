@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="16dp"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp">
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="16dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,17 +17,17 @@
             android:id="@+id/imageViewAvatar"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@drawable/nezuko_chan"
-            app:civ_border_width="2dp"
             app:civ_border_color="@color/white"
+            app:civ_border_width="2dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/shinobu" />
 
         <TextView
             android:id="@+id/textViewUserName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintEnd_toStartOf="@+id/textViewRate"
@@ -40,8 +40,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintStart_toStartOf="@+id/textViewUserName"
-            app:layout_constraintTop_toBottomOf="@+id/textViewUserName"
+            app:layout_constraintEnd_toEndOf="@+id/textViewRate"
+            app:layout_constraintStart_toStartOf="@+id/textViewRate"
+            app:layout_constraintTop_toBottomOf="@+id/textViewRate"
             tools:text="2020-12-26" />
 
         <com.google.android.material.button.MaterialButton
@@ -63,7 +64,7 @@
             android:id="@+id/textViewComment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxHeight="150dp"
+            android:layout_marginTop="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

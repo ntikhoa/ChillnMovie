@@ -61,6 +61,7 @@ public class UserRate {
     }
 
     public void setComment(String comment) {
+        //comment = comment.replace("\n", "\\n");
         this.comment = comment;
     }
 

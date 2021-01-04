@@ -78,6 +78,8 @@ public class MovieDetailRepository {
                             MovieDetail movieDetail = response.body();
                             movieDetail.setTrailer_key(videoKey);
                             movieDetail.setVoteCount(1);
+                            movieDetail.setBackdropPath(Movie.path + movieDetail.getBackdropPath());
+                            movieDetail.setPosterPath(Movie.path + movieDetail.getPosterPath());
                             MLDmovieDetail.postValue(movieDetail);
                         }
                     }
@@ -159,22 +161,6 @@ public class MovieDetailRepository {
                 });
         return MLDcaster;
     }
-
-    public MutableLiveData<List<UserRate>> getMLDuserRate(Integer id) {
-        db.collection(CollectionName.MOVIE_RATE)
-                .document(String.valueOf(id))
-                .collection(CollectionName.USER_RATE)
-                .orderBy("rateDate", Query.Direction.DESCENDING)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        MLDuserRate.postValue(queryDocumentSnapshots.toObjects(UserRate.class));
-                    }
-                });
-        return MLDuserRate;
-    }
-
 
     //repeat with EditMovieRepository
     public void addToFirestore(MovieDetail movieDetail) {

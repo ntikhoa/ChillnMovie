@@ -15,10 +15,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.model.Movie;
+import com.ntikhoa.chillnmovie.model.UserAccount;
+import com.ntikhoa.chillnmovie.model.UserModeSingleton;
 import com.ntikhoa.chillnmovie.model.UserRate;
 import com.ntikhoa.chillnmovie.viewmodel.RateMovieViewModel;
 import com.squareup.picasso.Picasso;
@@ -28,6 +31,8 @@ public class RateMovieActivity extends AppCompatActivity {
     public static final String EXTRA_ID = "movie id";
     public static final String EXTRA_TITLE = "movie title";
     public static final String EXTRA_POSTER_PATH = "movie poster path";
+
+    private int mode;
 
     private FrameLayout frameLayout;
     private RateMovieFragment plotFragment, visualEffectFragment, soundEffectFragment;
@@ -49,6 +54,8 @@ public class RateMovieActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rate_movie);
+
+        mode = ((UserModeSingleton) getApplicationContext()).getMode();
 
         initComponent();
         addRatingFragment();
@@ -83,13 +90,27 @@ public class RateMovieActivity extends AppCompatActivity {
                 newUserRate.setAudioVote(audioRate);
                 newUserRate.setComment(comment);
 
-                viewModel.rateMovie(id, newUserRate).observe(RateMovieActivity.this, new Observer<Boolean>() {
-                    @Override
-                    public void onChanged(Boolean success) {
-                        if (success)
-                            finish();
-                    }
-                });
+                if (mode == UserAccount.USER) {
+                    viewModel.rateMovie(id, newUserRate).observe(RateMovieActivity.this, new Observer<Boolean>() {
+                        @Override
+                        public void onChanged(Boolean success) {
+                            if (success)
+                                finish();
+                            else
+                                Toast.makeText(getApplicationContext(), "Unsuccessful", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else if (mode == UserAccount.EDITOR) {
+                    viewModel.reviewMovie(id, newUserRate).observe(RateMovieActivity.this, new Observer<Boolean>() {
+                        @Override
+                        public void onChanged(Boolean success) {
+                            if (success)
+                                finish();
+                            else
+                                Toast.makeText(getApplicationContext(), "Unsuccessful", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else finish();
             }
         });
     }
@@ -129,9 +150,8 @@ public class RateMovieActivity extends AppCompatActivity {
     }
 
     private void setBackground() {
-        String posterURL = Movie.path + posterPath;
         Picasso.get()
-                .load(posterURL)
+                .load(posterPath)
                 .into(new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {

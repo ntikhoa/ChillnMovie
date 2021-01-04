@@ -169,7 +169,7 @@ public class EditMovieActivity extends AppCompatActivity {
         viewModel.getMLDmovieDetail(id)
                 .observe(this, movieDetail -> {
                     EditMovieActivity.this.movieDetail = movieDetail;
-                    setBackground(movieDetail);
+                    setBackground(movieDetail.getPosterPath());
                     fetchData(movieDetail);
                     fetchCheckBox(movieDetail.getId());
                 });
@@ -364,10 +364,9 @@ public class EditMovieActivity extends AppCompatActivity {
         return true;
     }
 
-    private void setBackground(MovieDetail movieDetail) {
-        String posterUrl = Movie.path + movieDetail.getPosterPath();
+    private void setBackground(String posterPath) {
         Picasso.get()
-                .load(posterUrl)
+                .load(posterPath)
                 .into(new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {

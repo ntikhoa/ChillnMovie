@@ -25,4 +25,8 @@ public class RateMovieViewModel extends AndroidViewModel {
     public MutableLiveData<Boolean> rateMovie(Integer id, UserRate newUserRate) {
         return repository.rateMovie(id, newUserRate);
     }
+
+    public MutableLiveData<Boolean> reviewMovie(Integer id, UserRate review) {
+        return repository.reviewMovie(id, review);
+    }
 }

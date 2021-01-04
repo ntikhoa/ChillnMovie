@@ -191,4 +191,12 @@ public class MovieDetail {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
+    }
+
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
+    }
 }

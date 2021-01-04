@@ -17,10 +17,12 @@ public class ReviewViewPagerAdapter extends FragmentPagerAdapter {
 
     private static final int SIZE = 2;
     private final Context context;
+    private int id;
 
-    public ReviewViewPagerAdapter(@NonNull FragmentManager fm, int behavior, Context context) {
+    public ReviewViewPagerAdapter(@NonNull FragmentManager fm, int behavior, Context context, Integer id) {
         super(fm, behavior);
         this.context = context;
+        this.id = id;
     }
 
     @NonNull
@@ -28,11 +30,11 @@ public class ReviewViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new ReviewFragment();
+                return ReviewFragment.newInstance(id);
             case 1:
-                return new UserRateFragment();
+                return UserRateFragment.newInstance(id);
             default:
-                return new ReviewFragment();
+                return UserRateFragment.newInstance(id);
         }
     }
 

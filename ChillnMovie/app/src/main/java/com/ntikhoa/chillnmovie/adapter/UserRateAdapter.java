@@ -68,6 +68,8 @@ public class UserRateAdapter extends ListAdapter<UserRate, UserRateAdapter.RateV
                             ShimmerDrawable drawable = new ShimmerDrawable();
                             drawable.setShimmer(shimmer);
 
+                            holder.textViewComment.setMaxHeight(113);//112.5px = 150dp
+
                             String path = userAccount.getAvatarPath();
                             Picasso.get().load(path)
                                     .placeholder(drawable)
@@ -77,12 +79,7 @@ public class UserRateAdapter extends ListAdapter<UserRate, UserRateAdapter.RateV
 
             holder.textViewRateDate.setText(userRate.getRateDate());
 
-            Integer plot = userRate.getPlotVote();
-            Integer visualEffect = userRate.getVisualVote();
-            Integer soundEffect = userRate.getAudioVote();
-            Double average = (plot + visualEffect + soundEffect) / 3d;
-            String avgStr = String.format("%.1f", average);
-            holder.textViewRate.setText(avgStr);
+            setUserRate(userRate, holder);
 
             String comment = userRate.getComment();
             if (comment.length() < 200)
@@ -92,6 +89,15 @@ public class UserRateAdapter extends ListAdapter<UserRate, UserRateAdapter.RateV
                 holder.textViewComment.setText(limit);
             }
         }
+    }
+
+    private void setUserRate(UserRate userRate, RateViewHolder holder) {
+        Integer plot = userRate.getPlotVote();
+        Integer visualEffect = userRate.getVisualVote();
+        Integer soundEffect = userRate.getAudioVote();
+        Double average = (plot + visualEffect + soundEffect) / 3d;
+        String avgStr = String.format("%.1f", average);
+        holder.textViewRate.setText(avgStr);
     }
 
     static class RateViewHolder extends RecyclerView.ViewHolder {

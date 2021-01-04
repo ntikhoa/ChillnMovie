@@ -70,8 +70,7 @@ public class FavoriteAdapter extends ListAdapter<Integer, FavoriteAdapter.Favori
                             Movie movie = documentSnapshot.toObject(Movie.class);
                             holder.textViewTitle.setText(movie.getTitle());
 
-                            String path = Movie.path + movie.getBackdropPath();
-                            setBackdrop(holder, path);
+                            setBackdrop(holder, movie.getBackdropPath());
 
                             setRating(holder, movie.getVoteAverage());
 

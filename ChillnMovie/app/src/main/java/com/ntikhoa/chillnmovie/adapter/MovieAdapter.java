@@ -52,8 +52,7 @@ public class MovieAdapter extends ListAdapter<Movie, MovieAdapter.MovieViewHolde
             ShimmerDrawable drawable = new ShimmerDrawable();
             drawable.setShimmer(shimmer);
 
-            String path = Movie.path + movie.getPosterPath();
-            Picasso.get().load(path)
+            Picasso.get().load(movie.getPosterPath())
                     .placeholder(drawable)
                     .into(holder.imageViewPoster);
 

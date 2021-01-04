@@ -135,6 +135,27 @@ public class RateMovieRepository {
         transaction.set(userRateRef, userRate);
     }
 
+    public MutableLiveData<Boolean> reviewMovie(Integer id, UserRate review) {
+        Date current = new Date();
+        String currentStr = new SimpleDateFormat("yyyy-MM-dd").format(current);
+        review.setRateDate(currentStr);
+        db.collection(CollectionName.MOVIE_REVIEW)
+                .document(String.valueOf(id))
+                .set(review)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        success.postValue(true);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                success.postValue(false);
+            }
+        });
+        return success;
+    }
+
     private void showMessage(String message) {
         Toast.makeText(application.getApplicationContext(),
                 message,

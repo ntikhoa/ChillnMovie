@@ -55,9 +55,6 @@ public class MovieDetailActivity extends AppCompatActivity {
     private RecyclerView recyclerViewCaster;
     private CasterAdapter casterAdapter;
 
-//    private RecyclerView recyclerViewUserRate;
-//    private UserRateAdapter userRateAdapter;
-
     private ViewPager viewPager;
     private ReviewViewPagerAdapter pagerAdapter;
     private TabLayout tabLayout;
@@ -140,20 +137,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         casterAdapter = new CasterAdapter(this);
         recyclerViewCaster.setAdapter(casterAdapter);
 
-//        recyclerViewUserRate = findViewById(R.id.recyclerViewUserRate);
-//        recyclerViewUserRate.setLayoutManager(
-//                new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-//        userRateAdapter = new UserRateAdapter(this);
-//        recyclerViewUserRate.setAdapter(userRateAdapter);
-
         viewPager = findViewById(R.id.viewPagerReview);
-        pagerAdapter = new ReviewViewPagerAdapter(getSupportFragmentManager(),
-                FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
-                getApplicationContext());
-        viewPager.setAdapter(pagerAdapter);
 
         tabLayout = findViewById(R.id.tabLayout);
-        tabLayout.setupWithViewPager(viewPager);
     }
 
     private void initGeneralView() {
@@ -170,14 +156,15 @@ public class MovieDetailActivity extends AppCompatActivity {
             @Override
             public void onChanged(MovieDetail movieDetail) {
                 MovieDetailActivity.this.movieDetail = movieDetail;
-                setBackground(movieDetail);
+                setBackground(movieDetail.getPosterPath());
                 setHeaderFragment(movieDetail);
                 setMovieInfoFragment(movieDetail);
+                setViewPagerReview(movieDetail.getId());
                 if (mode == UserAccount.EDITOR)
                     setEditorMenu(movieDetail);
 
                 //for testing
-                //Toast.makeText(getApplicationContext(), String.valueOf(movieDetail.getId()), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), String.valueOf(movieDetail.getId()), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -187,13 +174,15 @@ public class MovieDetailActivity extends AppCompatActivity {
                 casterAdapter.submitList(casters);
             }
         });
+    }
 
-//        viewModel.getMLDuserRate(id).observe(this, new Observer<List<UserRate>>() {
-//            @Override
-//            public void onChanged(List<UserRate> userRates) {
-//                userRateAdapter.submitList(userRates);
-//            }
-//        });
+    private void setViewPagerReview(Integer id) {
+        pagerAdapter = new ReviewViewPagerAdapter(getSupportFragmentManager(),
+                FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
+                getApplicationContext(),
+                movieDetail.getId());
+        viewPager.setAdapter(pagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     private void setHeaderFragment(MovieDetail movieDetail) {
@@ -226,10 +215,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         ft.commit();
     }
 
-    private void setBackground(MovieDetail movieDetail) {
-        String posterUrl = Movie.path + movieDetail.getPosterPath();
+    private void setBackground(String posterPath) {
         Picasso.get()
-                .load(posterUrl)
+                .load(posterPath)
                 .into(new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
