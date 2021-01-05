@@ -68,12 +68,12 @@ public class UserRateAdapter extends ListAdapter<UserRate, UserRateAdapter.RateV
                             ShimmerDrawable drawable = new ShimmerDrawable();
                             drawable.setShimmer(shimmer);
 
-                            holder.textViewComment.setMaxHeight(113);//112.5px = 150dp
-
                             String path = userAccount.getAvatarPath();
                             Picasso.get().load(path)
                                     .placeholder(drawable)
                                     .into(holder.imageViewAvatar);
+
+                            holder.textViewComment.setMaxHeight(113);//112.5px = 150dp
                         }
                     });
 

@@ -16,9 +16,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.shimmer.Shimmer;
+import com.facebook.shimmer.ShimmerDrawable;
 import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.model.UserAccount;
 import com.ntikhoa.chillnmovie.model.UserRate;
 import com.ntikhoa.chillnmovie.viewmodel.UserRateViewModel;
+import com.squareup.picasso.Picasso;
 
 public class ReviewFragment extends Fragment {
 
@@ -86,8 +90,9 @@ public class ReviewFragment extends Fragment {
                     @Override
                     public void onChanged(UserRate userRate) {
                         textViewComment.setText(userRate.getComment());
-                        setUserRate(userRate);
                         textViewRateDate.setText(userRate.getRateDate());
+                        setUserRate(userRate);
+                        setUserInfo(userRate.getUserId());
                     }
                 });
     }
@@ -99,5 +104,33 @@ public class ReviewFragment extends Fragment {
         Double average = (plot + visualEffect + soundEffect) / 3d;
         String avgStr = String.format("%.1f", average);
         textViewRate.setText(avgStr);
+    }
+
+    private void setUserInfo(String userId) {
+        viewModel.getMLDuserAccount(userId)
+            .observe(this, new Observer<UserAccount>() {
+                @Override
+                public void onChanged(UserAccount userAccount) {
+                    textViewUserName.setText(userAccount.getName());
+                    setAvatar(userAccount.getAvatarPath());
+                }
+            });
+    }
+
+    private void setAvatar(String avatarPath) {
+        Shimmer shimmer = new Shimmer.ColorHighlightBuilder()
+                .setBaseColor(ContextCompat.getColor(getActivity(), R.color.colorShimmerBase))
+                .setBaseAlpha(1)
+                .setHighlightColor(ContextCompat.getColor(getActivity(), R.color.colorShimmerHighlight))
+                .setHighlightAlpha(1)
+                .setDropoff(50)
+                .setDuration(500)
+                .build();
+        ShimmerDrawable drawable = new ShimmerDrawable();
+        drawable.setShimmer(shimmer);
+
+        Picasso.get().load(avatarPath)
+                .placeholder(drawable)
+                .into(imageViewAvatar);
     }
 }

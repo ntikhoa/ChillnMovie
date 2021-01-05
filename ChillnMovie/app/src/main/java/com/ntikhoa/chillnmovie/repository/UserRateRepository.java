@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.ntikhoa.chillnmovie.model.CollectionName;
+import com.ntikhoa.chillnmovie.model.UserAccount;
 import com.ntikhoa.chillnmovie.model.UserRate;
 
 import java.util.List;
@@ -19,12 +20,14 @@ public class UserRateRepository {
     private Application application;
     private MutableLiveData<List<UserRate>> MLDuserRate;
     private MutableLiveData<UserRate> MLDreview;
+    private MutableLiveData<UserAccount> MLDuserAccount;
 
     public UserRateRepository(Application application) {
         this.application = application;
         db = FirebaseFirestore.getInstance();
         MLDuserRate = new MutableLiveData<>();
         MLDreview = new MutableLiveData<>();
+        MLDuserAccount = new MutableLiveData<>();
     }
 
     public MutableLiveData<List<UserRate>> getMLDuserRate(Integer id) {
@@ -53,5 +56,18 @@ public class UserRateRepository {
                     }
                 });
         return MLDreview;
+    }
+
+    public MutableLiveData<UserAccount> getMLDuserAccount(String userId) {
+        db.collection(CollectionName.USER_PROFILE)
+                .document(userId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        MLDuserAccount.postValue(documentSnapshot.toObject(UserAccount.class));
+                    }
+                });
+        return MLDuserAccount;
     }
 }

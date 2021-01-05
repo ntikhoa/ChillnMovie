@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.ntikhoa.chillnmovie.model.UserAccount;
 import com.ntikhoa.chillnmovie.model.UserRate;
 import com.ntikhoa.chillnmovie.repository.UserRateRepository;
 
@@ -28,5 +29,9 @@ public class UserRateViewModel extends AndroidViewModel {
 
     public MutableLiveData<UserRate> getMLDreview(Integer movieId) {
         return repository.getMLDreview(movieId);
+    }
+
+    public MutableLiveData<UserAccount> getMLDuserAccount(String userId) {
+        return repository.getMLDuserAccount(userId);
     }
 }
