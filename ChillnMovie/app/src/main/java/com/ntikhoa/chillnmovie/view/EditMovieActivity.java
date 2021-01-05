@@ -3,6 +3,7 @@ package com.ntikhoa.chillnmovie.view;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -46,17 +48,16 @@ public class EditMovieActivity extends AppCompatActivity {
     private EditText editTextOriginalLanguage;
     private EditText editTextBudget;
     private EditText editTextRevenue;
-    private EditText editTextOverview;
 
-    private MaterialButton btnSave;
+    private MaterialButton btnNext;
     private MaterialButton btnCancel;
     private MaterialButton btnEditGenres;
     private MaterialButton btnPlayTrailer;
     private ImageButton btnHelp;
 
-    private MaterialCheckBox checkBoxTrending;
-    private MaterialCheckBox checkBoxUpcoming;
-    private MaterialCheckBox checkBoxNowPlaying;
+    private Boolean isTrending = false;
+    private Boolean isUpcoming = false;
+    private Boolean isNowPlaying = false;
 
     private String[] listGenres;
     private boolean[] checkedGenres;
@@ -73,14 +74,6 @@ public class EditMovieActivity extends AppCompatActivity {
 
         initComponent();
         loadData();
-
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (movieDetail != null)
-                    updateData();
-            }
-        });
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,13 +108,105 @@ public class EditMovieActivity extends AppCompatActivity {
                 }
             }
         });
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (movieDetail != null) {
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    OverviewFragment fragment = OverviewFragment.newInstance(
+                            movieDetail.getOverview(), isTrending, isUpcoming, isNowPlaying);
+                    ft.add(R.id.fragmentContainer, fragment);
+                    ft.addToBackStack(null);
+                    ft.commit();
+                    setOnSubmitBtn(fragment);
+                }
+            }
+        });
+    }
+
+    private void setOnSubmitBtn(OverviewFragment fragment) {
+        //updateData();
+        fragment.setOnClickSubmit(new OverviewFragment.OnClickSubmit() {
+            @Override
+            public void onClick() {
+                String title = editTextTitle.getText().toString();
+                if (editTextTitle.getText().toString().trim().equalsIgnoreCase("")) {
+                    editTextTitle.setError("This field cannot be blank");
+                    return;
+                }
+
+                String originalTitle = editTextOriginalTitle.getText().toString();
+                String status = editTextStatus.getText().toString();
+                String videoKey = editTextTrailer.getText().toString();
+
+                String releaseDate = editTextReleaseDate.getText().toString();
+                if (!releaseDate.isEmpty() && !validate(releaseDate)) {
+                    editTextReleaseDate.setError("Invalid input");
+                    return;
+                }
+
+                int runtime;
+                if (editTextRuntime.getText().toString().trim().equalsIgnoreCase("")) {
+                    runtime = 0;
+                } else runtime = Integer.parseInt(editTextRuntime.getText().toString());
+
+                String originalLanguage = editTextOriginalLanguage.getText().toString();
+
+                int budget;
+                if (editTextBudget.getText().toString().trim().equalsIgnoreCase("")) {
+                    budget = 0;
+                } else budget = Integer.parseInt(editTextBudget.getText().toString());
+
+                int revenue;
+                if (editTextRevenue.getText().toString().trim().equalsIgnoreCase("")) {
+                    revenue = 0;
+                } else revenue = Integer.parseInt(editTextRevenue.getText().toString());
+
+                String overview = fragment.getOverview();
+
+                if (newGenres.size() < 1) {
+                    textViewGenres.requestFocus();
+                    textViewGenres.setError("Cannot empty");
+                    return;
+                }
+
+                isTrending = fragment.isTrending();
+                isUpcoming = fragment.isUpcoming();
+                isNowPlaying = fragment.isNowPlaying();
+
+                movieDetail.setTitle(title);
+                movieDetail.setOriginalTitle(originalTitle);
+                movieDetail.setStatus(status);
+                movieDetail.setReleaseDate(releaseDate);
+                movieDetail.setTrailer_key(videoKey);
+                movieDetail.setRuntime(runtime);
+                movieDetail.setOriginalLanguage(originalLanguage);
+                movieDetail.setBudget(budget);
+                movieDetail.setRevenue(revenue);
+                movieDetail.setOverview(overview);
+                movieDetail.setGenres(newGenres);
+
+                viewModel.updateToDatabase(movieDetail,
+                        isTrending,
+                        isUpcoming,
+                        isNowPlaying)
+                        .observe(EditMovieActivity.this, new Observer<Boolean>() {
+                            @Override
+                            public void onChanged(Boolean success) {
+                                if (success) {
+                                    finish();
+                                }
+                            }
+                        });
+            }
+        });
     }
 
     private void initComponent() {
         initViewModel();
         initEditText();
         initBtn();
-        initCheckBox();
         initGenresList();
     }
 
@@ -142,21 +227,14 @@ public class EditMovieActivity extends AppCompatActivity {
         editTextOriginalLanguage = findViewById(R.id.editTextCountry);
         editTextBudget = findViewById(R.id.editTextBudget);
         editTextRevenue = findViewById(R.id.editTextRevenue);
-        editTextOverview = findViewById(R.id.editTextOverview);
     }
 
     private void initBtn() {
-        btnSave = findViewById(R.id.btnSubmit);
+        btnNext = findViewById(R.id.btnNext);
         btnCancel = findViewById(R.id.btnSkip);
         btnEditGenres = findViewById(R.id.btnEditGenres);
         btnPlayTrailer = findViewById(R.id.btnPlayTrailer);
         btnHelp = findViewById(R.id.btnHelp);
-    }
-
-    private void initCheckBox() {
-        checkBoxTrending = findViewById(R.id.checkboxTrending);
-        checkBoxNowPlaying = findViewById(R.id.checkboxNowPlaying);
-        checkBoxUpcoming = findViewById(R.id.checkboxUpcoming);
     }
 
     private void initGenresList() {
@@ -204,9 +282,6 @@ public class EditMovieActivity extends AppCompatActivity {
 
         Integer revenue = movieDetail.getRevenue();
         fetchViewInteger(editTextRevenue, revenue);
-
-        String overview = movieDetail.getOverview();
-        fetchViewString(editTextOverview, overview);
     }
 
     private void fetchCheckBox(Integer id) {
@@ -214,7 +289,7 @@ public class EditMovieActivity extends AppCompatActivity {
                 .observe(this, new Observer<Boolean>() {
                     @Override
                     public void onChanged(Boolean isExist) {
-                        checkBoxTrending.setChecked(isExist);
+                        isTrending = isExist;
                     }
                 });
 
@@ -222,7 +297,7 @@ public class EditMovieActivity extends AppCompatActivity {
                 .observe(this, new Observer<Boolean>() {
                     @Override
                     public void onChanged(Boolean isExist) {
-                        checkBoxNowPlaying.setChecked(isExist);
+                        isNowPlaying = isExist;
                     }
                 });
 
@@ -231,7 +306,7 @@ public class EditMovieActivity extends AppCompatActivity {
                 .observe(this, new Observer<Boolean>() {
                     @Override
                     public void onChanged(Boolean isExist) {
-                        checkBoxUpcoming.setChecked(isExist);
+                        isUpcoming = isExist;
                     }
                 });
     }
@@ -271,77 +346,8 @@ public class EditMovieActivity extends AppCompatActivity {
     }
 
     private void updateData() {
-        String title = editTextTitle.getText().toString();
-        if (editTextTitle.getText().toString().trim().equalsIgnoreCase("")) {
-            editTextTitle.setError("This field cannot be blank");
-            return;
-        }
 
-        String originalTitle = editTextOriginalTitle.getText().toString();
-        String status = editTextStatus.getText().toString();
-        String videoKey = editTextTrailer.getText().toString();
-
-        String releaseDate = editTextReleaseDate.getText().toString();
-        if (!releaseDate.isEmpty() && !validate(releaseDate)) {
-            editTextReleaseDate.setError("Invalid input");
-            return;
-        }
-
-        int runtime;
-        if (editTextRuntime.getText().toString().trim().equalsIgnoreCase("")) {
-            runtime = 0;
-        } else runtime = Integer.parseInt(editTextRuntime.getText().toString());
-
-        String originalLanguage = editTextOriginalLanguage.getText().toString();
-
-        int budget;
-        if (editTextBudget.getText().toString().trim().equalsIgnoreCase("")) {
-            budget = 0;
-        } else budget = Integer.parseInt(editTextBudget.getText().toString());
-
-        int revenue;
-        if (editTextRevenue.getText().toString().trim().equalsIgnoreCase("")) {
-            revenue = 0;
-        } else revenue = Integer.parseInt(editTextRevenue.getText().toString());
-
-        String overview = editTextOverview.getText().toString();
-        if (editTextOverview.getText().toString().trim().equalsIgnoreCase("")) {
-            editTextOverview.setError("This field cannot be blank");
-            return;
-        }
-
-        if (newGenres.size() < 1) {
-            textViewGenres.requestFocus();
-            textViewGenres.setError("Cannot empty");
-            return;
-        }
-
-        movieDetail.setTitle(title);
-        movieDetail.setOriginalTitle(originalTitle);
-        movieDetail.setStatus(status);
-        movieDetail.setReleaseDate(releaseDate);
-        movieDetail.setTrailer_key(videoKey);
-        movieDetail.setRuntime(runtime);
-        movieDetail.setOriginalLanguage(originalLanguage);
-        movieDetail.setBudget(budget);
-        movieDetail.setRevenue(revenue);
-        movieDetail.setOverview(overview);
-        movieDetail.setGenres(newGenres);
-
-        viewModel.updateToDatabase(movieDetail,
-                checkBoxTrending.isChecked(),
-                checkBoxUpcoming.isChecked(),
-                checkBoxNowPlaying.isChecked())
-                .observe(this, new Observer<Boolean>() {
-                    @Override
-                    public void onChanged(Boolean success) {
-                        if (success) {
-                            finish();
-                        }
-                    }
-                });
     }
-
 
     private boolean validate(String date) {
         String[] t = date.split("-");
@@ -370,8 +376,8 @@ public class EditMovieActivity extends AppCompatActivity {
                 .into(new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        NestedScrollView nestedScrollView = findViewById(R.id.nestedScrollView);
-                        nestedScrollView.setBackground(new BitmapDrawable(getResources(), bitmap));
+                        FrameLayout fragmentContainer = findViewById(R.id.fragmentContainer);
+                        fragmentContainer.setBackground(new BitmapDrawable(getResources(), bitmap));
                     }
 
                     @Override

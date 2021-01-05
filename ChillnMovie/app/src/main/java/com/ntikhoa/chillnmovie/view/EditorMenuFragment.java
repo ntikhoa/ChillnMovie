@@ -3,6 +3,7 @@ package com.ntikhoa.chillnmovie.view;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
@@ -16,6 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ntikhoa.chillnmovie.R;
 
 public class EditorMenuFragment extends Fragment {
+    public static final String MOVIE_ID = "movie id";
 
     private FloatingActionButton fabExpand;
     private FloatingActionButton fabAdd;
@@ -39,8 +41,25 @@ public class EditorMenuFragment extends Fragment {
         this.onClickFABadd = onClickFABadd;
     }
 
-    public EditorMenuFragment(Integer id) {
-        this.id = id;
+    public EditorMenuFragment() {
+        //require default constructor
+    }
+
+    public static EditorMenuFragment newInstance(Integer movieId) {
+
+        Bundle args = new Bundle();
+        args.putInt(MOVIE_ID, movieId);
+        EditorMenuFragment fragment = new EditorMenuFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            this.id = getArguments().getInt(MOVIE_ID);
+        }
     }
 
     @Override

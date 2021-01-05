@@ -28,6 +28,10 @@ public class UserRateFragment extends Fragment {
 
     private Integer movieId;
 
+    public UserRateFragment() {
+        //require default constructor
+    }
+
     public static UserRateFragment newInstance(Integer movieId) {
         UserRateFragment fragment = new UserRateFragment();
         Bundle args = new Bundle();

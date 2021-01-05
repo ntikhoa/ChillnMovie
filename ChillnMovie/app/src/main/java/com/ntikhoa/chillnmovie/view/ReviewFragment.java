@@ -38,6 +38,10 @@ public class ReviewFragment extends Fragment {
     private TextView textViewComment;
     private ImageView imageViewAvatar;
 
+    public ReviewFragment() {
+        //require default constructor
+    }
+
     public static ReviewFragment newInstance(Integer movieId) {
         ReviewFragment fragment = new ReviewFragment();
         Bundle args = new Bundle();
@@ -78,10 +82,6 @@ public class ReviewFragment extends Fragment {
         Drawable icVerify = ContextCompat.getDrawable(getActivity(), R.drawable.ic_check_circle);
         textViewUserName.setCompoundDrawablesWithIntrinsicBounds(icVerify, null, null, null);
         textViewUserName.setCompoundDrawablePadding(6); //6px = 8dp
-
-        //for testing
-        textViewUserName.setText("@realNtikhoa");
-        imageViewAvatar.setImageResource(R.drawable.shinobu);
     }
 
     private void loadData() {
@@ -89,10 +89,12 @@ public class ReviewFragment extends Fragment {
                 .observe(this, new Observer<UserRate>() {
                     @Override
                     public void onChanged(UserRate userRate) {
-                        textViewComment.setText(userRate.getComment());
-                        textViewRateDate.setText(userRate.getRateDate());
-                        setUserRate(userRate);
-                        setUserInfo(userRate.getUserId());
+                        if (userRate != null) {
+                            textViewComment.setText(userRate.getComment());
+                            textViewRateDate.setText(userRate.getRateDate());
+                            setUserRate(userRate);
+                            setUserInfo(userRate.getUserId());
+                        }
                     }
                 });
     }
@@ -108,13 +110,13 @@ public class ReviewFragment extends Fragment {
 
     private void setUserInfo(String userId) {
         viewModel.getMLDuserAccount(userId)
-            .observe(this, new Observer<UserAccount>() {
-                @Override
-                public void onChanged(UserAccount userAccount) {
-                    textViewUserName.setText(userAccount.getName());
-                    setAvatar(userAccount.getAvatarPath());
-                }
-            });
+                .observe(this, new Observer<UserAccount>() {
+                    @Override
+                    public void onChanged(UserAccount userAccount) {
+                        textViewUserName.setText(userAccount.getName());
+                        setAvatar(userAccount.getAvatarPath());
+                    }
+                });
     }
 
     private void setAvatar(String avatarPath) {

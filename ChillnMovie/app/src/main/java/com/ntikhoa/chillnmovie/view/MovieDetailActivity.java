@@ -238,7 +238,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     private void setEditorMenu(MovieDetail movieDetail) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        EditorMenuFragment fragment = new EditorMenuFragment(movieDetail.getId());
+        EditorMenuFragment fragment = EditorMenuFragment.newInstance(movieDetail.getId());
         ft.add(R.id.fragmentEditorMenu, fragment);
         ft.commit();
 

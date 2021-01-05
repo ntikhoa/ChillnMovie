@@ -87,4 +87,6 @@
     <string name="review">Review</string>
     <string name="user_rate">User Rate</string>
     <string name="next">Next</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
