@@ -1,7 +1,10 @@
 package com.ntikhoa.chillnmovie.repository;
 
 import android.app.Application;
+import android.content.ContentResolver;
+import android.net.Uri;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,6 +20,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Transaction;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.model.CollectionName;
 import com.ntikhoa.chillnmovie.model.Movie;
@@ -25,6 +31,7 @@ import com.ntikhoa.chillnmovie.model.MovieRate;
 import com.ntikhoa.chillnmovie.model.Video;
 import com.ntikhoa.chillnmovie.model.VideoDBResponse;
 import com.ntikhoa.chillnmovie.service.RetrofitTMDbClient;
+import com.ntikhoa.chillnmovie.view.PreviewFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -47,6 +54,10 @@ public class EditMovieRepository {
 
     private final MutableLiveData<Boolean> isSuccess;
 
+    private final MutableLiveData<String> posterUrl;
+    private final MutableLiveData<String> backdropUrl;
+
+    private final FirebaseStorage storage;
     private final RetrofitTMDbClient tmDbClient;
     private final FirebaseFirestore db;
 
@@ -60,8 +71,12 @@ public class EditMovieRepository {
 
         isSuccess = new MutableLiveData<>();
 
+        posterUrl = new MutableLiveData<>();
+        backdropUrl = new MutableLiveData<>();
+
         db = FirebaseFirestore.getInstance();
         tmDbClient = RetrofitTMDbClient.getInstance();
+        storage = FirebaseStorage.getInstance();
     }
 
     private MutableLiveData<MovieDetail> getMovieDetailFromTMDb(Integer id) {
@@ -289,6 +304,37 @@ public class EditMovieRepository {
         return isUpcomingExist;
     }
 
+    public MutableLiveData<String> uploadImage(Uri imageUri, int mode) {
+        StorageReference imageRef = storage.getReference().child(CollectionName.IMAGE + System.currentTimeMillis()
+                + "." + getFileExtension(imageUri));
+
+        imageRef.putFile(imageUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                if (mode == PreviewFragment.POSTER)
+                                    posterUrl.postValue(uri.toString());
+                                else if (mode == PreviewFragment.BACKDROP)
+                                    backdropUrl.postValue(uri.toString());
+                            }
+                        });
+                    }
+                });
+        if (mode == PreviewFragment.POSTER)
+            return posterUrl;
+        else if (mode == PreviewFragment.BACKDROP)
+            return backdropUrl;
+        return null;
+    }
+
+    private String getFileExtension(Uri uri) {
+        ContentResolver cR = application.getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
 
     private void showMessage(String message) {
         Toast.makeText(application.getApplicationContext(),

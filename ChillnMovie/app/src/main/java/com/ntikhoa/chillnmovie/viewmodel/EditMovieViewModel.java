@@ -1,6 +1,7 @@
 package com.ntikhoa.chillnmovie.viewmodel;
 
 import android.app.Application;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -40,5 +41,9 @@ public class EditMovieViewModel extends AndroidViewModel {
 
     public MutableLiveData<Boolean> isUpcomingExist(Integer id) {
         return repository.isUpcomingExist(id);
+    }
+
+    public MutableLiveData<String> uploadImage(Uri imageUri, int mode) {
+        return repository.uploadImage(imageUri, mode);
     }
 }

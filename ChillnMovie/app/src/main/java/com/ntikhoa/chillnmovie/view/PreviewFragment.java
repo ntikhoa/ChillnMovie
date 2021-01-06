@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -20,8 +21,14 @@ public class PreviewFragment extends Fragment {
     public static final int POSTER = 0;
     public static final int BACKDROP = 1;
 
+    private onClickListener onClickListener;
+
     private Uri uri;
     private int mode;
+
+    public void setOnClickListener(PreviewFragment.onClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
 
     public static PreviewFragment newInstance(Uri uri, int mode) {
         PreviewFragment fragment = new PreviewFragment();
@@ -46,11 +53,22 @@ public class PreviewFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_preview, container, false);
         ImageView preview = root.findViewById(R.id.imageViewPreview);
+        Button btnSubmit = root.findViewById(R.id.btnSubmit);
         if (mode == POSTER) {
             preview.setLayoutParams(new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
         }
         preview.setImageURI(uri);
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickListener.onClick(mode);
+            }
+        });
         return root;
+    }
+
+    interface onClickListener {
+        void onClick(int mode);
     }
 }

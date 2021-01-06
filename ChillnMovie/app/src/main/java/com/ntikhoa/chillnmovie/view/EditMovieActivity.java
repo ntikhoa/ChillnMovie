@@ -152,6 +152,20 @@ public class EditMovieActivity extends AppCompatActivity {
                     ft.add(R.id.fragmentContainer, fragment);
                     ft.addToBackStack(null);
                     ft.commit();
+
+                    fragment.setOnClickListener(new PreviewFragment.onClickListener() {
+                        @Override
+                        public void onClick(int mode) {
+                            viewModel.uploadImage(poster, PreviewFragment.POSTER)
+                                    .observe(EditMovieActivity.this, new Observer<String>() {
+                                        @Override
+                                        public void onChanged(String url) {
+                                            movieDetail.setPosterPath(url);
+                                            getSupportFragmentManager().popBackStack();
+                                        }
+                                    });
+                        }
+                    });
                 }
             }
         });
@@ -175,6 +189,20 @@ public class EditMovieActivity extends AppCompatActivity {
                     ft.add(R.id.fragmentContainer, fragment);
                     ft.addToBackStack(null);
                     ft.commit();
+
+                    fragment.setOnClickListener(new PreviewFragment.onClickListener() {
+                        @Override
+                        public void onClick(int mode) {
+                            viewModel.uploadImage(backdrop, PreviewFragment.BACKDROP)
+                                    .observe(EditMovieActivity.this, new Observer<String>() {
+                                        @Override
+                                        public void onChanged(String url) {
+                                            movieDetail.setBackdropPath(url);
+                                            getSupportFragmentManager().popBackStack();
+                                        }
+                                    });
+                        }
+                    });
                 }
             }
         });
