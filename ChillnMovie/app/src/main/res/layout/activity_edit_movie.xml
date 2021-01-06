@@ -161,7 +161,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:layout_constraintEnd_toEndOf="@+id/layoutStatus"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button4"
+                app:layout_constraintTop_toBottomOf="@+id/btnSetBackdrop"
                 tools:text="-Phim Hoạt Hình" />
 
             <TextView
@@ -302,44 +302,52 @@
                 app:strokeColor="@color/white"
                 app:strokeWidth="2dp" />
 
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSetPoster"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:text="Button"
-                app:layout_constraintEnd_toEndOf="@+id/layoutStatus"
-                app:layout_constraintStart_toStartOf="parent"
+                android:textColor="@color/white"
+                android:text="Set Poster"
+                app:layout_constraintEnd_toEndOf="@+id/btnSetBackdrop"
+                app:layout_constraintStart_toStartOf="@+id/btnSetBackdrop"
                 app:layout_constraintTop_toBottomOf="@+id/layoutStatus" />
 
-            <Button
-                android:id="@+id/button3"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPreviewPoster"
+
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Button"
+                android:text="Preview"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/layoutReleaseDate"
-                app:layout_constraintTop_toTopOf="@+id/button2" />
+                app:layout_constraintTop_toTopOf="@+id/btnSetPoster"
+                app:strokeColor="@color/white"
+                app:strokeWidth="2dp" />
 
-            <Button
-                android:id="@+id/button4"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSetBackdrop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Button"
+                android:text="Set Backdrop"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="@+id/layoutStatus"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button2" />
+                app:layout_constraintTop_toBottomOf="@+id/btnSetPoster" />
 
-            <Button
-                android:id="@+id/button5"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPreviewBackdrop"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Button"
+                android:text="Preview"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/layoutReleaseDate"
-                app:layout_constraintTop_toBottomOf="@+id/button3" />
+                app:layout_constraintTop_toTopOf="@+id/btnSetBackdrop"
+                app:strokeColor="@color/white"
+                app:strokeWidth="2dp" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

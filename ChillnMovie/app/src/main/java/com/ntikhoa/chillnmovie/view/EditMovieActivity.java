@@ -1,8 +1,8 @@
 package com.ntikhoa.chillnmovie.view;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,11 +21,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.model.Genre;
-import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
 import com.ntikhoa.chillnmovie.viewmodel.EditMovieViewModel;
 import com.squareup.picasso.Picasso;
@@ -35,6 +34,9 @@ import java.util.List;
 
 public class EditMovieActivity extends AppCompatActivity {
     public static final String EXTRA_ID = "tmdb_movie_id";
+
+    public static final int REQUEST_POSTER = 1;
+    public static final int REQUEST_BACKDROP = 2;
 
     private EditMovieViewModel viewModel;
 
@@ -54,6 +56,13 @@ public class EditMovieActivity extends AppCompatActivity {
     private MaterialButton btnEditGenres;
     private MaterialButton btnPlayTrailer;
     private ImageButton btnHelp;
+
+    private MaterialButton btnSetPoster;
+    private MaterialButton btnSetBackdrop;
+    private MaterialButton btnPreviewPoster;
+    private MaterialButton btnPreviewBackdrop;
+
+    private Uri poster, backdrop;
 
     private Boolean isTrending = false;
     private Boolean isUpcoming = false;
@@ -123,6 +132,66 @@ public class EditMovieActivity extends AppCompatActivity {
                 }
             }
         });
+
+        btnSetPoster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, REQUEST_POSTER);
+            }
+        });
+
+        btnPreviewPoster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (poster != null) {
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    PreviewFragment fragment = PreviewFragment.newInstance(poster, PreviewFragment.POSTER);
+                    ft.add(R.id.fragmentContainer, fragment);
+                    ft.addToBackStack(null);
+                    ft.commit();
+                }
+            }
+        });
+
+        btnSetBackdrop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, REQUEST_BACKDROP);
+            }
+        });
+
+        btnPreviewBackdrop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (backdrop != null) {
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    PreviewFragment fragment = PreviewFragment.newInstance(backdrop, PreviewFragment.BACKDROP);
+                    ft.add(R.id.fragmentContainer, fragment);
+                    ft.addToBackStack(null);
+                    ft.commit();
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_POSTER && resultCode == RESULT_OK) {
+            if (data != null && data.getData() != null) {
+                poster = data.getData();
+            }
+        } else if (requestCode == REQUEST_BACKDROP && resultCode == RESULT_OK) {
+            if (data != null && data.getData() != null) {
+                backdrop = data.getData();
+            }
+        }
     }
 
     private void setOnSubmitBtn(OverviewFragment fragment) {
@@ -235,6 +304,11 @@ public class EditMovieActivity extends AppCompatActivity {
         btnEditGenres = findViewById(R.id.btnEditGenres);
         btnPlayTrailer = findViewById(R.id.btnPlayTrailer);
         btnHelp = findViewById(R.id.btnHelp);
+
+        btnSetPoster = findViewById(R.id.btnSetPoster);
+        btnSetBackdrop = findViewById(R.id.btnSetBackdrop);
+        btnPreviewPoster = findViewById(R.id.btnPreviewPoster);
+        btnPreviewBackdrop = findViewById(R.id.btnPreviewBackdrop);
     }
 
     private void initGenresList() {
