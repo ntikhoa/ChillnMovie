@@ -22,7 +22,7 @@ public class MovieDetail {
     private List<Genre> genres;
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private Long id;
     @SerializedName("imdb_id")
     @Expose
     private String imdbId;
@@ -68,6 +68,14 @@ public class MovieDetail {
 
     private String trailer_key;
 
+    public MovieDetail() {
+        //require empty constructor
+    }
+
+    public MovieDetail(long id) {
+        this.id = id;
+    }
+
     public void setVoteCount(Integer voteCount) {
         this.voteCount = voteCount;
     }
@@ -100,7 +108,7 @@ public class MovieDetail {
         return genres;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

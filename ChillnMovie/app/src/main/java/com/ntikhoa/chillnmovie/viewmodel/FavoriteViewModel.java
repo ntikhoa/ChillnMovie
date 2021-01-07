@@ -19,11 +19,11 @@ public class FavoriteViewModel extends AndroidViewModel {
         repository = new FavoriteRepository(application);
     }
 
-    public MutableLiveData<List<Integer>> getMLDmovieFavorite(String userId) {
+    public MutableLiveData<List<Long>> getMLDmovieFavorite(String userId) {
         return repository.getMLDmovieFavorite(userId);
     }
 
-    public void removeMovieFromFavorite(String uid, Integer movieId) {
+    public void removeMovieFromFavorite(String uid, Long movieId) {
         repository.removeMovieFromFavorite(uid, movieId);
     }
 }

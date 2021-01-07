@@ -45,8 +45,12 @@ public class EditorFrontPageRepository {
                         if (response.isSuccessful()) {
                             List<Movie> movies = response.body().getMovies();
                             List<Movie> subMovie = new ArrayList<>();
-                            for (int i = 0; i < 10; i++)
+                            for (int i = 0; i < 10; i++) {
+                                Movie movie = movies.get(i);
+                                movie.setPosterPath(Movie.path + movie.getPosterPath());
+                                movie.setBackdropPath(Movie.path + movie.getBackdropPath());
                                 subMovie.add(movies.get(i));
+                            }
                             MLDtrendingMovie.postValue(subMovie);
                         }
                     }
@@ -70,6 +74,11 @@ public class EditorFrontPageRepository {
                     public void onResponse(Call<MovieDBresponse> call, Response<MovieDBresponse> response) {
                         if (response.isSuccessful()) {
                             List<Movie> movies = response.body().getMovies();
+                            for (int i = 0; i < movies.size(); i++) {
+                                Movie movie = movies.get(i);
+                                movie.setPosterPath(Movie.path + movie.getPosterPath());
+                                movie.setBackdropPath(Movie.path + movie.getBackdropPath());
+                            }
                             MLDpopularMovie.postValue(movies);
                         }
                     }
@@ -93,6 +102,11 @@ public class EditorFrontPageRepository {
                     public void onResponse(Call<MovieDBresponse> call, Response<MovieDBresponse> response) {
                         if (response.isSuccessful()) {
                             List<Movie> movies = response.body().getMovies();
+                            for (int i = 0; i < movies.size(); i++) {
+                                Movie movie = movies.get(i);
+                                movie.setPosterPath(Movie.path + movie.getPosterPath());
+                                movie.setBackdropPath(Movie.path + movie.getBackdropPath());
+                            }
                             MLDupcomingMovie.postValue(movies);
                         }
                     }
@@ -116,6 +130,11 @@ public class EditorFrontPageRepository {
                     public void onResponse(Call<MovieDBresponse> call, Response<MovieDBresponse> response) {
                         if (response.isSuccessful()) {
                             List<Movie> movies = response.body().getMovies();
+                            for (int i = 0; i < movies.size(); i++) {
+                                Movie movie = movies.get(i);
+                                movie.setPosterPath(Movie.path + movie.getPosterPath());
+                                movie.setBackdropPath(Movie.path + movie.getBackdropPath());
+                            }
                             MLDnowPlayingMovie.postValue(movies);
                         }
                     }
@@ -139,6 +158,11 @@ public class EditorFrontPageRepository {
                     public void onResponse(Call<MovieDBresponse> call, Response<MovieDBresponse> response) {
                         if (response.isSuccessful()) {
                             List<Movie> movies = response.body().getMovies();
+                            for (int i = 0; i < movies.size(); i++) {
+                                Movie movie = movies.get(i);
+                                movie.setPosterPath(Movie.path + movie.getPosterPath());
+                                movie.setBackdropPath(Movie.path + movie.getBackdropPath());
+                            }
                             MLDtopRatedMovie.postValue(movies);
                         }
                     }

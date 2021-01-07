@@ -42,7 +42,7 @@ public class RateMovieRepository {
         success = new MutableLiveData<>();
     }
 
-    public MutableLiveData<Boolean> rateMovie(Integer id, UserRate newUserRate) {
+    public MutableLiveData<Boolean> rateMovie(Long id, UserRate newUserRate) {
         db.runTransaction(new Transaction.Function<Void>() {
 
             @Nullable
@@ -105,7 +105,7 @@ public class RateMovieRepository {
         return success;
     }
 
-    private void updateMovieRate(Integer movieId, MovieRate movieRate, Transaction transaction) {
+    private void updateMovieRate(Long movieId, MovieRate movieRate, Transaction transaction) {
         DocumentReference movieRateRef = db.collection(CollectionName.MOVIE_RATE)
                 .document(String.valueOf(movieId));
         transaction.set(movieRateRef, movieRate);
@@ -123,7 +123,7 @@ public class RateMovieRepository {
         transaction.update(movieDetailRef, map);
     }
 
-    private void addUserRate(Integer movieId, UserRate userRate, Transaction transaction) {
+    private void addUserRate(Long movieId, UserRate userRate, Transaction transaction) {
         Date current = new Date();
         String currentStr = new SimpleDateFormat("yyyy-MM-dd").format(current);
         userRate.setRateDate(currentStr);
@@ -135,7 +135,7 @@ public class RateMovieRepository {
         transaction.set(userRateRef, userRate);
     }
 
-    public MutableLiveData<Boolean> reviewMovie(Integer id, UserRate review) {
+    public MutableLiveData<Boolean> reviewMovie(Long id, UserRate review) {
         Date current = new Date();
         String currentStr = new SimpleDateFormat("yyyy-MM-dd").format(current);
         review.setRateDate(currentStr);

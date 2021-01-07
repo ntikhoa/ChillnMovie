@@ -23,11 +23,11 @@ public class UserRateViewModel extends AndroidViewModel {
         repository = new UserRateRepository(application);
     }
 
-    public MutableLiveData<List<UserRate>> getMLDuserRate(Integer movideId) {
+    public MutableLiveData<List<UserRate>> getMLDuserRate(Long movideId) {
         return repository.getMLDuserRate(movideId);
     }
 
-    public MutableLiveData<UserRate> getMLDreview(Integer movieId) {
+    public MutableLiveData<UserRate> getMLDreview(Long movieId) {
         return repository.getMLDreview(movieId);
     }
 

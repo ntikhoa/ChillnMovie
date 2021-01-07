@@ -79,11 +79,13 @@ public class EditMovieRepository {
         storage = FirebaseStorage.getInstance();
     }
 
-    private MutableLiveData<MovieDetail> getMovieDetailFromTMDb(Integer id) {
+    private MutableLiveData<MovieDetail> getMovieDetailFromTMDb(Long id) {
         getVideo(id);
 
+        String strId = String.valueOf(id);
+        Integer intId = Integer.parseInt(strId);
         tmDbClient.getMovieAPI()
-                .getMovieDetail(id,
+                .getMovieDetail(intId,
                         application.getString(R.string.TMDb_API_key),
                         application.getString(R.string.lang_vietnamese))
                 .enqueue(new Callback<MovieDetail>() {
@@ -107,7 +109,7 @@ public class EditMovieRepository {
         return MLDmovieDetail;
     }
 
-    public MutableLiveData<MovieDetail> getMLDmovieDetail(Integer id) {
+    public MutableLiveData<MovieDetail> getMLDmovieDetail(Long id) {
         db.collection(CollectionName.MOVIE_DETAIL)
                 .document(String.valueOf(id))
                 .get()
@@ -131,9 +133,11 @@ public class EditMovieRepository {
         return MLDmovieDetail;
     }
 
-    private void getVideo(Integer id) {
+    private void getVideo(Long id) {
+        String strId = String.valueOf(id);
+        Integer intId = Integer.parseInt(strId);
         tmDbClient.getMovieAPI()
-                .getVideo(id, application.getString(R.string.TMDb_API_key))
+                .getVideo(intId, application.getString(R.string.TMDb_API_key))
                 .enqueue(new Callback<VideoDBResponse>() {
                     @Override
                     public void onResponse(Call<VideoDBResponse> call, Response<VideoDBResponse> response) {
@@ -166,7 +170,7 @@ public class EditMovieRepository {
             @Nullable
             @Override
             public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
-                int id = movieDetail.getId();
+                long id = movieDetail.getId();
                 DocumentReference movieRateRef = db.collection(CollectionName.MOVIE_RATE)
                         .document(String.valueOf(id));
                 if (!transaction.get(movieRateRef)
@@ -199,7 +203,7 @@ public class EditMovieRepository {
     }
 
     private void updateMovie(MovieDetail movieDetail, Transaction transaction) {
-        int id = movieDetail.getId();
+        long id = movieDetail.getId();
 
         DocumentReference movieDetailRef = db.collection(CollectionName.MOVIE_DETAIL)
                 .document(String.valueOf(id));
@@ -232,7 +236,7 @@ public class EditMovieRepository {
     }
 
     private void addToCategoryList(MovieDetail movieDetail, String collectionPath, Transaction transaction) {
-        int id = movieDetail.getId();
+        long id = movieDetail.getId();
         Movie movie = new Movie(movieDetail);
 
         DocumentReference collectionRef = db.collection(collectionPath)
@@ -247,14 +251,14 @@ public class EditMovieRepository {
     }
 
     private void removeFromCategoryList(MovieDetail movieDetail, String collectionPath, Transaction transaction) {
-        int id = movieDetail.getId();
+        long id = movieDetail.getId();
         DocumentReference collectionRef = db.collection(collectionPath)
                 .document(String.valueOf(id));
         transaction.delete(collectionRef);
     }
 
 
-    public MutableLiveData<Boolean> isTrendingExist(Integer id) {
+    public MutableLiveData<Boolean> isTrendingExist(Long id) {
         db.collection(CollectionName.MOVIE_TRENDING)
                 .document(String.valueOf(id))
                 .get()
@@ -270,7 +274,7 @@ public class EditMovieRepository {
         return isTrendingExist;
     }
 
-    public MutableLiveData<Boolean> isNowPlayingExist(Integer id) {
+    public MutableLiveData<Boolean> isNowPlayingExist(Long id) {
         db.collection(CollectionName.MOVIE_UPCOMING)
                 .document(String.valueOf(id))
                 .get()
@@ -287,7 +291,7 @@ public class EditMovieRepository {
         return isNowPlayingExist;
     }
 
-    public MutableLiveData<Boolean> isUpcomingExist(Integer id) {
+    public MutableLiveData<Boolean> isUpcomingExist(Long id) {
         db.collection(CollectionName.MOVIE_NOW_PLAYING)
                 .document(String.valueOf(id))
                 .get()

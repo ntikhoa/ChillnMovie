@@ -25,7 +25,7 @@ public class Movie {
     private Integer voteCount;
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private Long id;
     @SerializedName("video")
     @Expose
     private Boolean video;
@@ -101,7 +101,7 @@ public class Movie {
         return backdropPath;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -119,5 +119,13 @@ public class Movie {
 
     public String getReleaseDate() {
         return releaseDate;
+    }
+
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
+    }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
     }
 }

@@ -22,7 +22,7 @@ public class RatingSourceViewModel extends AndroidViewModel {
         return repository.getMLDratingSource(id);
     }
 
-    public MutableLiveData<MovieRate> getMLDmovieRate(Integer id) {
+    public MutableLiveData<MovieRate> getMLDmovieRate(Long id) {
         return repository.getMLDmovieRate(id);
     }
 }

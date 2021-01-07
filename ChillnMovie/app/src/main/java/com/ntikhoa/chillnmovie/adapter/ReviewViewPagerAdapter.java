@@ -17,9 +17,9 @@ public class ReviewViewPagerAdapter extends FragmentPagerAdapter {
 
     private static final int SIZE = 2;
     private final Context context;
-    private int id;
+    private long id;
 
-    public ReviewViewPagerAdapter(@NonNull FragmentManager fm, int behavior, Context context, Integer id) {
+    public ReviewViewPagerAdapter(@NonNull FragmentManager fm, int behavior, Context context, Long id) {
         super(fm, behavior);
         this.context = context;
         this.id = id;

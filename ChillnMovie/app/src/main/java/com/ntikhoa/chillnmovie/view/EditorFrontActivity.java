@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.ntikhoa.chillnmovie.R;
@@ -40,6 +41,8 @@ public class EditorFrontActivity extends AppCompatActivity {
     private MovieAdapter topRatedMovieAdapter;
     private RecyclerView recyclerViewTopRatedMovie;
 
+    private FloatingActionButton fabAddNewMovie;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +50,14 @@ public class EditorFrontActivity extends AppCompatActivity {
 
         initComponent();
         loadData();
+
+        fabAddNewMovie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), EditorFrontActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initComponent() {
@@ -85,6 +96,8 @@ public class EditorFrontActivity extends AppCompatActivity {
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         topRatedMovieAdapter = new MovieAdapter(EditorFrontActivity.this);
         recyclerViewTopRatedMovie.setAdapter(topRatedMovieAdapter);
+
+        fabAddNewMovie = findViewById(R.id.fabAddNewMovie);
     }
 
     private void loadData() {
@@ -131,7 +144,7 @@ public class EditorFrontActivity extends AppCompatActivity {
 
     public void onClickSeeMore(View view) {
         Intent intent = new Intent(this, MovieActivity.class);
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.textViewMoreTrending:
                 intent.putExtra(MovieActivity.EXTRA_CATEGORY, Movie.POPULAR);
                 break;

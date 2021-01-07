@@ -22,7 +22,7 @@ import com.ntikhoa.chillnmovie.viewmodel.RatingSourceViewModel;
 
 public class RatingSourceFragment extends Fragment {
     private String imdbId;
-    private Integer id;
+    private Long id;
 
     private static final int UNIT_10 = 1;
     private static final int UNIT_100 = 10;
@@ -58,7 +58,7 @@ public class RatingSourceFragment extends Fragment {
     private ProgressBar pbRatingRottenTomatoes;
     private TextView tvRatingRottenTomatoes;
 
-    public RatingSourceFragment(String imdbId, Integer id) {
+    public RatingSourceFragment(String imdbId, Long id) {
         this.imdbId = imdbId;
         this.id = id;
     }

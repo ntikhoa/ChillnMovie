@@ -59,7 +59,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private ReviewViewPagerAdapter pagerAdapter;
     private TabLayout tabLayout;
 
-    private int id;
+    private long id;
     private MovieDetail movieDetail;
 
     private MaterialButton btnPlayTrailer;
@@ -150,7 +150,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        id = getIntent().getIntExtra(EXTRA_ID, -1);
+        id = getIntent().getLongExtra(EXTRA_ID, -1);
         movieDetail = viewModel.getMLDmovieDetail(id).getValue();
         viewModel.getMLDmovieDetail(id).observe(this, new Observer<MovieDetail>() {
             @Override
@@ -176,7 +176,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void setViewPagerReview(Integer id) {
+    private void setViewPagerReview(Long id) {
         pagerAdapter = new ReviewViewPagerAdapter(getSupportFragmentManager(),
                 FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
                 getApplicationContext(),

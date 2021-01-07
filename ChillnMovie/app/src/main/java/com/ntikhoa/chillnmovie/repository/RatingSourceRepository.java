@@ -59,7 +59,7 @@ public class RatingSourceRepository {
         return MLDratingSource;
     }
 
-    public MutableLiveData<MovieRate> getMLDmovieRate(Integer id) {
+    public MutableLiveData<MovieRate> getMLDmovieRate(Long id) {
         db.collection(CollectionName.MOVIE_RATE)
                 .document(String.valueOf(id))
                 .get()

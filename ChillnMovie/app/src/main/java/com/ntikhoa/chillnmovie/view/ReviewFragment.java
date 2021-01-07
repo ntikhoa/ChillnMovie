@@ -28,7 +28,7 @@ public class ReviewFragment extends Fragment {
 
     private static final String MOVIE_ID = "movie id";
 
-    private Integer movieId;
+    private Long movieId;
 
     private UserRateViewModel viewModel;
 
@@ -42,10 +42,10 @@ public class ReviewFragment extends Fragment {
         //require default constructor
     }
 
-    public static ReviewFragment newInstance(Integer movieId) {
+    public static ReviewFragment newInstance(Long movieId) {
         ReviewFragment fragment = new ReviewFragment();
         Bundle args = new Bundle();
-        args.putInt(MOVIE_ID, movieId);
+        args.putLong(MOVIE_ID, movieId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,7 +54,7 @@ public class ReviewFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            movieId = getArguments().getInt(MOVIE_ID);
+            movieId = getArguments().getLong(MOVIE_ID);
         }
     }
 

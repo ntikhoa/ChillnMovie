@@ -44,7 +44,7 @@ public class RateMovieActivity extends AppCompatActivity {
     private int plotRate, visualRate, audioRate;
     private String comment;
 
-    private int id;
+    private long id;
     private String title;
     private String posterPath;
 

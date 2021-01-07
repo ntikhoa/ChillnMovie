@@ -22,11 +22,11 @@ public class MovieDetailViewModel extends AndroidViewModel {
         repository = new MovieDetailRepository(application);
     }
 
-    public MutableLiveData<MovieDetail> getMLDmovieDetail(Integer id) {
+    public MutableLiveData<MovieDetail> getMLDmovieDetail(Long id) {
         return repository.getMLDmovieDetail(id);
     }
 
-    public MutableLiveData<List<Caster>> getMLDcaster(Integer id) {
+    public MutableLiveData<List<Caster>> getMLDcaster(Long id) {
         return repository.getMLDcaster(id);
     }
 
@@ -34,7 +34,7 @@ public class MovieDetailViewModel extends AndroidViewModel {
         repository.addToFirestore(movieDetail);
     }
 
-    public void addToFavorite(String userId, Integer movieId) {
+    public void addToFavorite(String userId, Long movieId) {
         repository.addToFavorite(userId, movieId);
     }
 }

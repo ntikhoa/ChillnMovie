@@ -26,16 +26,16 @@ public class UserRateFragment extends Fragment {
     private RecyclerView recyclerViewUserRate;
     private UserRateAdapter userRateAdapter;
 
-    private Integer movieId;
+    private Long movieId;
 
     public UserRateFragment() {
         //require default constructor
     }
 
-    public static UserRateFragment newInstance(Integer movieId) {
+    public static UserRateFragment newInstance(Long movieId) {
         UserRateFragment fragment = new UserRateFragment();
         Bundle args = new Bundle();
-        args.putInt(MOVIE_ID, movieId);
+        args.putLong(MOVIE_ID, movieId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -44,7 +44,7 @@ public class UserRateFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            movieId = getArguments().getInt(MOVIE_ID);
+            movieId = getArguments().getLong(MOVIE_ID);
         }
     }
 

@@ -61,10 +61,10 @@ public class FavoriteFragment extends Fragment {
 
     private void loadData(String userId) {
         viewModel.getMLDmovieFavorite(userId)
-                .observe(this, new Observer<List<Integer>>() {
+                .observe(this, new Observer<List<Long>>() {
                     @Override
-                    public void onChanged(List<Integer> integers) {
-                        favoriteAdapter.submitList(integers);
+                    public void onChanged(List<Long> movieId) {
+                        favoriteAdapter.submitList(movieId);
                     }
                 });
     }
@@ -91,14 +91,14 @@ public class FavoriteFragment extends Fragment {
                     builder.setPositiveButton("Remove", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            List<Integer> currentList = favoriteAdapter.getCurrentList();
+                            List<Long> currentList = favoriteAdapter.getCurrentList();
                             viewModel.removeMovieFromFavorite(auth.getUid(),
-                                    Integer.parseInt(String.valueOf(currentList.get(viewHolder.getAdapterPosition()))));
+                                    currentList.get(viewHolder.getAdapterPosition()));
                             viewModel.getMLDmovieFavorite(auth.getUid())
-                                    .observe(getActivity(), new Observer<List<Integer>>() {
+                                    .observe(getActivity(), new Observer<List<Long>>() {
                                         @Override
-                                        public void onChanged(List<Integer> integers) {
-                                            favoriteAdapter.submitList(integers);
+                                        public void onChanged(List<Long> movieId) {
+                                            favoriteAdapter.submitList(movieId);
                                         }
                                     });
                         }

@@ -64,11 +64,14 @@ public class MovieDetailRepository {
     }
 
     //repeat with EditMovieRepository
-    private MutableLiveData<MovieDetail> getMovieDetailFromTMDb(Integer id) {
+    private MutableLiveData<MovieDetail> getMovieDetailFromTMDb(Long id) {
         getVideo(id);
 
+        String strId = String.valueOf(id);
+        Integer intId = Integer.parseInt(strId);
+
         tmDbClient.getMovieAPI()
-                .getMovieDetail(id,
+                .getMovieDetail(intId,
                         application.getString(R.string.TMDb_API_key),
                         application.getString(R.string.lang_vietnamese))
                 .enqueue(new Callback<MovieDetail>() {
@@ -93,7 +96,7 @@ public class MovieDetailRepository {
     }
 
     //repeat with EditMovieRepository
-    public MutableLiveData<MovieDetail> getMLDmovieDetail(Integer id) {
+    public MutableLiveData<MovieDetail> getMLDmovieDetail(Long id) {
         db.collection(CollectionName.MOVIE_DETAIL)
                 .document(String.valueOf(id))
                 .get()
@@ -118,9 +121,12 @@ public class MovieDetailRepository {
     }
 
     //repeat with EditMovieRepository
-    private void getVideo(Integer id) {
+    private void getVideo(Long id) {
+        String strId = String.valueOf(id);
+        Integer intId = Integer.parseInt(strId);
+
         tmDbClient.getMovieAPI()
-                .getVideo(id, application.getString(R.string.TMDb_API_key))
+                .getVideo(intId, application.getString(R.string.TMDb_API_key))
                 .enqueue(new Callback<VideoDBResponse>() {
                     @Override
                     public void onResponse(Call<VideoDBResponse> call, Response<VideoDBResponse> response) {
@@ -143,9 +149,12 @@ public class MovieDetailRepository {
                 });
     }
 
-    public MutableLiveData<List<Caster>> getMLDcaster(Integer id) {
+    public MutableLiveData<List<Caster>> getMLDcaster(Long id) {
+        String strId = String.valueOf(id);
+        Integer intId = Integer.parseInt(strId);
+
         tmDbClient.getMovieAPI()
-                .getCaster(id, application.getString(R.string.TMDb_API_key))
+                .getCaster(intId, application.getString(R.string.TMDb_API_key))
                 .enqueue(new Callback<CreditDBresponse>() {
                     @Override
                     public void onResponse(Call<CreditDBresponse> call, Response<CreditDBresponse> response) {
@@ -168,7 +177,7 @@ public class MovieDetailRepository {
             @Nullable
             @Override
             public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
-                int id = movieDetail.getId();
+                long id = movieDetail.getId();
                 DocumentReference movieRateRef = db.collection(CollectionName.MOVIE_RATE)
                         .document(String.valueOf(id));
                 if (!transaction.get(movieRateRef)
@@ -194,7 +203,7 @@ public class MovieDetailRepository {
     }
 
     private void addMovie(MovieDetail movieDetail, Transaction transaction) {
-        int id = movieDetail.getId();
+        long id = movieDetail.getId();
 
         DocumentReference movieDetailRef = db.collection(CollectionName.MOVIE_DETAIL)
                 .document(String.valueOf(id));
@@ -206,7 +215,7 @@ public class MovieDetailRepository {
         transaction.set(movieRef, movie);
     }
 
-    public void addToFavorite(String userId, Integer movieId) {
+    public void addToFavorite(String userId, Long movieId) {
         db.collection(CollectionName.USER_FAVORITE)
                 .document(userId)
                 .update("favorite_list", FieldValue.arrayUnion(movieId))

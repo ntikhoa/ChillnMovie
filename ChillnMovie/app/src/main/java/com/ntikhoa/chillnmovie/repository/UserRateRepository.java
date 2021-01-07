@@ -30,7 +30,7 @@ public class UserRateRepository {
         MLDuserAccount = new MutableLiveData<>();
     }
 
-    public MutableLiveData<List<UserRate>> getMLDuserRate(Integer id) {
+    public MutableLiveData<List<UserRate>> getMLDuserRate(Long id) {
         db.collection(CollectionName.MOVIE_RATE)
                 .document(String.valueOf(id))
                 .collection(CollectionName.USER_RATE)
@@ -45,7 +45,7 @@ public class UserRateRepository {
         return MLDuserRate;
     }
 
-    public MutableLiveData<UserRate> getMLDreview(Integer id) {
+    public MutableLiveData<UserRate> getMLDreview(Long id) {
         db.collection(CollectionName.MOVIE_REVIEW)
                 .document(String.valueOf(id))
                 .get()

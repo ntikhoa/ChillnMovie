@@ -67,6 +67,7 @@ public class EditMovieActivity extends AppCompatActivity {
     private Boolean isTrending = false;
     private Boolean isUpcoming = false;
     private Boolean isNowPlaying = false;
+    private Boolean isVietnamese = false;
 
     private String[] listGenres;
     private boolean[] checkedGenres;
@@ -74,7 +75,7 @@ public class EditMovieActivity extends AppCompatActivity {
     private List<Genre> newGenres;
 
     private MovieDetail movieDetail;
-    private int id;
+    private long id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -345,14 +346,21 @@ public class EditMovieActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        id = getIntent().getIntExtra(EXTRA_ID, -1);
-        viewModel.getMLDmovieDetail(id)
-                .observe(this, movieDetail -> {
-                    EditMovieActivity.this.movieDetail = movieDetail;
-                    setBackground(movieDetail.getPosterPath());
-                    fetchData(movieDetail);
-                    fetchCheckBox(movieDetail.getId());
-                });
+        id = getIntent().getLongExtra(EXTRA_ID, -1);
+        if (id != -1) {
+            viewModel.getMLDmovieDetail(id)
+                    .observe(this, movieDetail -> {
+                        EditMovieActivity.this.movieDetail = movieDetail;
+                        setBackground(movieDetail.getPosterPath());
+                        fetchData(movieDetail);
+                        fetchCheckBox(movieDetail.getId());
+                    });
+        }
+        else {
+            movieDetail = new MovieDetail((int) System.currentTimeMillis());
+            movieDetail.set
+            isVietnamese = true;
+        }
     }
 
     private void fetchData(MovieDetail movieDetail) {
@@ -386,7 +394,7 @@ public class EditMovieActivity extends AppCompatActivity {
         fetchViewInteger(editTextRevenue, revenue);
     }
 
-    private void fetchCheckBox(Integer id) {
+    private void fetchCheckBox(Long id) {
         viewModel.isTrendingExist(movieDetail.getId())
                 .observe(this, new Observer<Boolean>() {
                     @Override

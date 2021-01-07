@@ -19,7 +19,7 @@ public class EditMovieViewModel extends AndroidViewModel {
         repository = new EditMovieRepository(application);
     }
 
-    public MutableLiveData<MovieDetail> getMLDmovieDetail(Integer id) {
+    public MutableLiveData<MovieDetail> getMLDmovieDetail(Long id) {
         return repository.getMLDmovieDetail(id);
     }
 
@@ -31,15 +31,15 @@ public class EditMovieViewModel extends AndroidViewModel {
         return repository.updateToDatabase(movieDetail, trending, upcoming, nowPlaying);
     }
 
-    public MutableLiveData<Boolean> isTrendingExist(Integer id) {
+    public MutableLiveData<Boolean> isTrendingExist(Long id) {
         return repository.isTrendingExist(id);
     }
 
-    public MutableLiveData<Boolean> isNowPlayingExist(Integer id) {
+    public MutableLiveData<Boolean> isNowPlayingExist(Long id) {
         return repository.isNowPlayingExist(id);
     }
 
-    public MutableLiveData<Boolean> isUpcomingExist(Integer id) {
+    public MutableLiveData<Boolean> isUpcomingExist(Long id) {
         return repository.isUpcomingExist(id);
     }
 

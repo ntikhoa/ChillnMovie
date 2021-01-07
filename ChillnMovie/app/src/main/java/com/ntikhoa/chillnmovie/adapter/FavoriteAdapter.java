@@ -28,15 +28,15 @@ import com.squareup.picasso.Picasso;
 
 import java.util.zip.Inflater;
 
-public class FavoriteAdapter extends ListAdapter<Integer, FavoriteAdapter.FavoriteViewHolder> {
-    private static final DiffUtil.ItemCallback<Integer> CALLBACK = new DiffUtil.ItemCallback<Integer>() {
+public class FavoriteAdapter extends ListAdapter<Long, FavoriteAdapter.FavoriteViewHolder> {
+    private static final DiffUtil.ItemCallback<Long> CALLBACK = new DiffUtil.ItemCallback<Long>() {
         @Override
-        public boolean areItemsTheSame(@NonNull Integer oldItem, @NonNull Integer newItem) {
+        public boolean areItemsTheSame(@NonNull Long oldItem, @NonNull Long newItem) {
             return oldItem.equals(newItem);
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull Integer oldItem, @NonNull Integer newItem) {
+        public boolean areContentsTheSame(@NonNull Long oldItem, @NonNull Long newItem) {
             return false;
         }
     };
@@ -58,7 +58,7 @@ public class FavoriteAdapter extends ListAdapter<Integer, FavoriteAdapter.Favori
 
     @Override
     public void onBindViewHolder(@NonNull FavoriteViewHolder holder, int position) {
-        Integer movieId = Integer.parseInt(String.valueOf(getItem(position)));
+        Long movieId = getItem(position);
         if (movieId != null) {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection(CollectionName.MOVIE)

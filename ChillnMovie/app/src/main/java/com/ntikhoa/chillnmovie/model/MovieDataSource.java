@@ -9,6 +9,8 @@ import androidx.paging.PageKeyedDataSource;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.service.RetrofitTMDbClient;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,7 +33,13 @@ public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
             @Override
             public void onResponse(Call<MovieDBresponse> call, Response<MovieDBresponse> response) {
                 if (response.isSuccessful()) {
-                    callback.onResult(response.body().getMovies(), null, 2);
+                    List<Movie> movies = response.body().getMovies();
+                    for (int i = 0; i < movies.size(); i++) {
+                        Movie movie = movies.get(i);
+                        movie.setBackdropPath(Movie.path + movie.getBackdropPath());
+                        movie.setPosterPath(Movie.path + movie.getPosterPath());
+                    }
+                    callback.onResult(movies, null, 2);
                 }
             }
 

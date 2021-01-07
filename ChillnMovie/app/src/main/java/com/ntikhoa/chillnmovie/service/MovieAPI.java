@@ -45,17 +45,17 @@ public interface MovieAPI {
 
     @GET("movie/{movie_id}")
     Call<MovieDetail> getMovieDetail(
-            @Path("movie_id") Integer id,
+            @Path("movie_id") int id,
             @Query("api_key") String key,
             @Query("language") String lang);
 
     @GET("movie/{movie_id}/credits")
     Call<CreditDBresponse> getCaster(
-            @Path("movie_id") Integer movieId,
+            @Path("movie_id") int movieId,
             @Query("api_key") String key);
 
     @GET("movie/{movie_id}/videos")
     Call<VideoDBResponse> getVideo(
-            @Path("movie_id") Integer movieId,
+            @Path("movie_id") int movieId,
             @Query("api_key") String key);
 }

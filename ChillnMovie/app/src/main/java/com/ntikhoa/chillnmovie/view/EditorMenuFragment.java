@@ -33,7 +33,7 @@ public class EditorMenuFragment extends Fragment {
 
     private boolean clicked = false;
 
-    private Integer id;
+    private Long id;
 
     private OnClickFAB onClickFABadd;
 
@@ -45,10 +45,10 @@ public class EditorMenuFragment extends Fragment {
         //require default constructor
     }
 
-    public static EditorMenuFragment newInstance(Integer movieId) {
+    public static EditorMenuFragment newInstance(Long movieId) {
 
         Bundle args = new Bundle();
-        args.putInt(MOVIE_ID, movieId);
+        args.putLong(MOVIE_ID, movieId);
         EditorMenuFragment fragment = new EditorMenuFragment();
         fragment.setArguments(args);
         return fragment;
@@ -58,7 +58,7 @@ public class EditorMenuFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            this.id = getArguments().getInt(MOVIE_ID);
+            this.id = getArguments().getLong(MOVIE_ID);
         }
     }
 

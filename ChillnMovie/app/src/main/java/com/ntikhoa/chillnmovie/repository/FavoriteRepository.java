@@ -17,7 +17,7 @@ import java.util.List;
 public class FavoriteRepository {
     private FirebaseFirestore db;
     private Application application;
-    private MutableLiveData<List<Integer>> MLDmovieFavorite;
+    private MutableLiveData<List<Long>> MLDmovieFavorite;
 
     public FavoriteRepository(Application application) {
         this.application = application;
@@ -25,7 +25,7 @@ public class FavoriteRepository {
         MLDmovieFavorite = new MutableLiveData<>();
     }
 
-    public MutableLiveData<List<Integer>> getMLDmovieFavorite(String userId) {
+    public MutableLiveData<List<Long>> getMLDmovieFavorite(String userId) {
         db.collection(CollectionName.USER_FAVORITE)
                 .document(userId)
                 .get()
@@ -36,9 +36,9 @@ public class FavoriteRepository {
                         resultStr = resultStr.substring(1, resultStr.length() - 1);
                         if (!resultStr.isEmpty()) {
                             String[] moviesStr = resultStr.split(", ");
-                            List<Integer> movies = new ArrayList<>();
+                            List<Long> movies = new ArrayList<>();
                             for (int i = 0; i < moviesStr.length; i++) {
-                                movies.add(Integer.parseInt(moviesStr[i]));
+                                movies.add(Long.parseLong(moviesStr[i]));
                             }
                             MLDmovieFavorite.postValue(movies);
                         }
@@ -47,7 +47,7 @@ public class FavoriteRepository {
         return MLDmovieFavorite;
     }
 
-    public void removeMovieFromFavorite(String uid, Integer movieId) {
+    public void removeMovieFromFavorite(String uid, Long movieId) {
         db.collection(CollectionName.USER_FAVORITE)
                 .document(uid)
                 .update("favorite_list", FieldValue.arrayRemove(movieId));
