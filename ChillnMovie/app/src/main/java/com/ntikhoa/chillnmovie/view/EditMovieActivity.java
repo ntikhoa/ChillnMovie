@@ -64,11 +64,6 @@ public class EditMovieActivity extends AppCompatActivity {
 
     private Uri poster, backdrop;
 
-    private Boolean isTrending = false;
-    private Boolean isUpcoming = false;
-    private Boolean isNowPlaying = false;
-    private Boolean isVietnamese = false;
-
     private String[] listGenres;
     private boolean[] checkedGenres;
     private ArrayList<Integer> indexGenres = new ArrayList<>();
@@ -125,7 +120,10 @@ public class EditMovieActivity extends AppCompatActivity {
                 if (movieDetail != null) {
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                     OverviewFragment fragment = OverviewFragment.newInstance(
-                            movieDetail.getOverview(), isTrending, isUpcoming, isNowPlaying);
+                            movieDetail.getOverview(),
+                            movieDetail.getIsTrending(),
+                            movieDetail.getIsUpcoming(),
+                            movieDetail.getIsNowPlaying());
                     ft.add(R.id.fragmentContainer, fragment);
                     ft.addToBackStack(null);
                     ft.commit();
@@ -269,9 +267,9 @@ public class EditMovieActivity extends AppCompatActivity {
                     return;
                 }
 
-                isTrending = fragment.isTrending();
-                isUpcoming = fragment.isUpcoming();
-                isNowPlaying = fragment.isNowPlaying();
+                movieDetail.setIsTrending(fragment.isTrending());
+                movieDetail.setIsUpcoming(fragment.isUpcoming());
+                movieDetail.setIsNowPlaying(fragment.isNowPlaying());
 
                 movieDetail.setTitle(title);
                 movieDetail.setOriginalTitle(originalTitle);
@@ -285,10 +283,7 @@ public class EditMovieActivity extends AppCompatActivity {
                 movieDetail.setOverview(overview);
                 movieDetail.setGenres(newGenres);
 
-                viewModel.updateToDatabase(movieDetail,
-                        isTrending,
-                        isUpcoming,
-                        isNowPlaying)
+                viewModel.updateToDatabase(movieDetail)
                         .observe(EditMovieActivity.this, new Observer<Boolean>() {
                             @Override
                             public void onChanged(Boolean success) {
@@ -353,13 +348,13 @@ public class EditMovieActivity extends AppCompatActivity {
                         EditMovieActivity.this.movieDetail = movieDetail;
                         setBackground(movieDetail.getPosterPath());
                         fetchData(movieDetail);
-                        fetchCheckBox(movieDetail.getId());
                     });
         }
         else {
-            movieDetail = new MovieDetail((int) System.currentTimeMillis());
-            movieDetail.set
-            isVietnamese = true;
+            movieDetail = new MovieDetail(System.currentTimeMillis());
+            movieDetail.setIsVietnamese(true);
+            movieDetail.setVoteAverage(8.0d);
+            movieDetail.setVoteCount(1);
         }
     }
 
@@ -392,33 +387,6 @@ public class EditMovieActivity extends AppCompatActivity {
 
         Integer revenue = movieDetail.getRevenue();
         fetchViewInteger(editTextRevenue, revenue);
-    }
-
-    private void fetchCheckBox(Long id) {
-        viewModel.isTrendingExist(movieDetail.getId())
-                .observe(this, new Observer<Boolean>() {
-                    @Override
-                    public void onChanged(Boolean isExist) {
-                        isTrending = isExist;
-                    }
-                });
-
-        viewModel.isNowPlayingExist(movieDetail.getId())
-                .observe(this, new Observer<Boolean>() {
-                    @Override
-                    public void onChanged(Boolean isExist) {
-                        isNowPlaying = isExist;
-                    }
-                });
-
-
-        viewModel.isUpcomingExist(movieDetail.getId())
-                .observe(this, new Observer<Boolean>() {
-                    @Override
-                    public void onChanged(Boolean isExist) {
-                        isUpcoming = isExist;
-                    }
-                });
     }
 
     private void fetchViewString(EditText editText, String data) {

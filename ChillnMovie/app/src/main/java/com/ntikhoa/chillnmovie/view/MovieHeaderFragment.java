@@ -2,6 +2,7 @@ package com.ntikhoa.chillnmovie.view;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -21,10 +22,13 @@ import com.ntikhoa.chillnmovie.model.MovieDetail;
 import com.squareup.picasso.Picasso;
 
 public class MovieHeaderFragment extends Fragment {
+    public static final String BACKDROP_PATH = "backdrop path";
+    public static final String TITLE = "title";
+    public static final String VOTE_AVERAGE = "vote average";
 
-    private final String backdropPath;
-    private final String title;
-    private final Double voteAverage;
+    private String backdropPath;
+    private String title;
+    private Double voteAverage;
 
     private ImageView imageViewBackdrop;
     private TextView textViewTitle;
@@ -37,10 +41,25 @@ public class MovieHeaderFragment extends Fragment {
         this.onClickPBrating = onClickPBrating;
     }
 
-    public MovieHeaderFragment(String backdropPath, String title, Double voteAverage) {
-        this.backdropPath = backdropPath;
-        this.title = title;
-        this.voteAverage = voteAverage;
+    public static MovieHeaderFragment newInstance(String backdropPath, String title, Double voteAverage) {
+
+        Bundle args = new Bundle();
+        MovieHeaderFragment fragment = new MovieHeaderFragment();
+        args.putString(BACKDROP_PATH, backdropPath);
+        args.putString(TITLE, title);
+        args.putDouble(VOTE_AVERAGE, voteAverage);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            backdropPath = getArguments().getString(BACKDROP_PATH);
+            title = getArguments().getString(TITLE);
+            voteAverage = getArguments().getDouble(VOTE_AVERAGE);
+        }
     }
 
     @Override

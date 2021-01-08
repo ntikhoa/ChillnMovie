@@ -10,13 +10,17 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.adapter.MovieAdapter;
 import com.ntikhoa.chillnmovie.adapter.MoviePagerAdapter;
+import com.ntikhoa.chillnmovie.model.CollectionName;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.viewmodel.EditorFrontPageViewModel;
 
@@ -54,7 +58,7 @@ public class EditorFrontActivity extends AppCompatActivity {
         fabAddNewMovie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), EditorFrontActivity.class);
+                Intent intent = new Intent(getApplicationContext(), EditMovieActivity.class);
                 startActivity(intent);
             }
         });

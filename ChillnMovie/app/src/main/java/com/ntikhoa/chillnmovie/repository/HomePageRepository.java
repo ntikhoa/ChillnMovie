@@ -59,7 +59,8 @@ public class HomePageRepository {
     }
 
     public MutableLiveData<List<Movie>> getMLDupcoming() {
-        firestore.collection(CollectionName.MOVIE_UPCOMING)
+        firestore.collection(CollectionName.MOVIE)
+                .whereEqualTo("isUpcoming", true)
                 .orderBy("updated_date", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -78,7 +79,8 @@ public class HomePageRepository {
     }
 
     public MutableLiveData<List<Movie>> getMLDnowPlaying() {
-        firestore.collection(CollectionName.MOVIE_NOW_PLAYING)
+        firestore.collection(CollectionName.MOVIE)
+                .whereEqualTo("isNowPlaying", true)
                 .orderBy("updated_date", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -97,7 +99,8 @@ public class HomePageRepository {
     }
 
     public MutableLiveData<List<Movie>> getMLDtrending() {
-        firestore.collection(CollectionName.MOVIE_TRENDING)
+        firestore.collection(CollectionName.MOVIE)
+                .whereEqualTo("isTrending", true)
                 .orderBy("updated_date", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {

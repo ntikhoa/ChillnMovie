@@ -157,11 +157,11 @@ public class MovieDetailActivity extends AppCompatActivity {
             public void onChanged(MovieDetail movieDetail) {
                 MovieDetailActivity.this.movieDetail = movieDetail;
                 setBackground(movieDetail.getPosterPath());
-                setHeaderFragment(movieDetail);
+                setHeaderFragment(movieDetail.getBackdropPath(), movieDetail.getTitle(), movieDetail.getVoteAverage());
                 setMovieInfoFragment(movieDetail);
                 setViewPagerReview(movieDetail.getId());
                 if (mode == UserAccount.EDITOR)
-                    setEditorMenu(movieDetail);
+                    setEditorMenu(movieDetail.getId());
 
                 //for testing
                 Toast.makeText(getApplicationContext(), String.valueOf(movieDetail.getId()), Toast.LENGTH_LONG).show();
@@ -176,20 +176,18 @@ public class MovieDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void setViewPagerReview(Long id) {
+    private void setViewPagerReview(Long movieId) {
         pagerAdapter = new ReviewViewPagerAdapter(getSupportFragmentManager(),
                 FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
                 getApplicationContext(),
-                movieDetail.getId());
+                movieId);
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void setHeaderFragment(MovieDetail movieDetail) {
+    private void setHeaderFragment(String backdropPath, String title, Double voteAverage) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        MovieHeaderFragment fragment = new MovieHeaderFragment(movieDetail.getBackdropPath(),
-                movieDetail.getTitle(),
-                movieDetail.getVoteAverage());
+        MovieHeaderFragment fragment = MovieHeaderFragment.newInstance(backdropPath, title, voteAverage);
         ft.add(R.id.fragmentMovieHeader, fragment);
         ft.commit();
 
@@ -236,9 +234,9 @@ public class MovieDetailActivity extends AppCompatActivity {
                 });
     }
 
-    private void setEditorMenu(MovieDetail movieDetail) {
+    private void setEditorMenu(Long movieId) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        EditorMenuFragment fragment = EditorMenuFragment.newInstance(movieDetail.getId());
+        EditorMenuFragment fragment = EditorMenuFragment.newInstance(movieId);
         ft.add(R.id.fragmentEditorMenu, fragment);
         ft.commit();
 

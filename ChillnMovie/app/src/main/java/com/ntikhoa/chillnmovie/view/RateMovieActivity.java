@@ -142,7 +142,7 @@ public class RateMovieActivity extends AppCompatActivity {
 
     private void loadData() {
         Intent intent = getIntent();
-        id = intent.getIntExtra(EXTRA_ID, -1);
+        id = intent.getLongExtra(EXTRA_ID, -1);
         title = intent.getStringExtra(EXTRA_TITLE);
         posterPath = intent.getStringExtra(EXTRA_POSTER_PATH);
         textViewTitle.setText(title);

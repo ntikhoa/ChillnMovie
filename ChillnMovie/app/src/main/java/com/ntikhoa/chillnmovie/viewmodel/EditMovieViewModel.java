@@ -23,24 +23,8 @@ public class EditMovieViewModel extends AndroidViewModel {
         return repository.getMLDmovieDetail(id);
     }
 
-    public MutableLiveData<Boolean> updateToDatabase(
-            MovieDetail movieDetail,
-            boolean trending,
-            boolean upcoming,
-            boolean nowPlaying) {
-        return repository.updateToDatabase(movieDetail, trending, upcoming, nowPlaying);
-    }
-
-    public MutableLiveData<Boolean> isTrendingExist(Long id) {
-        return repository.isTrendingExist(id);
-    }
-
-    public MutableLiveData<Boolean> isNowPlayingExist(Long id) {
-        return repository.isNowPlayingExist(id);
-    }
-
-    public MutableLiveData<Boolean> isUpcomingExist(Long id) {
-        return repository.isUpcomingExist(id);
+    public MutableLiveData<Boolean> updateToDatabase(MovieDetail movieDetail) {
+        return repository.updateToDatabase(movieDetail);
     }
 
     public MutableLiveData<String> uploadImage(Uri imageUri, int mode) {

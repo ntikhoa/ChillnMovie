@@ -35,9 +35,6 @@ public class Movie {
     @SerializedName("title")
     @Expose
     private String title;
-    @SerializedName("popularity")
-    @Expose
-    private Double popularity;
     @SerializedName("poster_path")
     @Expose
     private String posterPath;
@@ -63,6 +60,12 @@ public class Movie {
     @Expose
     private String releaseDate;
 
+    private String updated_date;
+    private boolean isTrending;
+    private boolean isUpcoming;
+    private boolean isNowPlaying;
+    private boolean isVietnamese;
+
     public static final DiffUtil.ItemCallback<Movie> CALLBACK = new DiffUtil.ItemCallback<Movie>() {
         @Override
         public boolean areItemsTheSame(@NonNull Movie oldItem, @NonNull Movie newItem) {
@@ -75,7 +78,19 @@ public class Movie {
         }
     };
 
+    public String getUpdated_date() {
+        return updated_date;
+    }
+
+    public void setUpdated_date(String updated_date) {
+        this.updated_date = updated_date;
+    }
+
     public Movie() {
+        isTrending = false;
+        isUpcoming = false;
+        isNowPlaying = false;
+        isVietnamese = false;
     }
 
     public Movie(MovieDetail movieDetail) {
@@ -85,8 +100,12 @@ public class Movie {
         this.backdropPath = movieDetail.getBackdropPath();
         this.voteCount = movieDetail.getVoteCount();
         this.voteAverage = movieDetail.getVoteAverage();
-        this.popularity = movieDetail.getPopularity();
         this.releaseDate = movieDetail.getReleaseDate();
+
+        this.isTrending = movieDetail.getIsTrending();
+        this.isNowPlaying = movieDetail.getIsNowPlaying();
+        this.isUpcoming = movieDetail.getIsUpcoming();
+        this.isVietnamese = movieDetail.getIsVietnamese();
     }
 
     public String getTitle() {
@@ -113,10 +132,6 @@ public class Movie {
         return voteAverage;
     }
 
-    public Double getPopularity() {
-        return popularity;
-    }
-
     public String getReleaseDate() {
         return releaseDate;
     }
@@ -127,5 +142,21 @@ public class Movie {
 
     public void setBackdropPath(String backdropPath) {
         this.backdropPath = backdropPath;
+    }
+
+    public boolean getIsTrending() {
+        return isTrending;
+    }
+
+    public boolean getIsUpcoming() {
+        return isUpcoming;
+    }
+
+    public boolean getIsNowPlaying() {
+        return isNowPlaying;
+    }
+
+    public boolean getIsVietnamese() {
+        return isVietnamese;
     }
 }

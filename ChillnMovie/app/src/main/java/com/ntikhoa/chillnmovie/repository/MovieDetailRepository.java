@@ -34,6 +34,8 @@ import com.ntikhoa.chillnmovie.model.VideoDBResponse;
 import com.ntikhoa.chillnmovie.service.RetrofitTMDbClient;
 import com.ntikhoa.chillnmovie.view.MovieDetailActivity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,11 +69,8 @@ public class MovieDetailRepository {
     private MutableLiveData<MovieDetail> getMovieDetailFromTMDb(Long id) {
         getVideo(id);
 
-        String strId = String.valueOf(id);
-        Integer intId = Integer.parseInt(strId);
-
         tmDbClient.getMovieAPI()
-                .getMovieDetail(intId,
+                .getMovieDetail(id,
                         application.getString(R.string.TMDb_API_key),
                         application.getString(R.string.lang_vietnamese))
                 .enqueue(new Callback<MovieDetail>() {
@@ -150,11 +149,8 @@ public class MovieDetailRepository {
     }
 
     public MutableLiveData<List<Caster>> getMLDcaster(Long id) {
-        String strId = String.valueOf(id);
-        Integer intId = Integer.parseInt(strId);
-
         tmDbClient.getMovieAPI()
-                .getCaster(intId, application.getString(R.string.TMDb_API_key))
+                .getCaster(id, application.getString(R.string.TMDb_API_key))
                 .enqueue(new Callback<CreditDBresponse>() {
                     @Override
                     public void onResponse(Call<CreditDBresponse> call, Response<CreditDBresponse> response) {
@@ -210,6 +206,10 @@ public class MovieDetailRepository {
         transaction.set(movieDetailRef, movieDetail);
 
         Movie movie = new Movie(movieDetail);
+        Date current = new Date();
+        String currentStr = new SimpleDateFormat("yyyy-MM-dd").format(current);
+        movie.setUpdated_date(currentStr);
+
         DocumentReference movieRef = db.collection(CollectionName.MOVIE)
                 .document(String.valueOf(id));
         transaction.set(movieRef, movie);

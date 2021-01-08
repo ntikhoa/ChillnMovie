@@ -35,9 +35,6 @@ public class MovieDetail {
     @SerializedName("overview")
     @Expose
     private String overview;
-    @SerializedName("popularity")
-    @Expose
-    private Double popularity;
     @SerializedName("poster_path")
     @Expose
     private String posterPath;
@@ -68,12 +65,61 @@ public class MovieDetail {
 
     private String trailer_key;
 
+    private boolean isTrending;
+    private boolean isUpcoming;
+    private boolean isNowPlaying;
+    private boolean isVietnamese;
+
     public MovieDetail() {
         //require empty constructor
+        isTrending = false;
+        isUpcoming = false;
+        isNowPlaying = false;
+        isVietnamese = false;
     }
 
     public MovieDetail(long id) {
         this.id = id;
+        isTrending = false;
+        isUpcoming = false;
+        isNowPlaying = false;
+        isVietnamese = false;
+    }
+
+    public boolean getIsTrending() {
+        return isTrending;
+    }
+
+    public boolean getIsUpcoming() {
+        return isUpcoming;
+    }
+
+    public boolean getIsNowPlaying() {
+        return isNowPlaying;
+    }
+
+    public boolean getIsVietnamese() {
+        return isVietnamese;
+    }
+
+    public void setVoteAverage(Double voteAverage) {
+        this.voteAverage = voteAverage;
+    }
+
+    public void setIsTrending(boolean trending) {
+        isTrending = trending;
+    }
+
+    public void setIsUpcoming(boolean upcoming) {
+        isUpcoming = upcoming;
+    }
+
+    public void setIsNowPlaying(boolean nowPlaying) {
+        isNowPlaying = nowPlaying;
+    }
+
+    public void setIsVietnamese(boolean vietnamese) {
+        isVietnamese = vietnamese;
     }
 
     public void setVoteCount(Integer voteCount) {
@@ -126,10 +172,6 @@ public class MovieDetail {
 
     public String getOverview() {
         return overview;
-    }
-
-    public Double getPopularity() {
-        return popularity;
     }
 
     public String getReleaseDate() {

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -23,6 +24,8 @@ import com.ntikhoa.chillnmovie.model.MovieRate;
 import com.ntikhoa.chillnmovie.model.UserRate;
 import com.ntikhoa.chillnmovie.viewmodel.HomePageViewModel;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

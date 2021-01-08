@@ -48,10 +48,6 @@ public class EditMovieRepository {
     private final Application application;
     private String videoKey;
 
-    private final MutableLiveData<Boolean> isTrendingExist;
-    private final MutableLiveData<Boolean> isNowPlayingExist;
-    private final MutableLiveData<Boolean> isUpcomingExist;
-
     private final MutableLiveData<Boolean> isSuccess;
 
     private final MutableLiveData<String> posterUrl;
@@ -65,9 +61,6 @@ public class EditMovieRepository {
     public EditMovieRepository(Application application) {
         this.application = application;
         MLDmovieDetail = new MutableLiveData<>();
-        isTrendingExist = new MutableLiveData<>();
-        isNowPlayingExist = new MutableLiveData<>();
-        isUpcomingExist = new MutableLiveData<>();
 
         isSuccess = new MutableLiveData<>();
 
@@ -82,10 +75,8 @@ public class EditMovieRepository {
     private MutableLiveData<MovieDetail> getMovieDetailFromTMDb(Long id) {
         getVideo(id);
 
-        String strId = String.valueOf(id);
-        Integer intId = Integer.parseInt(strId);
         tmDbClient.getMovieAPI()
-                .getMovieDetail(intId,
+                .getMovieDetail(id,
                         application.getString(R.string.TMDb_API_key),
                         application.getString(R.string.lang_vietnamese))
                 .enqueue(new Callback<MovieDetail>() {
@@ -134,10 +125,8 @@ public class EditMovieRepository {
     }
 
     private void getVideo(Long id) {
-        String strId = String.valueOf(id);
-        Integer intId = Integer.parseInt(strId);
         tmDbClient.getMovieAPI()
-                .getVideo(intId, application.getString(R.string.TMDb_API_key))
+                .getVideo(id, application.getString(R.string.TMDb_API_key))
                 .enqueue(new Callback<VideoDBResponse>() {
                     @Override
                     public void onResponse(Call<VideoDBResponse> call, Response<VideoDBResponse> response) {
@@ -161,10 +150,7 @@ public class EditMovieRepository {
     }
 
     public MutableLiveData<Boolean> updateToDatabase(
-            MovieDetail movieDetail,
-            boolean trending,
-            boolean upcoming,
-            boolean nowPlaying) {
+            MovieDetail movieDetail) {
 
         db.runTransaction(new Transaction.Function<Void>() {
             @Nullable
@@ -178,7 +164,7 @@ public class EditMovieRepository {
                     initMovieRate(movieDetail, transaction);
 
                 updateMovie(movieDetail, transaction);
-                updateCategory(movieDetail, trending, upcoming, nowPlaying, transaction);
+                //updateCategory(movieDetail, trending, upcoming, nowPlaying, transaction);
                 return null;
             }
         }).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -210,102 +196,13 @@ public class EditMovieRepository {
         transaction.set(movieDetailRef, movieDetail);
 
         Movie movie = new Movie(movieDetail);
+        Date current = new Date();
+        String currentStr = new SimpleDateFormat("yyyy-MM-dd").format(current);
+        movie.setUpdated_date(currentStr);
+
         DocumentReference movieRef = db.collection(CollectionName.MOVIE)
                 .document(String.valueOf(id));
         transaction.set(movieRef, movie);
-    }
-
-    private void updateCategory(
-            MovieDetail movieDetail,
-            boolean trending,
-            boolean upcoming,
-            boolean nowPlaying,
-            Transaction transaction) {
-
-        if (trending) {
-            addToCategoryList(movieDetail, CollectionName.MOVIE_TRENDING, transaction);
-        } else removeFromCategoryList(movieDetail, CollectionName.MOVIE_TRENDING, transaction);
-
-        if (upcoming) {
-            addToCategoryList(movieDetail, CollectionName.MOVIE_UPCOMING, transaction);
-        } else removeFromCategoryList(movieDetail, CollectionName.MOVIE_UPCOMING, transaction);
-
-        if (nowPlaying) {
-            addToCategoryList(movieDetail, CollectionName.MOVIE_NOW_PLAYING, transaction);
-        } else removeFromCategoryList(movieDetail, CollectionName.MOVIE_NOW_PLAYING, transaction);
-    }
-
-    private void addToCategoryList(MovieDetail movieDetail, String collectionPath, Transaction transaction) {
-        long id = movieDetail.getId();
-        Movie movie = new Movie(movieDetail);
-
-        DocumentReference collectionRef = db.collection(collectionPath)
-                .document(String.valueOf(id));
-        transaction.set(collectionRef, movie);
-
-        Date current = new Date();
-        String currentStr = new SimpleDateFormat("yyyy-MM-dd").format(current);
-        Map<String, Object> map = new HashMap<>();
-        map.put("updated_date", currentStr);
-        transaction.update(collectionRef, map);
-    }
-
-    private void removeFromCategoryList(MovieDetail movieDetail, String collectionPath, Transaction transaction) {
-        long id = movieDetail.getId();
-        DocumentReference collectionRef = db.collection(collectionPath)
-                .document(String.valueOf(id));
-        transaction.delete(collectionRef);
-    }
-
-
-    public MutableLiveData<Boolean> isTrendingExist(Long id) {
-        db.collection(CollectionName.MOVIE_TRENDING)
-                .document(String.valueOf(id))
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot documentSnapshot = task.getResult();
-                            isTrendingExist.postValue(documentSnapshot.exists());
-                        }
-                    }
-                });
-        return isTrendingExist;
-    }
-
-    public MutableLiveData<Boolean> isNowPlayingExist(Long id) {
-        db.collection(CollectionName.MOVIE_UPCOMING)
-                .document(String.valueOf(id))
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot documentSnapshot = task.getResult();
-                            isNowPlayingExist.postValue(documentSnapshot.exists());
-                        }
-                    }
-                });
-
-        return isNowPlayingExist;
-    }
-
-    public MutableLiveData<Boolean> isUpcomingExist(Long id) {
-        db.collection(CollectionName.MOVIE_NOW_PLAYING)
-                .document(String.valueOf(id))
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot documentSnapshot = task.getResult();
-                            isUpcomingExist.postValue(documentSnapshot.exists());
-                        }
-                    }
-                });
-
-        return isUpcomingExist;
     }
 
     public MutableLiveData<String> uploadImage(Uri imageUri, int mode) {
