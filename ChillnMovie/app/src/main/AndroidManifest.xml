@@ -14,6 +14,9 @@
         android:theme="@style/Theme.ChillnMovie"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.EditorMenuActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".view.AutoLoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -46,9 +49,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.MovieActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".view.EditorFrontActivity"
             android:screenOrientation="portrait" />
 
         <meta-data

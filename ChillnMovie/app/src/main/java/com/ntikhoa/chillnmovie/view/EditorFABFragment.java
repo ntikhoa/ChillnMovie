@@ -16,7 +16,7 @@ import android.view.animation.AnimationUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ntikhoa.chillnmovie.R;
 
-public class EditorMenuFragment extends Fragment {
+public class EditorFABFragment extends Fragment {
     public static final String MOVIE_ID = "movie id";
 
     private FloatingActionButton fabExpand;
@@ -41,15 +41,15 @@ public class EditorMenuFragment extends Fragment {
         this.onClickFABadd = onClickFABadd;
     }
 
-    public EditorMenuFragment() {
+    public EditorFABFragment() {
         //require default constructor
     }
 
-    public static EditorMenuFragment newInstance(Long movieId) {
+    public static EditorFABFragment newInstance(Long movieId) {
 
         Bundle args = new Bundle();
         args.putLong(MOVIE_ID, movieId);
-        EditorMenuFragment fragment = new EditorMenuFragment();
+        EditorFABFragment fragment = new EditorFABFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,7 +65,7 @@ public class EditorMenuFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_editor_menu, container, false);
+        View root = inflater.inflate(R.layout.fragment_editor_fab, container, false);
         initComponent(root);
         setOnClickFAB();
         return root;

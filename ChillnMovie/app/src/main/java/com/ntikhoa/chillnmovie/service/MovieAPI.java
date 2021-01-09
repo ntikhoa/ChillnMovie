@@ -4,6 +4,7 @@ import android.graphics.Movie;
 
 import androidx.lifecycle.LiveData;
 
+import com.google.api.Quota;
 import com.ntikhoa.chillnmovie.model.CreditDBresponse;
 import com.ntikhoa.chillnmovie.model.MovieDBresponse;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
@@ -58,4 +59,12 @@ public interface MovieAPI {
     Call<VideoDBResponse> getVideo(
             @Path("movie_id") long movieId,
             @Query("api_key") String key);
+
+    @GET("search/movie")
+    Call<MovieDBresponse> getSearchMovie(
+            @Query("api_key") String key,
+            @Query("language") String lang,
+            @Query("page") int page,
+            @Query("include_adult") boolean adult,
+            @Query("query") boolean search);
 }

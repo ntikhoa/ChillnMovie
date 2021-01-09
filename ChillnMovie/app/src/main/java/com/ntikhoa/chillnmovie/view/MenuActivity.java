@@ -23,6 +23,9 @@ public class MenuActivity extends AppCompatActivity {
 
     private int mode;
 
+    private BottomNavigationView bottomNavigationView;
+    private FloatingActionButton fabEditor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +35,7 @@ public class MenuActivity extends AppCompatActivity {
         //for testing purposes
         Toast.makeText(this, String.valueOf(mode), Toast.LENGTH_LONG).show();
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -40,7 +43,7 @@ public class MenuActivity extends AppCompatActivity {
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.commit();
 
-        FloatingActionButton fabEditor = findViewById(R.id.fabEditor);
+        fabEditor = findViewById(R.id.fabEditor);
         if (mode == UserAccount.EDITOR) {
             fabEditor.setVisibility(View.VISIBLE);
             fabEditor.setClickable(true);
@@ -49,7 +52,7 @@ public class MenuActivity extends AppCompatActivity {
         fabEditor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), EditorFrontActivity.class);
+                Intent intent = new Intent(getApplicationContext(), EditorMenuActivity.class);
                 startActivity(intent);
             }
         });
@@ -65,7 +68,7 @@ public class MenuActivity extends AppCompatActivity {
                             selectedFragment = new HomeFragment();
                             break;
                         case R.id.nav_search:
-                            selectedFragment = new SearchFragment();
+                            selectedFragment = SearchFragment.newInstance(SearchFragment.MODE_FIRESTORE);
                             break;
                         case R.id.nav_list:
                             selectedFragment = new FavoriteFragment();

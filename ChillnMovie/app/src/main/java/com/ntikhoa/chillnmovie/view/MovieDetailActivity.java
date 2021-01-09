@@ -1,10 +1,6 @@
 package com.ntikhoa.chillnmovie.view;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
@@ -12,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -31,18 +26,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.adapter.CasterAdapter;
 import com.ntikhoa.chillnmovie.adapter.ReviewViewPagerAdapter;
-import com.ntikhoa.chillnmovie.adapter.UserRateAdapter;
 import com.ntikhoa.chillnmovie.model.Caster;
-import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
 import com.ntikhoa.chillnmovie.model.UserAccount;
 import com.ntikhoa.chillnmovie.model.UserModeSingleton;
-import com.ntikhoa.chillnmovie.model.UserRate;
 import com.ntikhoa.chillnmovie.viewmodel.MovieDetailViewModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MovieDetailActivity extends AppCompatActivity {
@@ -236,11 +227,11 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     private void setEditorMenu(Long movieId) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        EditorMenuFragment fragment = EditorMenuFragment.newInstance(movieId);
+        EditorFABFragment fragment = EditorFABFragment.newInstance(movieId);
         ft.add(R.id.fragmentEditorMenu, fragment);
         ft.commit();
 
-        fragment.setOnClickFABadd(new EditorMenuFragment.OnClickFAB() {
+        fragment.setOnClickFABadd(new EditorFABFragment.OnClickFAB() {
             @Override
             public void onClick() {
                 viewModel.addToDatabase(movieDetail);
