@@ -31,4 +31,8 @@ public class SearchViewModel extends AndroidViewModel {
     public LiveData<PagedList<Movie>> getMLDmoviesFromTMDB(String search) {
         return repository.getMLDmoviesFromTMDB(search);
     }
+
+    public MutableLiveData<List<Movie>> getMLDmoviesFromFirestore(String search) {
+        return repository.getMLDmoviesFromFirestore(search);
+    }
 }

@@ -64,4 +64,6 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     //youtube video
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
+    //Algolia
+    implementation 'com.algolia:algoliasearch-android:3.27.0'
 }

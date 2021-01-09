@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.adapter.FavoriteAdapter;
 import com.ntikhoa.chillnmovie.adapter.MovieAdapter;
+import com.ntikhoa.chillnmovie.adapter.MovieBackdropAdapter;
 import com.ntikhoa.chillnmovie.adapter.MoviePagedListAdapter;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.viewmodel.SearchViewModel;
@@ -38,6 +39,7 @@ public class SearchFragment extends Fragment {
 
     private RecyclerView recyclerViewSearchMovie;
     private MoviePagedListAdapter movieAdapter;
+    private MovieBackdropAdapter movieBackdropAdapter;
 
     public static SearchFragment newInstance(int searchMode) {
         SearchFragment fragment = new SearchFragment();
@@ -61,7 +63,6 @@ public class SearchFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_search, container, false);
         initComponent(root);
 
-
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,13 +73,23 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (query != null && !query.isEmpty()) {
-                    viewModel.getMLDmoviesFromTMDB(query)
-                            .observe(SearchFragment.this, new Observer<PagedList<Movie>>() {
-                                @Override
-                                public void onChanged(PagedList<Movie> movies) {
-                                    movieAdapter.submitList(movies);
-                                }
-                            });
+                    if (searchMode == MODE_TMDB) {
+                        viewModel.getMLDmoviesFromTMDB(query)
+                                .observe(SearchFragment.this, new Observer<PagedList<Movie>>() {
+                                    @Override
+                                    public void onChanged(PagedList<Movie> movies) {
+                                        movieAdapter.submitList(movies);
+                                    }
+                                });
+                    } else if (searchMode == MODE_FIRESTORE) {
+                        viewModel.getMLDmoviesFromFirestore(query)
+                                .observe(SearchFragment.this, new Observer<List<Movie>>() {
+                                    @Override
+                                    public void onChanged(List<Movie> movies) {
+                                        movieBackdropAdapter.submitList(movies);
+                                    }
+                                });
+                    }
                 }
                 return true;
             }
@@ -103,7 +114,12 @@ public class SearchFragment extends Fragment {
         recyclerViewSearchMovie = root.findViewById(R.id.recyclerViewSearchMovie);
         recyclerViewSearchMovie.setLayoutManager(new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false));
-        movieAdapter = new MoviePagedListAdapter(getActivity());
-        recyclerViewSearchMovie.setAdapter(movieAdapter);
+        if (searchMode == MODE_TMDB) {
+            movieAdapter = new MoviePagedListAdapter(getActivity());
+            recyclerViewSearchMovie.setAdapter(movieAdapter);
+        } else if (searchMode == MODE_FIRESTORE) {
+            movieBackdropAdapter = new MovieBackdropAdapter(getActivity());
+            recyclerViewSearchMovie.setAdapter(movieBackdropAdapter);
+        }
     }
 }
