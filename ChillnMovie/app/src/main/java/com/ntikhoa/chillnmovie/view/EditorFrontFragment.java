@@ -13,6 +13,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -34,15 +35,19 @@ public class EditorFrontFragment extends Fragment {
 
     private MovieAdapter popularMovieAdapter;
     private RecyclerView recyclerViewPopularMovie;
+    private TextView textViewMorePopular;
 
     private MovieAdapter nowPlayingMovieAdapter;
     private RecyclerView recyclerViewNowPlayingMovie;
+    private TextView textViewMoreNowPlaying;
 
     private MovieAdapter upcomingMovieAdapter;
     private RecyclerView recyclerViewUpcomingMovie;
+    private TextView textViewMoreUpcoming;
 
     private MovieAdapter topRatedMovieAdapter;
     private RecyclerView recyclerViewTopRatedMovie;
+    private TextView textViewMoreTopRated;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,6 +94,16 @@ public class EditorFrontFragment extends Fragment {
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         topRatedMovieAdapter = new MovieAdapter(getActivity());
         recyclerViewTopRatedMovie.setAdapter(topRatedMovieAdapter);
+
+        textViewMoreNowPlaying = root.findViewById(R.id.textViewMoreNowPlaying);
+        textViewMorePopular = root.findViewById(R.id.textViewMorePopular);
+        textViewMoreUpcoming = root.findViewById(R.id.textViewMoreUpcoming);
+        textViewMoreTopRated = root.findViewById(R.id.textViewMoreTopRated);
+
+        textViewMoreNowPlaying.setOnClickListener(onClickMore);
+        textViewMorePopular.setOnClickListener(onClickMore);
+        textViewMoreUpcoming.setOnClickListener(onClickMore);
+        textViewMoreTopRated.setOnClickListener(onClickMore);
     }
 
     private void loadData() {
@@ -133,8 +148,30 @@ public class EditorFrontFragment extends Fragment {
                 });
     }
 
+    private View.OnClickListener onClickMore = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(getActivity().getApplicationContext(), MovieActivity.class);
+            switch (view.getId()) {
+                case R.id.textViewMorePopular:
+                    intent.putExtra(MovieActivity.EXTRA_CATEGORY, Movie.POPULAR);
+                    break;
+                case R.id.textViewMoreNowPlaying:
+                    intent.putExtra(MovieActivity.EXTRA_CATEGORY, Movie.NOW_PLAYING);
+                    break;
+                case R.id.textViewMoreUpcoming:
+                    intent.putExtra(MovieActivity.EXTRA_CATEGORY, Movie.UPCOMING);
+                    break;
+                case R.id.textViewMoreTopRated:
+                    intent.putExtra(MovieActivity.EXTRA_CATEGORY, Movie.TOP_RATED);
+                    break;
+            }
+            startActivity(intent);
+        }
+    };
+
 //    public void onClickSeeMore(View view) {
-//        Intent intent = new Intent(this, MovieActivity.class);
+//        Intent intent = new Intent(getActivity().getApplicationContext(), MovieActivity.class);
 //        switch (view.getId()) {
 //            case R.id.textViewMoreTrending:
 //                intent.putExtra(MovieActivity.EXTRA_CATEGORY, Movie.POPULAR);

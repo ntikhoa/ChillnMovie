@@ -26,7 +26,7 @@ public class MovieViewModel extends AndroidViewModel {
     //page list for movie activity
     public LiveData<PagedList<Movie>> getMoviePagedListLiveData(int category) {
         MovieDataSourceFactory factory = new MovieDataSourceFactory(application, category);
-        LiveData<MovieDataSource> movieDataSourceLiveData = factory.getMutableLiveData();
+        //LiveData<MovieDataSource> movieDataSourceLiveData = factory.getMutableLiveData();
         PagedList.Config config = (new PagedList.Config.Builder())
                 .setEnablePlaceholders(true)
                 .setInitialLoadSizeHint(10)

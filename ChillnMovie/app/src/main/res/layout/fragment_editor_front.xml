@@ -85,10 +85,9 @@
                 tools:layout_height="300dp" />
 
             <TextView
-                android:id="@+id/textViewMoreTrending"
+                android:id="@+id/textViewMorePopular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onClickSeeMore"
                 android:text="@string/more"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/recyclerViewTrendingMovie"
@@ -117,7 +116,6 @@
                 android:id="@+id/textViewMoreNowPlaying"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onClickSeeMore"
                 android:text="@string/more"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/recyclerViewNowPlaying"
@@ -146,7 +144,6 @@
                 android:id="@+id/textViewMoreUpcoming"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onClickSeeMore"
                 android:text="@string/more"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/recyclerViewUpcoming"
@@ -175,7 +172,6 @@
                 android:id="@+id/textViewMoreTopRated"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onClickSeeMore"
                 android:text="@string/more"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/recyclerViewTopRated"

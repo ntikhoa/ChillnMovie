@@ -2,13 +2,27 @@ package com.ntikhoa.chillnmovie.view;
 
 import android.os.Bundle;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.paging.PagedList;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.adapter.FavoriteAdapter;
+import com.ntikhoa.chillnmovie.adapter.MovieAdapter;
+import com.ntikhoa.chillnmovie.adapter.MoviePagedListAdapter;
+import com.ntikhoa.chillnmovie.model.Movie;
+import com.ntikhoa.chillnmovie.viewmodel.SearchViewModel;
+
+import java.util.List;
 
 public class SearchFragment extends Fragment {
     public static final int MODE_TMDB = 0;
@@ -16,7 +30,14 @@ public class SearchFragment extends Fragment {
 
     private static final String SEARCH_MODE = "search mode";
 
+    private SearchViewModel viewModel;
+
     private int searchMode;
+
+    private SearchView searchView;
+
+    private RecyclerView recyclerViewSearchMovie;
+    private MoviePagedListAdapter movieAdapter;
 
     public static SearchFragment newInstance(int searchMode) {
         SearchFragment fragment = new SearchFragment();
@@ -37,7 +58,52 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false);
+        View root = inflater.inflate(R.layout.fragment_search, container, false);
+        initComponent(root);
+
+
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.setIconified(false);
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (query != null && !query.isEmpty()) {
+                    viewModel.getMLDmoviesFromTMDB(query)
+                            .observe(SearchFragment.this, new Observer<PagedList<Movie>>() {
+                                @Override
+                                public void onChanged(PagedList<Movie> movies) {
+                                    movieAdapter.submitList(movies);
+                                }
+                            });
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+
+        return root;
+    }
+
+    private void initComponent(View root) {
+        viewModel = new ViewModelProvider(this,
+                ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()))
+                .get(SearchViewModel.class);
+
+        searchView = root.findViewById(R.id.searchView);
+
+        recyclerViewSearchMovie = root.findViewById(R.id.recyclerViewSearchMovie);
+        recyclerViewSearchMovie.setLayoutManager(new LinearLayoutManager(getContext(),
+                LinearLayoutManager.VERTICAL, false));
+        movieAdapter = new MoviePagedListAdapter(getActivity());
+        recyclerViewSearchMovie.setAdapter(movieAdapter);
     }
 }

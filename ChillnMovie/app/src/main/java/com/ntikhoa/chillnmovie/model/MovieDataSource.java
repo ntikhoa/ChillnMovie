@@ -45,10 +45,7 @@ public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
 
             @Override
             public void onFailure(Call<MovieDBresponse> call, Throwable t) {
-                Toast.makeText(
-                        application.getApplicationContext(),
-                        t.getMessage(),
-                        Toast.LENGTH_LONG).show();
+                showMessage(t.getMessage());
             }
         });
     }
@@ -64,16 +61,19 @@ public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
             @Override
             public void onResponse(Call<MovieDBresponse> call, Response<MovieDBresponse> response) {
                 if (response.isSuccessful()) {
-                    callback.onResult(response.body().getMovies(), params.key + 1);
+                    List<Movie> movies = response.body().getMovies();
+                    for (int i = 0; i < movies.size(); i++) {
+                        Movie movie = movies.get(i);
+                        movie.setBackdropPath(Movie.path + movie.getBackdropPath());
+                        movie.setPosterPath(Movie.path + movie.getPosterPath());
+                    }
+                    callback.onResult(movies, params.key + 1);
                 }
             }
 
             @Override
             public void onFailure(Call<MovieDBresponse> call, Throwable t) {
-                Toast.makeText(
-                        application.getApplicationContext(),
-                        t.getMessage(),
-                        Toast.LENGTH_LONG).show();
+                showMessage(t.getMessage());
             }
         });
     }
@@ -104,5 +104,12 @@ public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
                             application.getString(R.string.lang_vietnamese),
                             pageKey);
         }
+    }
+
+    private void showMessage(String message) {
+        Toast.makeText(application.getApplicationContext(),
+                message,
+                Toast.LENGTH_LONG)
+                .show();
     }
 }

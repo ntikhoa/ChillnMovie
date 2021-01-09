@@ -66,5 +66,5 @@ public interface MovieAPI {
             @Query("language") String lang,
             @Query("page") int page,
             @Query("include_adult") boolean adult,
-            @Query("query") boolean search);
+            @Query("query") String search);
 }

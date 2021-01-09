@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,7 +32,7 @@ public class MoviePagedListAdapter extends PagedListAdapter<Movie, MoviePagedLis
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.movie_item_paged_list, parent, false);
+        View view = inflater.inflate(R.layout.fragment_movie_header, parent, false);
         return new MovieViewHolder(view);
     }
 
@@ -39,22 +40,11 @@ public class MoviePagedListAdapter extends PagedListAdapter<Movie, MoviePagedLis
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
         Movie movie = getItem(position);
         if (movie != null) {
-            Shimmer shimmer = new Shimmer.ColorHighlightBuilder()
-                    .setBaseColor(ContextCompat.getColor(context, R.color.colorShimmerBase))
-                    .setBaseAlpha(1)
-                    .setHighlightColor(ContextCompat.getColor(context, R.color.colorShimmerHighlight))
-                    .setHighlightAlpha(1)
-                    .setDropoff(50)
-                    .setDuration(500)
-                    .build();
-            ShimmerDrawable drawable = new ShimmerDrawable();
-            drawable.setShimmer(shimmer);
-
-            Picasso.get().load(movie.getBackdropPath())
-                    .placeholder(drawable)
-                    .into(holder.imageViewBackdrop);
-
             holder.textViewTitle.setText(movie.getTitle());
+
+            setBackdrop(holder, movie.getBackdropPath());
+
+            setRating(holder, movie.getVoteAverage());
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -67,14 +57,58 @@ public class MoviePagedListAdapter extends PagedListAdapter<Movie, MoviePagedLis
         }
     }
 
+    private void setBackdrop(MovieViewHolder holder, String backdropPath) {
+        Shimmer shimmer = new Shimmer.ColorHighlightBuilder()
+                .setBaseColor(ContextCompat.getColor(context, R.color.colorShimmerBase))
+                .setBaseAlpha(1)
+                .setHighlightColor(ContextCompat.getColor(context, R.color.colorShimmerHighlight))
+                .setHighlightAlpha(1)
+                .setDropoff(50)
+                .setDuration(500)
+                .build();
+        ShimmerDrawable drawable = new ShimmerDrawable();
+        drawable.setShimmer(shimmer);
+
+        Picasso.get().load(backdropPath)
+                .placeholder(drawable)
+                .into(holder.imageBackdrop);
+    }
+
+    private void setRating(MovieViewHolder holder, double voteAverage) {
+        ProgressBar pbRating = holder.progressBarRating;
+        TextView textViewRating = holder.textViewRating;
+
+        if (voteAverage >= 8.0d) {
+            pbRating.setProgressDrawable(ContextCompat.getDrawable(context,
+                    R.drawable.circle_green));
+        } else if (voteAverage >= 5.0d) {
+            pbRating.setProgressDrawable(ContextCompat.getDrawable(context,
+                    R.drawable.circle_yellow));
+        } else {
+            pbRating.setProgressDrawable(ContextCompat.getDrawable(context,
+                    R.drawable.circle_red));
+        }
+        //when setProgressDrawable manually, have to add this line
+        pbRating.setProgress(1);
+        pbRating.setMax(10);
+        pbRating.setProgress((int) voteAverage);
+        String ratingFormatted = String.format("%.1f", voteAverage);
+        textViewRating.setText(ratingFormatted);
+    }
+
     static class MovieViewHolder extends RecyclerView.ViewHolder {
-        public ImageView imageViewBackdrop;
-        public TextView textViewTitle;
+        private ImageView imageBackdrop;
+        private ProgressBar progressBarRating;
+        private TextView textViewRating;
+        private TextView textViewTitle;
 
         public MovieViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageViewBackdrop = itemView.findViewById(R.id.imageViewBackdrop);
-            textViewTitle = itemView.findViewById(R.id.editTextTitle);
+            imageBackdrop = itemView.findViewById(R.id.imageViewBackdrop);
+            textViewTitle = itemView.findViewById(R.id.textViewTitle);
+            View view = itemView.findViewById(R.id.ratingView);
+            progressBarRating = view.findViewById(R.id.progressBarRating);
+            textViewRating = view.findViewById(R.id.textViewRate);
         }
     }
 }
