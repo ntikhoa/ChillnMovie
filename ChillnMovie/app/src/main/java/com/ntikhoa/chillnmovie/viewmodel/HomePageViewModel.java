@@ -19,8 +19,7 @@ public class HomePageViewModel extends AndroidViewModel {
     private final MutableLiveData<List<Movie>> MLDupcomingMovie;
     private final MutableLiveData<List<Movie>> MLDnowPlayingMovie;
     private final MutableLiveData<List<Movie>> MLDtrendingMovie;
-
-
+    private final MutableLiveData<List<Movie>> MLDvietnameseMovie;
 
     public HomePageViewModel(@NonNull Application application) {
         super(application);
@@ -29,6 +28,7 @@ public class HomePageViewModel extends AndroidViewModel {
         MLDnowPlayingMovie = repository.getMLDnowPlaying();
         MLDupcomingMovie = repository.getMLDupcoming();
         MLDtrendingMovie = repository.getMLDtrending();
+        MLDvietnameseMovie = repository.getMLDvietnamese();
     }
 
     public MutableLiveData<List<Movie>> getMLDtopRatedMovie() {
@@ -45,5 +45,9 @@ public class HomePageViewModel extends AndroidViewModel {
 
     public MutableLiveData<List<Movie>> getMLDtrendingMovie() {
         return MLDtrendingMovie;
+    }
+
+    public MutableLiveData<List<Movie>> getMLDvietnameseMovie() {
+        return MLDvietnameseMovie;
     }
 }

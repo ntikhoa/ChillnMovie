@@ -76,7 +76,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/top_billed_caster"
+                android:text="@string/top_billed_cast"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -91,14 +91,24 @@
                 app:layout_constraintTop_toBottomOf="@+id/labelTopBilledCaster"
                 tools:layout_height="150dp" />
 
+            <TextView
+                android:id="@+id/labelDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Movie Detail"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recyclerViewCaster"/>
+
             <FrameLayout
                 android:id="@+id/fragmentMovieInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recyclerViewCaster"
+                app:layout_constraintTop_toBottomOf="@id/labelDetail"
                 tools:background="@color/white"
                 tools:layout_height="500dp" />
 

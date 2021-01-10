@@ -8,16 +8,21 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.adapter.MovieAdapter;
+import com.ntikhoa.chillnmovie.adapter.MoviePagerAdapter;
 import com.ntikhoa.chillnmovie.model.CollectionName;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieRate;
@@ -34,6 +39,10 @@ public class HomeFragment extends Fragment {
 
     private HomePageViewModel viewModel;
 
+    private MoviePagerAdapter trendingMovieAdapter;
+    private ViewPager2 viewPagerTrendingMovie;
+    private TabLayout tabLayout;
+
     private MovieAdapter topRatedMovieAdapter;
     private RecyclerView recyclerViewTopRatedMovie;
 
@@ -43,8 +52,8 @@ public class HomeFragment extends Fragment {
     private MovieAdapter upcomingMovieAdapter;
     private RecyclerView recyclerViewUpcomingMovie;
 
-    private MovieAdapter trendingMovieAdapter;
-    private RecyclerView recyclerViewTrendingMovie;
+    private MovieAdapter vietnameseMovieAdapter;
+    private RecyclerView recyclerViewVietnameseMovie;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,6 +77,12 @@ public class HomeFragment extends Fragment {
     }
 
     private void initRecyclerView(View root) {
+        recyclerViewVietnameseMovie = root.findViewById(R.id.recyclerViewVietnamese);
+        recyclerViewVietnameseMovie.setLayoutManager(new LinearLayoutManager(getActivity(),
+                LinearLayoutManager.HORIZONTAL, false));
+        vietnameseMovieAdapter = new MovieAdapter(getActivity());
+        recyclerViewVietnameseMovie.setAdapter(vietnameseMovieAdapter);
+
         recyclerViewTopRatedMovie = root.findViewById(R.id.recyclerViewTopRated);
         recyclerViewTopRatedMovie.setLayoutManager(
                 new LinearLayoutManager(getActivity(),
@@ -87,16 +102,25 @@ public class HomeFragment extends Fragment {
         upcomingMovieAdapter = new MovieAdapter(getActivity());
         recyclerViewUpcomingMovie.setAdapter(upcomingMovieAdapter);
 
-        recyclerViewTrendingMovie = root.findViewById(R.id.recyclerViewTrendingMovie);
-        recyclerViewTrendingMovie.setLayoutManager(
-                new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        trendingMovieAdapter = new MovieAdapter(getActivity());
-        recyclerViewTrendingMovie.setAdapter(trendingMovieAdapter);
+        viewPagerTrendingMovie = root.findViewById(R.id.viewPagerTrending);
+        trendingMovieAdapter = new MoviePagerAdapter(getActivity());
+        viewPagerTrendingMovie.setAdapter(trendingMovieAdapter);
+        tabLayout = root.findViewById(R.id.tabs);
+        new TabLayoutMediator(tabLayout, viewPagerTrendingMovie, (tab, position) -> {
+        }).attach();
     }
 
     private void loadData() {
+        viewModel.getMLDvietnameseMovie()
+                .observe(this, new Observer<List<Movie>>() {
+                    @Override
+                    public void onChanged(List<Movie> movies) {
+                        vietnameseMovieAdapter.submitList(movies);
+                    }
+                });
+
         viewModel.getMLDtopRatedMovie()
-                .observe(getActivity(), new Observer<List<Movie>>() {
+                .observe(this, new Observer<List<Movie>>() {
                     @Override
                     public void onChanged(List<Movie> movies) {
                         topRatedMovieAdapter.submitList(movies);
@@ -104,7 +128,7 @@ public class HomeFragment extends Fragment {
                 });
 
         viewModel.getMLDnowPlayingMovie()
-                .observe(getActivity(), new Observer<List<Movie>>() {
+                .observe(this, new Observer<List<Movie>>() {
                     @Override
                     public void onChanged(List<Movie> movies) {
                         nowPlayingMovieAdapter.submitList(movies);
@@ -112,7 +136,7 @@ public class HomeFragment extends Fragment {
                 });
 
         viewModel.getMLDupcomingMovie()
-                .observe(getActivity(), new Observer<List<Movie>>() {
+                .observe(this, new Observer<List<Movie>>() {
                     @Override
                     public void onChanged(List<Movie> movies) {
                         upcomingMovieAdapter.submitList(movies);
@@ -120,7 +144,7 @@ public class HomeFragment extends Fragment {
                 });
 
         viewModel.getMLDtrendingMovie()
-                .observe(getActivity(), new Observer<List<Movie>>() {
+                .observe(this, new Observer<List<Movie>>() {
                     @Override
                     public void onChanged(List<Movie> movies) {
                         trendingMovieAdapter.submitList(movies);

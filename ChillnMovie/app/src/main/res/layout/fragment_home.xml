@@ -23,11 +23,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/labelDummy"
+            android:id="@+id/labelTrending"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="64dp"
-            android:text="Dummy"
+            android:text="@string/trending"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/logo" />
@@ -40,7 +40,7 @@
             android:background="@android:color/transparent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/labelDummy" />
+            app:layout_constraintTop_toBottomOf="@+id/labelTrending" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
@@ -59,33 +59,23 @@
             app:tabIndicatorGravity="stretch" />
 
         <TextView
-            android:id="@+id/labelTrending"
+            android:id="@+id/labelVietnamese"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="@string/trending"
+            android:text="@string/vietnamese"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tabs" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewTrendingMovie"
+            android:id="@+id/recyclerViewVietnamese"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/labelTrending"
+            app:layout_constraintTop_toBottomOf="@+id/labelVietnamese"
             tools:layout_height="300dp" />
-
-        <TextView
-            android:id="@+id/textViewMoreTrending"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onClickSeeMore"
-            android:text="@string/more"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/recyclerViewTrendingMovie"
-            app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
             android:id="@+id/labelNowPlaying"
@@ -95,7 +85,7 @@
             android:text="@string/now_playing"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerViewTrendingMovie" />
+            app:layout_constraintTop_toBottomOf="@+id/recyclerViewVietnamese" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewNowPlaying"
@@ -105,16 +95,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/labelNowPlaying"
             tools:layout_height="300dp" />
-
-        <TextView
-            android:id="@+id/textViewMoreNowPlaying"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onClickSeeMore"
-            android:text="@string/more"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/recyclerViewNowPlaying"
-            app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
             android:id="@+id/labelUpcoming"
@@ -136,16 +116,6 @@
             tools:layout_height="300dp" />
 
         <TextView
-            android:id="@+id/textViewMoreUpcoming"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onClickSeeMore"
-            android:text="@string/more"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/recyclerViewUpcoming"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <TextView
             android:id="@+id/labelTopRated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -164,15 +134,10 @@
             app:layout_constraintTop_toBottomOf="@+id/labelTopRated"
             tools:layout_height="300dp" />
 
-        <TextView
-            android:id="@+id/textViewMoreTopRated"
+        <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onClickSeeMore"
-            android:text="@string/more"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/recyclerViewTopRated"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

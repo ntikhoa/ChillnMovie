@@ -39,7 +39,7 @@ public class MenuActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragmentContainer, SearchFragment.newInstance(SearchFragment.MODE_FIRESTORE));
+        ft.replace(R.id.fragmentContainer, new HomeFragment());
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.commit();
 

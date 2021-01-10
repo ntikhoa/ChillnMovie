@@ -16,7 +16,7 @@
     <string name="play_trailer">Play trailer</string>
     <string name="rate_button">rate button</string>
     <string name="add_to_favorite_list_button">add to favorite list button</string>
-    <string name="top_billed_caster">Top Billed Caster</string>
+    <string name="top_billed_cast">Top Billed Cast</string>
     <string name="add_to_database">add to database</string>
     <string name="title">Title:</string>
     <string name="original_title">Original Title:</string>
@@ -93,4 +93,5 @@
     <string name="search">Search</string>
     <string name="favorite">Favorite</string>
     <string name="profile">Profile</string>
+    <string name="vietnamese">Vietnamese</string>
 </resources>

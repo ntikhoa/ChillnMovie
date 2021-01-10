@@ -38,9 +38,7 @@ public class ReviewFragment extends Fragment {
     private TextView textViewComment;
     private ImageView imageViewAvatar;
 
-    public ReviewFragment() {
-        //require default constructor
-    }
+    private TextView textViewEmpty;
 
     public static ReviewFragment newInstance(Long movieId) {
         ReviewFragment fragment = new ReviewFragment();
@@ -79,6 +77,8 @@ public class ReviewFragment extends Fragment {
         textViewRate = root.findViewById(R.id.textViewRate);
         imageViewAvatar = root.findViewById(R.id.imageViewAvatar);
 
+        textViewEmpty = root.findViewById(R.id.textViewEmpty);
+
         Drawable icVerify = ContextCompat.getDrawable(getActivity(), R.drawable.ic_check_circle);
         textViewUserName.setCompoundDrawablesWithIntrinsicBounds(icVerify, null, null, null);
         textViewUserName.setCompoundDrawablePadding(6); //6px = 8dp
@@ -94,6 +94,8 @@ public class ReviewFragment extends Fragment {
                             textViewRateDate.setText(userRate.getRateDate());
                             setUserRate(userRate);
                             setUserInfo(userRate.getUserId());
+                        } else {
+                            textViewEmpty.setVisibility(View.VISIBLE);
                         }
                     }
                 });

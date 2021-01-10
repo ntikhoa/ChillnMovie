@@ -20,13 +20,14 @@ import java.util.List;
 import java.util.Map;
 
 public class HomePageRepository {
-    private Application application;
-    private FirebaseFirestore firestore;
+    private final Application application;
+    private final FirebaseFirestore firestore;
 
-    private MutableLiveData<List<Movie>> MLDtopRatedMovie;
-    private MutableLiveData<List<Movie>> MLDupcoming;
-    private MutableLiveData<List<Movie>> MLDnowPlaying;
-    private MutableLiveData<List<Movie>> MLDtrending;
+    private final MutableLiveData<List<Movie>> MLDtopRatedMovie;
+    private final MutableLiveData<List<Movie>> MLDupcoming;
+    private final MutableLiveData<List<Movie>> MLDnowPlaying;
+    private final MutableLiveData<List<Movie>> MLDtrending;
+    private final MutableLiveData<List<Movie>> MLDvietnamese;
 
     public HomePageRepository(Application application) {
         this.application = application;
@@ -36,11 +37,13 @@ public class HomePageRepository {
         MLDupcoming = new MutableLiveData<>();
         MLDnowPlaying = new MutableLiveData<>();
         MLDtrending = new MutableLiveData<>();
+        MLDvietnamese = new MutableLiveData<>();
     }
 
     public MutableLiveData<List<Movie>> getMLDtopRatedMovie() {
         firestore.collection(CollectionName.MOVIE)
                 .orderBy("voteAverage", Query.Direction.DESCENDING)
+                .limit(20)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -116,6 +119,25 @@ public class HomePageRepository {
                     }
                 });
         return MLDtrending;
+    }
+
+    public MutableLiveData<List<Movie>> getMLDvietnamese() {
+        firestore.collection(CollectionName.MOVIE)
+                .whereEqualTo("isVietnamese", true)
+                .orderBy("updated_date", Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        MLDvietnamese.postValue(queryDocumentSnapshots.toObjects(Movie.class));
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                showMessage(e.getMessage());
+            }
+        });
+        return MLDvietnamese;
     }
 
     private void showMessage(String message) {

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.adapter.UserRateAdapter;
@@ -25,6 +26,7 @@ public class UserRateFragment extends Fragment {
     private UserRateViewModel viewModel;
     private RecyclerView recyclerViewUserRate;
     private UserRateAdapter userRateAdapter;
+    private TextView textViewEmpty;
 
     private Long movieId;
 
@@ -67,13 +69,17 @@ public class UserRateFragment extends Fragment {
                 new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         userRateAdapter = new UserRateAdapter(getActivity());
         recyclerViewUserRate.setAdapter(userRateAdapter);
+
+        textViewEmpty = root.findViewById(R.id.textViewEmpty);
     }
 
     private void loadData() {
         viewModel.getMLDuserRate(movieId).observe(this, new Observer<List<UserRate>>() {
             @Override
             public void onChanged(List<UserRate> userRates) {
-                userRateAdapter.submitList(userRates);
+                if (userRates != null && userRates.size() != 0)
+                    userRateAdapter.submitList(userRates);
+                else textViewEmpty.setVisibility(View.VISIBLE);
             }
         });
     }

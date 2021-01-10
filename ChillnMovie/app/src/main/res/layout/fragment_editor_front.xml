@@ -30,7 +30,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/labelDummy"
+                android:id="@+id/labelTrending"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="64dp"
@@ -47,7 +47,7 @@
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/labelDummy" />
+                app:layout_constraintTop_toBottomOf="@+id/labelTrending" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs"
@@ -66,7 +66,7 @@
                 app:tabPaddingStart="10dp" />
 
             <TextView
-                android:id="@+id/labelTrending"
+                android:id="@+id/labelVietnamese"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/labelTrending"
+                app:layout_constraintTop_toBottomOf="@+id/labelVietnamese"
                 tools:layout_height="300dp" />
 
             <TextView
