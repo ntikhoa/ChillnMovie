@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,6 +33,8 @@ public class FavoriteFragment extends Fragment {
     private FavoriteAdapter favoriteAdapter;
     private FavoriteViewModel viewModel;
     private FirebaseAuth auth;
+
+    private TextView textViewEmpty;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,6 +60,8 @@ public class FavoriteFragment extends Fragment {
         recyclerViewFavorite.setAdapter(favoriteAdapter);
 
         new ItemTouchHelper(mItemTouchHelperCallback).attachToRecyclerView(recyclerViewFavorite);
+
+        textViewEmpty = root.findViewById(R.id.textViewEmpty);
     }
 
     private void loadData(String userId) {
@@ -64,7 +69,9 @@ public class FavoriteFragment extends Fragment {
                 .observe(this, new Observer<List<Long>>() {
                     @Override
                     public void onChanged(List<Long> movieId) {
-                        favoriteAdapter.submitList(movieId);
+                        if (movieId != null && movieId.size() != 0)
+                            favoriteAdapter.submitList(movieId);
+                        else textViewEmpty.setVisibility(View.VISIBLE);
                     }
                 });
     }
