@@ -1,7 +1,9 @@
 package com.ntikhoa.chillnmovie.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,6 +11,7 @@ import android.os.Bundle;
 
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.adapter.MoviePagedListAdapter;
+import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.viewmodel.MovieViewModel;
 
 public class MovieActivity extends AppCompatActivity {
@@ -40,7 +43,15 @@ public class MovieActivity extends AppCompatActivity {
 
     private void loadData() {
         category = getIntent().getIntExtra(EXTRA_CATEGORY, -1);
-        viewModel.getMoviePagedListLiveData(category)
-                .observe(this, movies -> adapter.submitList(movies));
+        if (category != -1)
+            viewModel.getMoviePagedListLiveData(category)
+                    .observe(this, movies -> adapter.submitList(movies));
+        else viewModel.getMovieFirestore()
+                .observe(this, new Observer<PagedList<Movie>>() {
+                    @Override
+                    public void onChanged(PagedList<Movie> movies) {
+                        adapter.submitList(movies);
+                    }
+                });
     }
 }

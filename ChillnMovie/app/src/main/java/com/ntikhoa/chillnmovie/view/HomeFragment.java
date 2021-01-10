@@ -1,5 +1,6 @@
 package com.ntikhoa.chillnmovie.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
@@ -55,12 +57,23 @@ public class HomeFragment extends Fragment {
     private MovieAdapter vietnameseMovieAdapter;
     private RecyclerView recyclerViewVietnameseMovie;
 
+    private Button btnMore;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         initComponent(root);
         loadData();
+
+        btnMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MovieActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return root;
     }
 
@@ -108,6 +121,8 @@ public class HomeFragment extends Fragment {
         tabLayout = root.findViewById(R.id.tabs);
         new TabLayoutMediator(tabLayout, viewPagerTrendingMovie, (tab, position) -> {
         }).attach();
+
+        btnMore = root.findViewById(R.id.btnMore);
     }
 
     private void loadData() {
@@ -150,5 +165,7 @@ public class HomeFragment extends Fragment {
                         trendingMovieAdapter.submitList(movies);
                     }
                 });
+
+
     }
 }

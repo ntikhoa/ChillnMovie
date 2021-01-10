@@ -26,8 +26,4 @@ public class MovieSearchDataSourceFactory extends DataSource.Factory{
         mutableLiveData.postValue(movieSearchDataSource);
         return movieSearchDataSource;
     }
-
-    public MutableLiveData<MovieSearchDataSource> getMutableLiveData() {
-        return mutableLiveData;
-    }
 }
