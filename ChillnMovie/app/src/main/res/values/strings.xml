@@ -4,7 +4,7 @@
     <string name="IMDb_API_key">k_8ewo9eed</string>
     <string name="lang_vietnamese">vi-VN</string>
 
-    <string name="more"><u><i>More</i></u></string>
+    <string name="more"><u>More</u></string>
     <string name="popular_movie">Popular</string>
     <string name="upcoming_movie">Upcoming</string>
     <string name="now_playing">Now Playing</string>
@@ -87,11 +87,13 @@
     <string name="review">Review</string>
     <string name="user_rate">User Rate</string>
     <string name="next">Next</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="home">Home</string>
     <string name="search">Search</string>
     <string name="favorite">Favorite</string>
     <string name="profile">Profile</string>
     <string name="vietnamese">Vietnamese</string>
+    <string name="change_password">Change Password</string>
+    <string name="about_us">About Us</string>
+    <string name="logout">Logout</string>
 </resources>

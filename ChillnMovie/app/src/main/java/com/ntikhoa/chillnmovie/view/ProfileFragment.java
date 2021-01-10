@@ -19,7 +19,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
-        Button btn = root.findViewById(R.id.button);
+        Button btn = root.findViewById(R.id.btnLogout);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
