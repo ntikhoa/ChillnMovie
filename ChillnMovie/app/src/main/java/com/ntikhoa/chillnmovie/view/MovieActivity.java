@@ -46,7 +46,7 @@ public class MovieActivity extends AppCompatActivity {
         if (category != -1)
             viewModel.getMoviePagedListLiveData(category)
                     .observe(this, movies -> adapter.submitList(movies));
-        else viewModel.getMovieFirestore()
+        else viewModel.getMoviePagedListFirestore()
                 .observe(this, new Observer<PagedList<Movie>>() {
                     @Override
                     public void onChanged(PagedList<Movie> movies) {
