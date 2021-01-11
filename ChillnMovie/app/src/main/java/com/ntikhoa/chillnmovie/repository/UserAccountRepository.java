@@ -48,6 +48,8 @@ public class UserAccountRepository {
     private final MutableLiveData<Boolean> isCreateInfoSuccess;
     private final MutableLiveData<Boolean> isUploadImageSuccess;
 
+    private final MutableLiveData<UserAccount> MLDuserAccount;
+
     //login signup
 
     public UserAccountRepository(Application application) {
@@ -60,6 +62,7 @@ public class UserAccountRepository {
         isCreateInfoSuccess = new MutableLiveData<>();
         isUploadImageSuccess = new MutableLiveData<>();
         userMode = new MutableLiveData<>();
+        MLDuserAccount = new MutableLiveData<>();
     }
 
     public MutableLiveData<Boolean> login(String email, String password) {
@@ -240,6 +243,25 @@ public class UserAccountRepository {
         ContentResolver cR = application.getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+    public MutableLiveData<UserAccount> getMLDuserAccount(String uid) {
+        db.collection(CollectionName.USER_PROFILE)
+                .document(uid)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        MLDuserAccount.postValue(documentSnapshot.toObject(UserAccount.class));
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showMessage(e.getMessage());
+                    }
+                });
+        return MLDuserAccount;
     }
 
     private void showMessage(String message) {

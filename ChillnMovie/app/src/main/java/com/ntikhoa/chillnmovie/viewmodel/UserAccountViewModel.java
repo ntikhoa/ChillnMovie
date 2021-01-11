@@ -37,4 +37,8 @@ public class UserAccountViewModel extends AndroidViewModel {
     public MutableLiveData<Boolean> setUserMode(String userId) {
         return repository.setUserMode(userId);
     }
+
+    public MutableLiveData<UserAccount> getMLDuserAccount(String userId) {
+        return repository.getMLDuserAccount(userId);
+    }
 }
