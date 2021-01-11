@@ -21,7 +21,7 @@
             app:civ_border_width="2dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/shinobu" />
+            tools:src="@drawable/user_photo_light" />
 
         <TextView
             android:id="@+id/textViewUserName"

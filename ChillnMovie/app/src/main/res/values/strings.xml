@@ -1,23 +1,23 @@
 <resources>
     <string name="app_name">ChillnMovie</string>
-    <string name="TMDb_API_key">e1ccb0be53deb720478324dfc600cdfa</string>
-    <string name="IMDb_API_key">k_8ewo9eed</string>
-    <string name="lang_vietnamese">vi-VN</string>
+    <string name="TMDb_API_key" translatable="false">e1ccb0be53deb720478324dfc600cdfa</string>
+    <string name="IMDb_API_key" translatable="false">k_8ewo9eed</string>
+    <string name="lang_vietnamese" translatable="false">vi-VN</string>
 
     <string name="more"><u>More</u></string>
     <string name="popular_movie">Popular</string>
     <string name="upcoming_movie">Upcoming</string>
     <string name="now_playing">Now Playing</string>
-    <string name="top_rated">Top Rated</string>
+    <string name="top_rated" translatable="false">Top Rated</string>
     <string name="trending">Trending</string>
-    <string name="backdrop_image">backdrop image</string>
-    <string name="team_logo">team logo</string>
-    <string name="image_poster">poster image</string>
+    <string name="backdrop_image" translatable="false">backdrop image</string>
+    <string name="team_logo" translatable="false">team logo</string>
+    <string name="image_poster" translatable="false">poster image</string>
     <string name="play_trailer">Play trailer</string>
-    <string name="rate_button">rate button</string>
-    <string name="add_to_favorite_list_button">add to favorite list button</string>
+    <string name="rate_button" translatable="false">rate button</string>
+    <string name="add_to_favorite_list_button" translatable="false">add to favorite list button</string>
     <string name="top_billed_cast">Top Billed Cast</string>
-    <string name="add_to_database">add to database</string>
+    <string name="add_to_database" translatable="false">add to database</string>
     <string name="title">Title:</string>
     <string name="original_title">Original Title:</string>
     <string name="release_date">Release Date:</string>
@@ -28,12 +28,12 @@
     <string name="budget">Budget:</string>
     <string name="revenue">Revenue:</string>
     <string name="overview">Overview:</string>
-    <string name="default_description">-</string>
+    <string name="default_description" translatable="false">-</string>
 
     <string name="minute">Minute</string>
-    <string name="yyyy_mm_dd">YYYY-MM-DD</string>
-    <string name="released">E.g: Released</string>
-    <string name="usd">USD</string>
+    <string name="yyyy_mm_dd" translatable="false">YYYY-MM-DD</string>
+    <string name="released" translatable="false">E.g: Released</string>
+    <string name="usd" translatable="false">USD</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="edit_genres">Edit Genres</string>
@@ -61,18 +61,18 @@
         <item>Phim Miền Tây</item>
     </string-array>
 
-    <string name="video_key">Video Key</string>
+    <string name="video_key" translatable="false">Video Key</string>
 
-    <string name="help">youtube.com/watch?v=8iUGUKLoQwE</string>
+    <string name="help" translatable="false">youtube.com/watch?v=8iUGUKLoQwE</string>
     <string name="test_video">Test Video</string>
     <string name="register"><u><i>Register</i></u></string>
     <string name="submit">Submit</string>
-    <string name="user_name">User Name</string>
+    <string name="user_name" translatable="false">User Name</string>
     <string name="birthdate">Birthdate</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="other">Other</string>
-    <string name="email">Email</string>
+    <string name="email" translatable="false">Email</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
 
@@ -94,6 +94,10 @@
     <string name="profile">Profile</string>
     <string name="vietnamese">Vietnamese</string>
     <string name="change_password">Change Password</string>
-    <string name="about_us">About Us</string>
+    <string name="about_us" translatable="false">About Us</string>
     <string name="logout">Logout</string>
+    <string name="movie_detail">Movie Detail</string>
+    <string name="login">Login</string>
+    <string name="guest_access">Guest Access</string>
+    <string name="don_t_have_an_account">Don\'t have an account ?</string>
 </resources>

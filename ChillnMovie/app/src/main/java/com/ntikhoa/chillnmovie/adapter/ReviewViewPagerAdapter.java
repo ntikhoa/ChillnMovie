@@ -19,6 +19,12 @@ public class ReviewViewPagerAdapter extends FragmentPagerAdapter {
     private final Context context;
     private long id;
 
+    private OnClickListener onClickReviewListener;
+
+    public void setOnClickListener(OnClickListener onClickReviewListener) {
+        this.onClickReviewListener = onClickReviewListener;
+    }
+
     public ReviewViewPagerAdapter(@NonNull FragmentManager fm, int behavior, Context context, Long id) {
         super(fm, behavior);
         this.context = context;
@@ -29,12 +35,28 @@ public class ReviewViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 0:
-                return ReviewFragment.newInstance(id);
+            case 0: {
+                ReviewFragment fragment = ReviewFragment.newInstance(id);
+                fragment.setOnClickListener(new ReviewFragment.OnClickListener() {
+                    @Override
+                    public void onClick() {
+                        onClickReviewListener.onClick();
+                    }
+                });
+                return fragment;
+            }
             case 1:
                 return UserRateFragment.newInstance(id);
-            default:
-                return UserRateFragment.newInstance(id);
+            default: {
+                ReviewFragment fragment = ReviewFragment.newInstance(id);
+                fragment.setOnClickListener(new ReviewFragment.OnClickListener() {
+                    @Override
+                    public void onClick() {
+                        onClickReviewListener.onClick();
+                    }
+                });
+                return fragment;
+            }
         }
     }
 
@@ -54,5 +76,9 @@ public class ReviewViewPagerAdapter extends FragmentPagerAdapter {
             default:
                 return context.getResources().getString(R.string.review);
         }
+    }
+
+    public interface OnClickListener {
+        void onClick();
     }
 }

@@ -1,5 +1,6 @@
 package com.ntikhoa.chillnmovie.view;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -40,6 +41,12 @@ public class ReviewFragment extends Fragment {
 
     private TextView textViewEmpty;
 
+    private OnClickListener onClickListener;
+
+    public void setOnClickListener(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
+
     public static ReviewFragment newInstance(Long movieId) {
         ReviewFragment fragment = new ReviewFragment();
         Bundle args = new Bundle();
@@ -62,7 +69,7 @@ public class ReviewFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.user_rate_item, container, false);
         initComponent(root);
-        loadData();
+        loadData(root);
         return root;
     }
 
@@ -84,7 +91,7 @@ public class ReviewFragment extends Fragment {
         textViewUserName.setCompoundDrawablePadding(6); //6px = 8dp
     }
 
-    private void loadData() {
+    private void loadData(View root) {
         viewModel.getMLDreview(movieId)
                 .observe(this, new Observer<UserRate>() {
                     @Override
@@ -94,6 +101,14 @@ public class ReviewFragment extends Fragment {
                             textViewRateDate.setText(userRate.getRateDate());
                             setUserRate(userRate);
                             setUserInfo(userRate.getUserId());
+
+                            root.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    onClickListener.onClick();
+                                }
+                            });
+
                         } else {
                             textViewEmpty.setVisibility(View.VISIBLE);
                         }
@@ -136,5 +151,9 @@ public class ReviewFragment extends Fragment {
         Picasso.get().load(avatarPath)
                 .placeholder(drawable)
                 .into(imageViewAvatar);
+    }
+
+    public interface OnClickListener {
+        void onClick();
     }
 }

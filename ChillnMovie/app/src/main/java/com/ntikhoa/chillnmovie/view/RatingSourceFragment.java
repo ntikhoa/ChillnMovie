@@ -1,6 +1,5 @@
 package com.ntikhoa.chillnmovie.view;
 
-import android.media.Rating;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
@@ -15,7 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ntikhoa.chillnmovie.R;
-import com.ntikhoa.chillnmovie.model.MovieDetail;
 import com.ntikhoa.chillnmovie.model.MovieRate;
 import com.ntikhoa.chillnmovie.model.RatingSource;
 import com.ntikhoa.chillnmovie.viewmodel.RatingSourceViewModel;
@@ -37,14 +35,14 @@ public class RatingSourceFragment extends Fragment {
     private ProgressBar pbRatingChillnMovie;
     private TextView tvRatingChillnMovie;
 
-    private ProgressBar pbVisualEffect;
-    private TextView tvVisualEffect;
+    private ProgressBar pbVisual;
+    private TextView tvVisual;
 
     private ProgressBar pbPlot;
     private TextView tvPlot;
 
-    private ProgressBar pbSoundEffect;
-    private TextView tvSoundEffect;
+    private ProgressBar pbAudio;
+    private TextView tvAudio;
 
     private ProgressBar pbRatingIMDb;
     private TextView tvRatingIMDb;
@@ -83,17 +81,17 @@ public class RatingSourceFragment extends Fragment {
         pbRatingChillnMovie = chillnMovie.findViewById(R.id.progressBarRating);
         tvRatingChillnMovie = chillnMovie.findViewById(R.id.textViewRate);
 
-        View visualEffect = root.findViewById(R.id.visualEffect);
-        pbVisualEffect = visualEffect.findViewById(R.id.progressBarRating);
-        tvVisualEffect = visualEffect.findViewById(R.id.textViewRate);
+        View visual = root.findViewById(R.id.visualEffect);
+        pbVisual = visual.findViewById(R.id.progressBarRating);
+        tvVisual = visual.findViewById(R.id.textViewRate);
 
         View plot = root.findViewById(R.id.plot);
         pbPlot = plot.findViewById(R.id.progressBarRating);
         tvPlot = plot.findViewById(R.id.textViewRate);
 
-        View soundEffect = root.findViewById(R.id.soundEffect);
-        pbSoundEffect = soundEffect.findViewById(R.id.progressBarRating);
-        tvSoundEffect = soundEffect.findViewById(R.id.textViewRate);
+        View audio = root.findViewById(R.id.soundEffect);
+        pbAudio = audio.findViewById(R.id.progressBarRating);
+        tvAudio = audio.findViewById(R.id.textViewRate);
 
         View imdb = root.findViewById(R.id.imdb);
         pbRatingIMDb = imdb.findViewById(R.id.progressBarRating);
@@ -165,9 +163,9 @@ public class RatingSourceFragment extends Fragment {
 
     private void fetchChillnMovieData(MovieRate movieRate) {
         setRating(movieRate.getVoteAverage(), pbRatingChillnMovie, tvRatingChillnMovie, UNIT_10);
-        setRating(movieRate.getVisualVoteAverage(), pbVisualEffect, tvVisualEffect, UNIT_10);
+        setRating(movieRate.getVisualVoteAverage(), pbVisual, tvVisual, UNIT_10);
         setRating(movieRate.getPlotVoteAverage(), pbPlot, tvPlot, UNIT_10);
-        setRating(movieRate.getAudioVoteAverage(), pbSoundEffect, tvSoundEffect, UNIT_10);
+        setRating(movieRate.getAudioVoteAverage(), pbAudio, tvAudio, UNIT_10);
     }
 
     private void setRating(double rating, ProgressBar pbRating, TextView tvRating, int UNIT) {

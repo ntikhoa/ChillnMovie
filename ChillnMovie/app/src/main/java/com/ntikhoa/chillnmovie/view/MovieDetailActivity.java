@@ -150,7 +150,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 setBackground(movieDetail.getPosterPath());
                 setHeaderFragment(movieDetail.getBackdropPath(), movieDetail.getTitle(), movieDetail.getVoteAverage());
                 setMovieInfoFragment(movieDetail);
-                setViewPagerReview(movieDetail.getId());
+                setViewPagerReview(movieDetail.getId(), movieDetail.getPosterPath());
                 if (mode == UserAccount.EDITOR)
                     setEditorMenu(movieDetail.getId());
 
@@ -167,13 +167,22 @@ public class MovieDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void setViewPagerReview(Long movieId) {
+    private void setViewPagerReview(Long movieId, String posterPath) {
         pagerAdapter = new ReviewViewPagerAdapter(getSupportFragmentManager(),
                 FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
                 getApplicationContext(),
                 movieId);
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+        pagerAdapter.setOnClickListener(new ReviewViewPagerAdapter.OnClickListener() {
+            @Override
+            public void onClick() {
+                Intent intent = new Intent(getApplicationContext(), UserRateActivity.class);
+                intent.putExtra(UserRateActivity.MOVIE_ID, movieId);
+                intent.putExtra(UserRateActivity.POSTER, posterPath);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setHeaderFragment(String backdropPath, String title, Double voteAverage) {

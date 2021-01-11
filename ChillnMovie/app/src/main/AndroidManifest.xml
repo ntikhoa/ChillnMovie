@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChillnMovie"
         android:usesCleartextTraffic="true">
+        <activity android:name=".view.UserRateActivity"></activity>
         <activity
             android:name=".view.EditorMenuActivity"
             android:screenOrientation="portrait" />

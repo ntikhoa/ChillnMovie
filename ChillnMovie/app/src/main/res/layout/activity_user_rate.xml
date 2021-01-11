@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:background="@drawable/background"
+    tools:context=".view.UserRateActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparentBlack80"
+            android:padding="16dp">
+
+            <include
+                android:id="@+id/ratePlot"
+                layout="@layout/rating_small_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/labelPlot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/plot"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintEnd_toEndOf="@+id/ratePlot"
+                app:layout_constraintStart_toStartOf="@+id/ratePlot"
+                app:layout_constraintTop_toBottomOf="@+id/ratePlot" />
+
+            <include
+                android:id="@+id/rateVisual"
+                layout="@layout/rating_small_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@+id/rateAudio"
+                app:layout_constraintStart_toEndOf="@+id/ratePlot"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/labelVisual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/visual"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintEnd_toEndOf="@+id/rateVisual"
+                app:layout_constraintStart_toStartOf="@+id/rateVisual"
+                app:layout_constraintTop_toBottomOf="@+id/rateVisual" />
+
+            <include
+                android:id="@+id/rateAudio"
+                layout="@layout/rating_small_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/labelAudio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/audio"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintEnd_toEndOf="@+id/rateAudio"
+                app:layout_constraintStart_toStartOf="@+id/rateAudio"
+                app:layout_constraintTop_toBottomOf="@+id/rateAudio" />
+
+            <FrameLayout
+                android:id="@+id/fragmentContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/labelPlot"
+                tools:layout_height="600dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</FrameLayout>
