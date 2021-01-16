@@ -15,12 +15,3 @@ Below are some of the technique I have use and learn while develop the app.
 * Google Firebase (Firestore, Auth, storage)
 * Pagination
 * Material design
-# Preview
-## 1. Login and Signup
-![](Preview/Login.png)
-![](Preview/Signup.png)
-![](Preview/CreateUserProfile.png)
-![](Preview/CreateUserProfile1.png)
-
-## 2. Home Page
-![](Preview/HomePage.png)
