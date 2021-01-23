@@ -41,9 +41,6 @@ public class Movie {
     @SerializedName("original_title")
     @Expose
     private String originalTitle;
-    @SerializedName("genre_ids")
-    @Expose
-    private List<Integer> genreIds = new ArrayList<Integer>();
     @SerializedName("backdrop_path")
     @Expose
     private String backdropPath;

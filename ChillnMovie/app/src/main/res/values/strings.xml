@@ -2,6 +2,9 @@
     <string name="app_name">ChillnMovie</string>
     <string name="TMDb_API_key" translatable="false">e1ccb0be53deb720478324dfc600cdfa</string>
     <string name="IMDb_API_key" translatable="false">k_8ewo9eed</string>
+    <string name="ALGOLIA_APP_ID" translatable="false">I3J0DWF0NU</string>
+    <string name="ALGOLIA_SEARCH_KEY" translatable="false">cf99bec2ac2d0d600632452182f2a7c8</string>
+    <string name="ALGOLIA_ADMIN_KEY" translatable="false">45e305da432d24a7a1f68d43288645c2</string>
     <string name="lang_vietnamese" translatable="false">vi-VN</string>
 
     <string name="more"><u>More</u></string>
