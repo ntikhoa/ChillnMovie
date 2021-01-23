@@ -7,40 +7,16 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieDetail {
-    @SerializedName("adult")
-    @Expose
-    private Boolean adult;
-    @SerializedName("backdrop_path")
-    @Expose
-    private String backdropPath;
+public class MovieDetail extends Movie {
     @SerializedName("budget")
     @Expose
     private Integer budget;
     @SerializedName("genres")
     @Expose
     private List<Genre> genres;
-    @SerializedName("id")
-    @Expose
-    private Long id;
     @SerializedName("imdb_id")
     @Expose
     private String imdbId;
-    @SerializedName("original_language")
-    @Expose
-    private String originalLanguage;
-    @SerializedName("original_title")
-    @Expose
-    private String originalTitle;
-    @SerializedName("overview")
-    @Expose
-    private String overview;
-    @SerializedName("poster_path")
-    @Expose
-    private String posterPath;
-    @SerializedName("release_date")
-    @Expose
-    private String releaseDate;
     @SerializedName("revenue")
     @Expose
     private Integer revenue;
@@ -53,97 +29,20 @@ public class MovieDetail {
     @SerializedName("tagline")
     @Expose
     private String tagline;
-    @SerializedName("title")
-    @Expose
-    private String title;
-    @SerializedName("vote_average")
-    @Expose
-    private Double voteAverage;
-    @SerializedName("vote_count")
-    @Expose
-    private Integer voteCount;
 
     private String trailer_key;
 
-    private boolean isTrending;
-    private boolean isUpcoming;
-    private boolean isNowPlaying;
-    private boolean isVietnamese;
-
     public MovieDetail() {
         //require empty constructor
-        isTrending = false;
-        isUpcoming = false;
-        isNowPlaying = false;
-        isVietnamese = false;
     }
 
     public MovieDetail(long id) {
-        this.id = id;
-        isTrending = false;
-        isUpcoming = false;
-        isNowPlaying = false;
-        isVietnamese = false;
+        super(id);
     }
 
-    public boolean getIsTrending() {
-        return isTrending;
-    }
-
-    public boolean getIsUpcoming() {
-        return isUpcoming;
-    }
-
-    public boolean getIsNowPlaying() {
-        return isNowPlaying;
-    }
-
-    public boolean getIsVietnamese() {
-        return isVietnamese;
-    }
-
-    public void setVoteAverage(Double voteAverage) {
-        this.voteAverage = voteAverage;
-    }
-
-    public void setIsTrending(boolean trending) {
-        isTrending = trending;
-    }
-
-    public void setIsUpcoming(boolean upcoming) {
-        isUpcoming = upcoming;
-    }
-
-    public void setIsNowPlaying(boolean nowPlaying) {
-        isNowPlaying = nowPlaying;
-    }
-
-    public void setIsVietnamese(boolean vietnamese) {
-        isVietnamese = vietnamese;
-    }
-
-    public void setVoteCount(Integer voteCount) {
-        this.voteCount = voteCount;
-    }
 
     public void setGenres(List<Genre> genres) {
         this.genres = genres;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getBackdropPath() {
-        return backdropPath;
-    }
-
-    public String getPosterPath() {
-        return posterPath;
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     public Integer getBudget() {
@@ -154,29 +53,11 @@ public class MovieDetail {
         return genres;
     }
 
-    public Long getId() {
-        return id;
-    }
 
     public String getImdbId() {
         return imdbId;
     }
 
-    public String getOriginalLanguage() {
-        return originalLanguage;
-    }
-
-    public String getOriginalTitle() {
-        return originalTitle;
-    }
-
-    public String getOverview() {
-        return overview;
-    }
-
-    public String getReleaseDate() {
-        return releaseDate;
-    }
 
     public Integer getRevenue() {
         return revenue;
@@ -188,18 +69,6 @@ public class MovieDetail {
 
     public String getStatus() {
         return status;
-    }
-
-    public String getTagline() {
-        return tagline;
-    }
-
-    public Double getVoteAverage() {
-        return voteAverage;
-    }
-
-    public Integer getVoteCount() {
-        return voteCount;
     }
 
     public String getTrailer_key() {
@@ -214,22 +83,6 @@ public class MovieDetail {
         this.budget = budget;
     }
 
-    public void setOriginalLanguage(String originalLanguage) {
-        this.originalLanguage = originalLanguage;
-    }
-
-    public void setOriginalTitle(String originalTitle) {
-        this.originalTitle = originalTitle;
-    }
-
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
     public void setRevenue(Integer revenue) {
         this.revenue = revenue;
     }
@@ -240,13 +93,5 @@ public class MovieDetail {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public void setBackdropPath(String backdropPath) {
-        this.backdropPath = backdropPath;
-    }
-
-    public void setPosterPath(String posterPath) {
-        this.posterPath = posterPath;
     }
 }

@@ -12,13 +12,10 @@ import java.util.List;
 
 public class Movie {
     public static final String path = "https://image.tmdb.org/t/p/w500";
-    public static final String MEDIA_TYPE = "movie";
-    public static final String TIME_WINDOW = "day";
     public static final int POPULAR = 1;
     public static final int NOW_PLAYING = 2;
     public static final int UPCOMING = 3;
     public static final int TOP_RATED = 4;
-
 
     @SerializedName("vote_count")
     @Expose
@@ -108,6 +105,14 @@ public class Movie {
         this.isVietnamese = movieDetail.getIsVietnamese();
     }
 
+    public Movie(long id) {
+        this.id = id;
+        isTrending = false;
+        isUpcoming = false;
+        isNowPlaying = false;
+        isVietnamese = false;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -158,5 +163,61 @@ public class Movie {
 
     public boolean getIsVietnamese() {
         return isVietnamese;
+    }
+
+    public void setIsTrending(boolean trending) {
+        isTrending = trending;
+    }
+
+    public void setIsUpcoming(boolean upcoming) {
+        isUpcoming = upcoming;
+    }
+
+    public void setIsNowPlaying(boolean nowPlaying) {
+        isNowPlaying = nowPlaying;
+    }
+
+    public void setIsVietnamese(boolean vietnamese) {
+        isVietnamese = vietnamese;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setOriginalLanguage(String originalLanguage) {
+        this.originalLanguage = originalLanguage;
+    }
+
+    public void setOriginalTitle(String originalTitle) {
+        this.originalTitle = originalTitle;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public void setVoteCount(Integer voteCount) {
+        this.voteCount = voteCount;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public void setVoteAverage(Double voteAverage) {
+        this.voteAverage = voteAverage;
+    }
+
+    public String getOriginalLanguage() {
+        return originalLanguage;
+    }
+
+    public String getOriginalTitle() {
+        return originalTitle;
     }
 }
