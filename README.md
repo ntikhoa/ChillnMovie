@@ -6,13 +6,14 @@ to user in categories like: trending, top rated, upcoming, now playing and Vietn
 # How it works
 ChillnMovie has two type of end users: editors and users. Editors is control the data that the users can see. Editor can edit movies, add a new movies and add a summary
 reviews for the film, Editor can also put movies in different categories.
-# Architecture
+# Architecture (MVVM model)
 ![](Preview/architecture.png)\
 Above is the architecture of the app. I use the MVVM models.
 Below are some of the technique I have use and learn while develop the app.
+# Technique uses
 * MVVM model (architecture component, live data)
 * RESTful API (Retrofit)
 * Google Firebase (Firestore, Auth, Storage)
 * Algolia (text search)
-* Pagination
-* Material design
+* Pagination (for api, firebase and algolia)
+* Material Design
