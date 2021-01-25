@@ -8,8 +8,6 @@ ChillnMovie has two type of end users: editors and users. Editors is control the
 reviews for the film, Editor can also put movies in different categories.
 # Architecture (MVVM model)
 ![](Preview/architecture.png)\
-Above is the architecture of the app. I use the MVVM models.
-Below are some of the technique I have use and learn while develop the app.
 # Technique uses
 * MVVM model (architecture component, live data)
 * RESTful API (Retrofit)
