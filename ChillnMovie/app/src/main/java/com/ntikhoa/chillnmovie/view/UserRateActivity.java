@@ -22,6 +22,9 @@ import com.ntikhoa.chillnmovie.viewmodel.UserRateViewModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class UserRateActivity extends AppCompatActivity {
     public static final String MOVIE_ID = "movieId";
     public static final String POSTER = "poster";
@@ -54,8 +57,7 @@ public class UserRateActivity extends AppCompatActivity {
     }
 
     private void initComponent() {
-        viewModel = new ViewModelProvider(this,
-                new ViewModelProvider.AndroidViewModelFactory(getApplication()))
+        viewModel = new ViewModelProvider(this)
                 .get(UserRateViewModel.class);
 
         frameBackground = findViewById(R.id.frameBackground);

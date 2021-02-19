@@ -21,6 +21,9 @@ import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
 import com.squareup.picasso.Picasso;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MovieHeaderFragment extends Fragment {
     public static final String BACKDROP_PATH = "backdrop path";
     public static final String TITLE = "title";

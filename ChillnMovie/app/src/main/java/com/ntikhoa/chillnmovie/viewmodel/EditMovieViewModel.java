@@ -10,13 +10,19 @@ import androidx.lifecycle.MutableLiveData;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
 import com.ntikhoa.chillnmovie.repository.EditMovieRepository;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class EditMovieViewModel extends AndroidViewModel {
 
     private EditMovieRepository repository;
 
-    public EditMovieViewModel(@NonNull Application application) {
+    @Inject
+    public EditMovieViewModel(@NonNull Application application, EditMovieRepository repository) {
         super(application);
-        repository = new EditMovieRepository(application);
+        this.repository = repository;
     }
 
     public MutableLiveData<MovieDetail> getMLDmovieDetail(Long id) {

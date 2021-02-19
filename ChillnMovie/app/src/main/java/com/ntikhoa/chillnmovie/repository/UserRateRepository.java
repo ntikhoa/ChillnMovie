@@ -15,6 +15,10 @@ import com.ntikhoa.chillnmovie.model.UserRate;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class UserRateRepository {
     private FirebaseFirestore db;
     private Application application;
@@ -22,9 +26,11 @@ public class UserRateRepository {
     private MutableLiveData<UserRate> MLDreview;
     private MutableLiveData<UserAccount> MLDuserAccount;
 
-    public UserRateRepository(Application application) {
+    @Inject
+    public UserRateRepository(Application application, FirebaseFirestore db) {
         this.application = application;
-        db = FirebaseFirestore.getInstance();
+        this.db = db;
+
         MLDuserRate = new MutableLiveData<>();
         MLDreview = new MutableLiveData<>();
         MLDuserAccount = new MutableLiveData<>();

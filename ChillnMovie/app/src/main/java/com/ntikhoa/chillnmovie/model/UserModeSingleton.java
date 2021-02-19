@@ -2,6 +2,9 @@ package com.ntikhoa.chillnmovie.model;
 
 import android.app.Application;
 
+import dagger.hilt.android.HiltAndroidApp;
+
+@HiltAndroidApp
 public class UserModeSingleton extends Application {
     private static UserModeSingleton instance;
 

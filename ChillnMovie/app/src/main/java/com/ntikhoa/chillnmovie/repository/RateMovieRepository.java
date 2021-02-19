@@ -30,14 +30,19 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class RateMovieRepository {
     private final MutableLiveData<Boolean> success;
     private final Application application;
     private final FirebaseFirestore db;
 
-    public RateMovieRepository(Application application) {
+    @Inject
+    public RateMovieRepository(Application application, FirebaseFirestore db) {
         this.application = application;
-        db = FirebaseFirestore.getInstance();
+        this.db = db;
 
         success = new MutableLiveData<>();
     }

@@ -18,6 +18,9 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.You
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class TrailerPlayerActivity extends AppCompatActivity {
     public static final String EXTRA_TRAILER_KEY = "trailer key";
     private static final String SAVED_START_TIME = "start time";

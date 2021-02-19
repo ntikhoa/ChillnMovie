@@ -36,6 +36,9 @@ import com.squareup.picasso.Target;
 
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MovieDetailActivity extends AppCompatActivity {
     public static final String TAG = "MovieDetailActivity";
     public static final String EXTRA_ID = "tmdb_movie_id";
@@ -116,8 +119,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     private void initViewModel() {
-        viewModel = new ViewModelProvider(MovieDetailActivity.this,
-                ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()))
+        viewModel = new ViewModelProvider(MovieDetailActivity.this)
                 .get(MovieDetailViewModel.class);
     }
 

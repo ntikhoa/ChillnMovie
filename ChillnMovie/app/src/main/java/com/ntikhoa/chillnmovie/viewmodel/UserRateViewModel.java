@@ -12,15 +12,21 @@ import com.ntikhoa.chillnmovie.repository.UserRateRepository;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class UserRateViewModel extends AndroidViewModel {
 
     private Application application;
     private UserRateRepository repository;
 
-    public UserRateViewModel(@NonNull Application application) {
+    @Inject
+    public UserRateViewModel(@NonNull Application application, UserRateRepository repository) {
         super(application);
         this.application = application;
-        repository = new UserRateRepository(application);
+        this.repository = repository;
     }
 
     public MutableLiveData<List<UserRate>> getMLDuserRate(Long movideId) {

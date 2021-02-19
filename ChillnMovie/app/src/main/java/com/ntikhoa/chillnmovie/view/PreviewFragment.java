@@ -14,6 +14,9 @@ import android.widget.ImageView;
 
 import com.ntikhoa.chillnmovie.R;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class PreviewFragment extends Fragment {
 
     private static final String URI = "uri";

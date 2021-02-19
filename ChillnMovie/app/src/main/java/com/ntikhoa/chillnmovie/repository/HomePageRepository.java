@@ -5,7 +5,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -15,13 +14,15 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.ntikhoa.chillnmovie.model.CollectionName;
 import com.ntikhoa.chillnmovie.model.Movie;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class HomePageRepository {
     private final Application application;
-    private final FirebaseFirestore firestore;
+    private final FirebaseFirestore db;
 
     private final MutableLiveData<List<Movie>> MLDtopRatedMovie;
     private final MutableLiveData<List<Movie>> MLDupcoming;
@@ -29,9 +30,10 @@ public class HomePageRepository {
     private final MutableLiveData<List<Movie>> MLDtrending;
     private final MutableLiveData<List<Movie>> MLDvietnamese;
 
-    public HomePageRepository(Application application) {
+    @Inject
+    public HomePageRepository(Application application, FirebaseFirestore db) {
         this.application = application;
-        firestore = FirebaseFirestore.getInstance();
+        this.db = db;
 
         MLDtopRatedMovie = new MutableLiveData<>();
         MLDupcoming = new MutableLiveData<>();
@@ -41,7 +43,7 @@ public class HomePageRepository {
     }
 
     public MutableLiveData<List<Movie>> getMLDtopRatedMovie() {
-        firestore.collection(CollectionName.MOVIE)
+        db.collection(CollectionName.MOVIE)
                 .orderBy("voteAverage", Query.Direction.DESCENDING)
                 .limit(20)
                 .get()
@@ -62,7 +64,7 @@ public class HomePageRepository {
     }
 
     public MutableLiveData<List<Movie>> getMLDupcoming() {
-        firestore.collection(CollectionName.MOVIE)
+        db.collection(CollectionName.MOVIE)
                 .whereEqualTo("isUpcoming", true)
                 .orderBy("updated_date", Query.Direction.DESCENDING)
                 .get()
@@ -82,7 +84,7 @@ public class HomePageRepository {
     }
 
     public MutableLiveData<List<Movie>> getMLDnowPlaying() {
-        firestore.collection(CollectionName.MOVIE)
+        db.collection(CollectionName.MOVIE)
                 .whereEqualTo("isNowPlaying", true)
                 .orderBy("updated_date", Query.Direction.DESCENDING)
                 .get()
@@ -102,7 +104,7 @@ public class HomePageRepository {
     }
 
     public MutableLiveData<List<Movie>> getMLDtrending() {
-        firestore.collection(CollectionName.MOVIE)
+        db.collection(CollectionName.MOVIE)
                 .whereEqualTo("isTrending", true)
                 .orderBy("updated_date", Query.Direction.DESCENDING)
                 .get()
@@ -122,7 +124,7 @@ public class HomePageRepository {
     }
 
     public MutableLiveData<List<Movie>> getMLDvietnamese() {
-        firestore.collection(CollectionName.MOVIE)
+        db.collection(CollectionName.MOVIE)
                 .whereEqualTo("isVietnamese", true)
                 .orderBy("updated_date", Query.Direction.DESCENDING)
                 .get()

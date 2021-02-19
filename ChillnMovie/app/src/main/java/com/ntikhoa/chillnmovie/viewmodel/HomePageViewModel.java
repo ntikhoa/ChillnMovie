@@ -11,6 +11,11 @@ import com.ntikhoa.chillnmovie.repository.HomePageRepository;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class HomePageViewModel extends AndroidViewModel {
     private Application application;
     private final HomePageRepository repository;
@@ -21,9 +26,12 @@ public class HomePageViewModel extends AndroidViewModel {
     private final MutableLiveData<List<Movie>> MLDtrendingMovie;
     private final MutableLiveData<List<Movie>> MLDvietnameseMovie;
 
-    public HomePageViewModel(@NonNull Application application) {
+    @Inject
+    public HomePageViewModel(@NonNull Application application, HomePageRepository repository) {
         super(application);
-        repository = new HomePageRepository(application);
+        this.repository = repository;
+        this.application = application;
+
         MLDtopRatedMovie = repository.getMLDtopRatedMovie();
         MLDnowPlayingMovie = repository.getMLDnowPlaying();
         MLDupcomingMovie = repository.getMLDupcoming();

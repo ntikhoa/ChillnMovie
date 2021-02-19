@@ -10,11 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,12 +34,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class UserAccountRepository {
     private final Application application;
     private final FirebaseAuth mAuth;
     private final FirebaseFirestore db;
     private final FirebaseStorage storage;
-    private final MutableLiveData<Integer> userMode;
+
     private final MutableLiveData<Boolean> isSignupSuccess;
     private final MutableLiveData<Boolean> isLoginSuccess;
     private final MutableLiveData<Boolean> isCreateInfoSuccess;
@@ -51,17 +52,20 @@ public class UserAccountRepository {
     private final MutableLiveData<UserAccount> MLDuserAccount;
 
     //login signup
-
-    public UserAccountRepository(Application application) {
+    @Inject
+    public UserAccountRepository(Application application,
+                                 FirebaseAuth mAuth,
+                                 FirebaseFirestore db,
+                                 FirebaseStorage storage) {
         this.application = application;
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        storage = FirebaseStorage.getInstance();
+        this.mAuth = mAuth;
+        this.db = db;
+        this.storage = storage;
+
         isSignupSuccess = new MutableLiveData<>();
         isLoginSuccess = new MutableLiveData<>();
         isCreateInfoSuccess = new MutableLiveData<>();
         isUploadImageSuccess = new MutableLiveData<>();
-        userMode = new MutableLiveData<>();
         MLDuserAccount = new MutableLiveData<>();
     }
 

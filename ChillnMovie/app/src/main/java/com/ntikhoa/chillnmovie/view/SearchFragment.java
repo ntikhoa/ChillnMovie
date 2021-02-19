@@ -25,6 +25,9 @@ import com.ntikhoa.chillnmovie.viewmodel.SearchViewModel;
 
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class SearchFragment extends Fragment {
     public static final int MODE_TMDB = 0;
     public static final int MODE_FIRESTORE = 1;
@@ -105,8 +108,7 @@ public class SearchFragment extends Fragment {
     }
 
     private void initComponent(View root) {
-        viewModel = new ViewModelProvider(this,
-                ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()))
+        viewModel = new ViewModelProvider(this)
                 .get(SearchViewModel.class);
 
         searchView = root.findViewById(R.id.searchView);

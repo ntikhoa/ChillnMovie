@@ -10,19 +10,27 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDataSourceFactory;
 import com.ntikhoa.chillnmovie.model.MovieFirestoreDataSourceFactory;
+import com.ntikhoa.chillnmovie.service.MovieAPI;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class MoviePagingRepository {
     private Application application;
+    private MovieAPI movieApi;
 
-    public MoviePagingRepository (Application application) {
+    @Inject
+    public MoviePagingRepository (Application application, MovieAPI movieApi) {
         this.application = application;
+        this.movieApi = movieApi;
     }
 
     public LiveData<PagedList<Movie>> getMoviePagedListLiveData(int category) {
-        MovieDataSourceFactory factory = new MovieDataSourceFactory(application, category);
+        MovieDataSourceFactory factory = new MovieDataSourceFactory(application, movieApi,category);
         PagedList.Config config = (new PagedList.Config.Builder())
                 .setEnablePlaceholders(true)
                 .setInitialLoadSizeHint(10)

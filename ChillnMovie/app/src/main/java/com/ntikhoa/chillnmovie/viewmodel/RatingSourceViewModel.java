@@ -10,12 +10,18 @@ import com.ntikhoa.chillnmovie.model.MovieRate;
 import com.ntikhoa.chillnmovie.model.RatingSource;
 import com.ntikhoa.chillnmovie.repository.RatingSourceRepository;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class RatingSourceViewModel extends AndroidViewModel {
     private final RatingSourceRepository repository;
 
-    public RatingSourceViewModel(@NonNull Application application) {
+    @Inject
+    public RatingSourceViewModel(@NonNull Application application, RatingSourceRepository repository) {
         super(application);
-        repository = new RatingSourceRepository(application);
+        this.repository = repository;
     }
 
     public MutableLiveData<RatingSource> getMLDratingSource(String id) {

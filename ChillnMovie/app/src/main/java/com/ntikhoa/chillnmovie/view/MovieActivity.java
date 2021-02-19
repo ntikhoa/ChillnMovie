@@ -14,6 +14,9 @@ import com.ntikhoa.chillnmovie.adapter.MoviePagedListAdapter;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.viewmodel.MovieViewModel;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MovieActivity extends AppCompatActivity {
 
     public static final String EXTRA_CATEGORY = "category";
@@ -36,8 +39,7 @@ public class MovieActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MoviePagedListAdapter(MovieActivity.this);
         recyclerView.setAdapter(adapter);
-        viewModel = new ViewModelProvider(this,
-                ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()))
+        viewModel = new ViewModelProvider(this)
                 .get(MovieViewModel.class);
     }
 

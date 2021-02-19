@@ -21,6 +21,9 @@ import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.model.UserAccount;
 import com.ntikhoa.chillnmovie.viewmodel.UserAccountViewModel;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class CreateUserProfileActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE = 1;
     public static final String UID = "uid";
@@ -174,9 +177,7 @@ public class CreateUserProfileActivity extends AppCompatActivity {
     }
 
     private void initComponent() {
-        viewModel = new ViewModelProvider(this,
-                ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()))
-                .get(UserAccountViewModel.class);
+        viewModel = new ViewModelProvider(this).get(UserAccountViewModel.class);
 
         imageViewAvatar = findViewById(R.id.imageViewAvatar);
         editTextUserName = findViewById(R.id.editTextUserName);

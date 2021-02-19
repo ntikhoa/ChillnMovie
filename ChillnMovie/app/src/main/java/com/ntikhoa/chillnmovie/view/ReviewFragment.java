@@ -25,6 +25,9 @@ import com.ntikhoa.chillnmovie.model.UserRate;
 import com.ntikhoa.chillnmovie.viewmodel.UserRateViewModel;
 import com.squareup.picasso.Picasso;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class ReviewFragment extends Fragment {
 
     private static final String MOVIE_ID = "movie id";
@@ -74,8 +77,7 @@ public class ReviewFragment extends Fragment {
     }
 
     private void initComponent(View root) {
-        viewModel = new ViewModelProvider(getActivity(),
-                ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()))
+        viewModel = new ViewModelProvider(getActivity())
                 .get(UserRateViewModel.class);
 
         textViewUserName = root.findViewById(R.id.textViewUserName);
@@ -93,7 +95,7 @@ public class ReviewFragment extends Fragment {
 
     private void loadData(View root) {
         viewModel.getMLDreview(movieId)
-                .observe(this, new Observer<UserRate>() {
+                .observe(getViewLifecycleOwner(), new Observer<UserRate>() {
                     @Override
                     public void onChanged(UserRate userRate) {
                         if (userRate != null) {

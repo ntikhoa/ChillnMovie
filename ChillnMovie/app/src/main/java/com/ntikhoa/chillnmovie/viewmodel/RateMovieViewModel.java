@@ -12,14 +12,20 @@ import com.ntikhoa.chillnmovie.model.UserAccount;
 import com.ntikhoa.chillnmovie.model.UserRate;
 import com.ntikhoa.chillnmovie.repository.RateMovieRepository;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class RateMovieViewModel extends AndroidViewModel {
     private Application application;
     private final RateMovieRepository repository;
 
-    public RateMovieViewModel(@NonNull Application application) {
+    @Inject
+    public RateMovieViewModel(@NonNull Application application, RateMovieRepository repository) {
         super(application);
         this.application = application;
-        repository = new RateMovieRepository(application);
+        this.repository = repository;
     }
 
     public MutableLiveData<Boolean> rateMovie(Long id, UserRate newUserRate) {

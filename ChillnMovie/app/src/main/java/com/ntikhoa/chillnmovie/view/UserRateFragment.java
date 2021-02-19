@@ -20,6 +20,9 @@ import com.ntikhoa.chillnmovie.viewmodel.UserRateViewModel;
 
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class UserRateFragment extends Fragment {
     private static final String MOVIE_ID = "movie id";
 
@@ -60,8 +63,7 @@ public class UserRateFragment extends Fragment {
     }
 
     private void initComponent(View root) {
-        viewModel = new ViewModelProvider(getActivity(),
-                ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()))
+        viewModel = new ViewModelProvider(getActivity())
                 .get(UserRateViewModel.class);
 
         recyclerViewUserRate = root.findViewById(R.id.recyclerViewUserRate);
@@ -74,7 +76,7 @@ public class UserRateFragment extends Fragment {
     }
 
     private void loadData() {
-        viewModel.getMLDuserRate(movieId).observe(this, new Observer<List<UserRate>>() {
+        viewModel.getMLDuserRate(movieId).observe(getViewLifecycleOwner(), new Observer<List<UserRate>>() {
             @Override
             public void onChanged(List<UserRate> userRates) {
                 if (userRates != null && userRates.size() != 0)

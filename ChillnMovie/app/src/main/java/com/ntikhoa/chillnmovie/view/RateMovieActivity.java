@@ -27,6 +27,9 @@ import com.ntikhoa.chillnmovie.viewmodel.RateMovieViewModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class RateMovieActivity extends AppCompatActivity {
     public static final String EXTRA_ID = "movie id";
     public static final String EXTRA_TITLE = "movie title";
@@ -48,7 +51,7 @@ public class RateMovieActivity extends AppCompatActivity {
     private String title;
     private String posterPath;
 
-    FirebaseAuth auth;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

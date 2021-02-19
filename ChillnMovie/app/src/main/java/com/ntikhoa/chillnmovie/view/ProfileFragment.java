@@ -26,6 +26,9 @@ import com.ntikhoa.chillnmovie.viewmodel.UserAccountViewModel;
 import com.ntikhoa.chillnmovie.viewmodel.UserRateViewModel;
 import com.squareup.picasso.Picasso;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class ProfileFragment extends Fragment {
     private UserAccountViewModel viewModel;
     private Button btnLogout;
@@ -58,8 +61,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void initComponent(View root) {
-        viewModel = new ViewModelProvider(this,
-                new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()))
+        viewModel = new ViewModelProvider(this)
                 .get(UserAccountViewModel.class);
 
         btnLogout = root.findViewById(R.id.btnLogout);
@@ -71,7 +73,7 @@ public class ProfileFragment extends Fragment {
     private void loadData() {
         if (mode != 3)
             viewModel.getMLDuserAccount(FirebaseAuth.getInstance().getUid())
-                    .observe(this, new Observer<UserAccount>() {
+                    .observe(getViewLifecycleOwner(), new Observer<UserAccount>() {
                         @Override
                         public void onChanged(UserAccount userAccount) {
                             textViewUserName.setText(userAccount.getName());

@@ -1,6 +1,7 @@
 package com.ntikhoa.chillnmovie.repository;
 
 import android.app.Application;
+import android.media.Rating;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -11,35 +12,41 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.BuildConfig;
 import com.ntikhoa.chillnmovie.model.CollectionName;
 import com.ntikhoa.chillnmovie.model.MovieRate;
 import com.ntikhoa.chillnmovie.model.RatingSource;
-import com.ntikhoa.chillnmovie.service.RetrofitIMDbClient;
+import com.ntikhoa.chillnmovie.service.RatingSourceAPI;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+@Singleton
 public class RatingSourceRepository {
 
     private MutableLiveData<RatingSource> MLDratingSource;
     private MutableLiveData<MovieRate> MLDmovieRate;
     private Application application;
-    private RetrofitIMDbClient imDbClient;
+    private RatingSourceAPI ratingSourceApi;
     private FirebaseFirestore db;
 
-    public RatingSourceRepository(Application application) {
+    @Inject
+    public RatingSourceRepository(Application application,
+                                  RatingSourceAPI ratingSourceApi,
+                                  FirebaseFirestore db) {
         this.application = application;
         MLDratingSource = new MutableLiveData<>();
         MLDmovieRate = new MutableLiveData<>();
-        imDbClient = RetrofitIMDbClient.getInstance();
-        db = FirebaseFirestore.getInstance();
+        this.ratingSourceApi = ratingSourceApi;
+        this.db = db;
     }
 
     public MutableLiveData<RatingSource> getMLDratingSource(String id) {
-        imDbClient.getAPI()
-                .getRatingSource(application.getString(R.string.IMDb_API_key),
+        ratingSourceApi.getRatingSource(BuildConfig.IMDB_ACCESS_KEY,
                         id)
                 .enqueue(new Callback<RatingSource>() {
                     @Override

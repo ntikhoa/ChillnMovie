@@ -18,6 +18,9 @@ import com.ntikhoa.chillnmovie.model.MovieRate;
 import com.ntikhoa.chillnmovie.model.RatingSource;
 import com.ntikhoa.chillnmovie.viewmodel.RatingSourceViewModel;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class RatingSourceFragment extends Fragment {
     private String imdbId;
     private Long id;
@@ -71,8 +74,7 @@ public class RatingSourceFragment extends Fragment {
     }
 
     private void initComponent(View root) {
-        viewModel = new ViewModelProvider(this,
-                ViewModelProvider.AndroidViewModelFactory.getInstance(this.getActivity().getApplication()))
+        viewModel = new ViewModelProvider(this)
                 .get(RatingSourceViewModel.class);
 
         progressBar = root.findViewById(R.id.progress);
@@ -114,7 +116,7 @@ public class RatingSourceFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
 
         viewModel.getMLDmovieRate(id)
-                .observe(this, new Observer<MovieRate>() {
+                .observe(getViewLifecycleOwner(), new Observer<MovieRate>() {
                     @Override
                     public void onChanged(MovieRate movieRate) {
                         fetchChillnMovieData(movieRate);
@@ -122,7 +124,7 @@ public class RatingSourceFragment extends Fragment {
                 });
 
         viewModel.getMLDratingSource(imdbId)
-                .observe(this, new Observer<RatingSource>() {
+                .observe(getViewLifecycleOwner(), new Observer<RatingSource>() {
                     @Override
                     public void onChanged(RatingSource ratingSource) {
                         fetchData(ratingSource);

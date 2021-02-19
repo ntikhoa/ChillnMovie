@@ -32,6 +32,11 @@ import com.squareup.picasso.Target;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class EditMovieActivity extends AppCompatActivity {
     public static final String EXTRA_ID = "tmdb_movie_id";
 
@@ -304,9 +309,7 @@ public class EditMovieActivity extends AppCompatActivity {
     }
 
     private void initViewModel() {
-        viewModel = new ViewModelProvider(this,
-                ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()))
-                .get(EditMovieViewModel.class);
+        viewModel = new ViewModelProvider(this).get(EditMovieViewModel.class);
     }
 
     private void initEditText() {

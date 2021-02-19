@@ -19,14 +19,20 @@ import com.ntikhoa.chillnmovie.repository.MoviePagingRepository;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class MovieViewModel extends AndroidViewModel {
     private final Application application;
     private final MoviePagingRepository repository;
 
-    public MovieViewModel(@NonNull Application application) {
+    @Inject
+    public MovieViewModel(@NonNull Application application, MoviePagingRepository repository) {
         super(application);
         this.application = application;
-        repository = new MoviePagingRepository(application);
+        this.repository = repository;
     }
 
     //page list for movie activity

@@ -10,69 +10,64 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
-import com.google.firebase.firestore.WriteBatch;
-import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.BuildConfig;
 import com.ntikhoa.chillnmovie.model.Caster;
 import com.ntikhoa.chillnmovie.model.CreditDBresponse;
 import com.ntikhoa.chillnmovie.model.CollectionName;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
 import com.ntikhoa.chillnmovie.model.MovieRate;
-import com.ntikhoa.chillnmovie.model.UserRate;
 import com.ntikhoa.chillnmovie.model.Video;
 import com.ntikhoa.chillnmovie.model.VideoDBResponse;
-import com.ntikhoa.chillnmovie.service.RetrofitTMDbClient;
+import com.ntikhoa.chillnmovie.service.MovieAPI;
 import com.ntikhoa.chillnmovie.view.MovieDetailActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+@Singleton
 public class MovieDetailRepository {
     private MutableLiveData<MovieDetail> MLDmovieDetail;
     private final MutableLiveData<List<Caster>> MLDcaster;
-    private final MutableLiveData<List<UserRate>> MLDuserRate;
+
 
     private final Application application;
     private String videoKey;
 
-    private final RetrofitTMDbClient tmDbClient;
+    private final MovieAPI movieAPI;
     private final FirebaseFirestore db;
 
-    public MovieDetailRepository(Application application) {
+    @Inject
+    public MovieDetailRepository(Application application, FirebaseFirestore db, MovieAPI movieAPI) {
         this.application = application;
         MLDmovieDetail = new MutableLiveData<>();
         MLDcaster = new MutableLiveData<>();
-        MLDuserRate = new MutableLiveData<>();
 
-        db = FirebaseFirestore.getInstance();
-        tmDbClient = RetrofitTMDbClient.getInstance();
+        this.db = db;
+        this.movieAPI = movieAPI;
     }
 
     //repeat with EditMovieRepository
     private MutableLiveData<MovieDetail> getMovieDetailFromTMDb(Long id) {
         getVideo(id);
 
-        tmDbClient.getMovieAPI()
-                .getMovieDetail(id,
-                        application.getString(R.string.TMDb_API_key),
-                        application.getString(R.string.lang_vietnamese))
+        movieAPI.getMovieDetail(id,
+                        BuildConfig.TMDB_ACCESS_KEY,
+                        BuildConfig.VN_LANG)
                 .enqueue(new Callback<MovieDetail>() {
                     @Override
                     public void onResponse(Call<MovieDetail> call, Response<MovieDetail> response) {
@@ -124,8 +119,7 @@ public class MovieDetailRepository {
         String strId = String.valueOf(id);
         Integer intId = Integer.parseInt(strId);
 
-        tmDbClient.getMovieAPI()
-                .getVideo(intId, application.getString(R.string.TMDb_API_key))
+        movieAPI.getVideo(intId, BuildConfig.TMDB_ACCESS_KEY)
                 .enqueue(new Callback<VideoDBResponse>() {
                     @Override
                     public void onResponse(Call<VideoDBResponse> call, Response<VideoDBResponse> response) {
@@ -149,8 +143,7 @@ public class MovieDetailRepository {
     }
 
     public MutableLiveData<List<Caster>> getMLDcaster(Long id) {
-        tmDbClient.getMovieAPI()
-                .getCaster(id, application.getString(R.string.TMDb_API_key))
+        movieAPI.getCaster(id, BuildConfig.TMDB_ACCESS_KEY)
                 .enqueue(new Callback<CreditDBresponse>() {
                     @Override
                     public void onResponse(Call<CreditDBresponse> call, Response<CreditDBresponse> response) {

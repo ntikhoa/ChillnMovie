@@ -6,23 +6,32 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
 
-public class MovieSearchDataSourceFactory extends DataSource.Factory{
+import com.ntikhoa.chillnmovie.service.MovieAPI;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
+public class MovieSearchDataSourceFactory extends DataSource.Factory {
 
     private Application application;
     private MovieSearchDataSource movieSearchDataSource;
     private MutableLiveData<MovieSearchDataSource> mutableLiveData;
     private String search;
+    private MovieAPI movieApi;
 
-    public MovieSearchDataSourceFactory(Application application, String search) {
+    @Inject
+    public MovieSearchDataSourceFactory(Application application, MovieAPI movieApi, String search) {
         this.application = application;
         mutableLiveData = new MutableLiveData<>();
         this.search = search;
+        this.movieApi = movieApi;
     }
 
     @NonNull
     @Override
     public DataSource create() {
-        movieSearchDataSource = new MovieSearchDataSource(application, search);
+        movieSearchDataSource = new MovieSearchDataSource(application, movieApi, search);
         mutableLiveData.postValue(movieSearchDataSource);
         return movieSearchDataSource;
     }

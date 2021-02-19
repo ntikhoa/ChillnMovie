@@ -14,6 +14,9 @@ import com.ntikhoa.chillnmovie.model.MovieDetail;
 
 import java.text.DecimalFormat;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MovieDetailFragment extends Fragment {
 
     private TextView textViewTitle;

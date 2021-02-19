@@ -14,6 +14,9 @@ import android.widget.EditText;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.ntikhoa.chillnmovie.R;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class OverviewFragment extends Fragment {
     public static final String OVERVIEW = "overview";
     public static final String TRENDING = "trending";

@@ -14,14 +14,18 @@ import com.ntikhoa.chillnmovie.model.Movie;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class FavoriteRepository {
     private FirebaseFirestore db;
-    private Application application;
     private MutableLiveData<List<Long>> MLDmovieFavorite;
 
-    public FavoriteRepository(Application application) {
-        this.application = application;
-        db = FirebaseFirestore.getInstance();
+    @Inject
+    public FavoriteRepository(FirebaseFirestore db) {
+        this.db = db;
+
         MLDmovieFavorite = new MutableLiveData<>();
     }
 

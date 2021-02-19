@@ -16,6 +16,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.viewmodel.UserAccountViewModel;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class SignUpActivity extends AppCompatActivity {
 
     private MaterialButton btnRegister;
@@ -84,8 +87,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void initComponent() {
-        viewModel = new ViewModelProvider(this,
-                ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()))
+        viewModel = new ViewModelProvider(this)
                 .get(UserAccountViewModel.class);
 
         btnRegister = findViewById(R.id.btnRegister);

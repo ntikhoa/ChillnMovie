@@ -23,6 +23,7 @@ import com.google.firebase.firestore.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.ntikhoa.chillnmovie.BuildConfig;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.model.CollectionName;
 import com.ntikhoa.chillnmovie.model.Movie;
@@ -30,22 +31,24 @@ import com.ntikhoa.chillnmovie.model.MovieDetail;
 import com.ntikhoa.chillnmovie.model.MovieRate;
 import com.ntikhoa.chillnmovie.model.Video;
 import com.ntikhoa.chillnmovie.model.VideoDBResponse;
-import com.ntikhoa.chillnmovie.service.RetrofitTMDbClient;
+import com.ntikhoa.chillnmovie.service.MovieAPI;
 import com.ntikhoa.chillnmovie.view.PreviewFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
+@Singleton
 public class EditMovieRepository {
     private MutableLiveData<MovieDetail> MLDmovieDetail;
-    private final Application application;
     private String videoKey;
 
     private final MutableLiveData<Boolean> isSuccess;
@@ -53,13 +56,18 @@ public class EditMovieRepository {
     private final MutableLiveData<String> posterUrl;
     private final MutableLiveData<String> backdropUrl;
 
-    private final FirebaseStorage storage;
-    private final RetrofitTMDbClient tmDbClient;
-    private final FirebaseFirestore db;
+
+    private FirebaseStorage storage;
+    private MovieAPI movieAPI;
+    private FirebaseFirestore db;
+    private Application application;
 
 
-    public EditMovieRepository(Application application) {
-        this.application = application;
+    @Inject
+    public EditMovieRepository(FirebaseStorage storage,
+                               MovieAPI movieAPI,
+                               FirebaseFirestore db,
+                               Application application) {
         MLDmovieDetail = new MutableLiveData<>();
 
         isSuccess = new MutableLiveData<>();
@@ -67,18 +75,18 @@ public class EditMovieRepository {
         posterUrl = new MutableLiveData<>();
         backdropUrl = new MutableLiveData<>();
 
-        db = FirebaseFirestore.getInstance();
-        tmDbClient = RetrofitTMDbClient.getInstance();
-        storage = FirebaseStorage.getInstance();
+        this.storage = storage;
+        this.movieAPI = movieAPI;
+        this.db = db;
+        this.application = application;
     }
 
     private MutableLiveData<MovieDetail> getMovieDetailFromTMDb(Long id) {
         getVideo(id);
 
-        tmDbClient.getMovieAPI()
-                .getMovieDetail(id,
-                        application.getString(R.string.TMDb_API_key),
-                        application.getString(R.string.lang_vietnamese))
+        movieAPI.getMovieDetail(id,
+                BuildConfig.TMDB_ACCESS_KEY,
+                BuildConfig.VN_LANG)
                 .enqueue(new Callback<MovieDetail>() {
                     @Override
                     public void onResponse(Call<MovieDetail> call, Response<MovieDetail> response) {
@@ -125,8 +133,7 @@ public class EditMovieRepository {
     }
 
     private void getVideo(Long id) {
-        tmDbClient.getMovieAPI()
-                .getVideo(id, application.getString(R.string.TMDb_API_key))
+        movieAPI.getVideo(id, BuildConfig.TMDB_ACCESS_KEY)
                 .enqueue(new Callback<VideoDBResponse>() {
                     @Override
                     public void onResponse(Call<VideoDBResponse> call, Response<VideoDBResponse> response) {

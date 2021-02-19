@@ -25,6 +25,9 @@ import com.ntikhoa.chillnmovie.viewmodel.EditorFrontPageViewModel;
 
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class EditorFrontFragment extends Fragment {
 
     private EditorFrontPageViewModel viewModel;
@@ -59,8 +62,7 @@ public class EditorFrontFragment extends Fragment {
     }
 
     private void initComponent(View root) {
-        viewModel = new ViewModelProvider(this,
-                ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()))
+        viewModel = new ViewModelProvider(this)
                 .get(EditorFrontPageViewModel.class);
 
         viewPagerTrendingMovie = root.findViewById(R.id.viewPagerTrending);

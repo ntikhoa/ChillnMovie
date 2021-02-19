@@ -14,6 +14,9 @@ import android.widget.TextView;
 
 import com.ntikhoa.chillnmovie.R;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class RateMovieFragment extends Fragment {
     private static final int GREEN_RATING = 8;
     private static final int YELLOW_RATING = 5;

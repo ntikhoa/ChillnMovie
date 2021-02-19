@@ -5,29 +5,38 @@ import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.BuildConfig;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDBresponse;
-import com.ntikhoa.chillnmovie.service.RetrofitTMDbClient;
+import com.ntikhoa.chillnmovie.service.MovieAPI;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+@Singleton
 public class EditorFrontPageRepository {
-    MutableLiveData<List<Movie>> MLDtrendingMovie;
-    MutableLiveData<List<Movie>> MLDpopularMovie;
-    MutableLiveData<List<Movie>> MLDupcomingMovie;
-    MutableLiveData<List<Movie>> MLDnowPlayingMovie;
-    MutableLiveData<List<Movie>> MLDtopRatedMovie;
+    private MutableLiveData<List<Movie>> MLDtrendingMovie;
+    private MutableLiveData<List<Movie>> MLDpopularMovie;
+    private MutableLiveData<List<Movie>> MLDupcomingMovie;
+    private MutableLiveData<List<Movie>> MLDnowPlayingMovie;
+    private MutableLiveData<List<Movie>> MLDtopRatedMovie;
 
-    Application application;
+    private Application application;
 
-    public EditorFrontPageRepository(Application application) {
+    private MovieAPI movieAPI;
+
+    @Inject
+    public EditorFrontPageRepository(Application application, MovieAPI movieAPI) {
         this.application = application;
+        this.movieAPI = movieAPI;
+
         MLDpopularMovie = new MutableLiveData<>();
         MLDupcomingMovie = new MutableLiveData<>();
         MLDnowPlayingMovie = new MutableLiveData<>();
@@ -36,9 +45,7 @@ public class EditorFrontPageRepository {
     }
 
     public MutableLiveData<List<Movie>> getMLDtrendingMovie() {
-        RetrofitTMDbClient.getInstance()
-                .getMovieAPI()
-                .getTrendingMovie(application.getString(R.string.TMDb_API_key))
+        movieAPI.getTrendingMovie(BuildConfig.TMDB_ACCESS_KEY)
                 .enqueue(new Callback<MovieDBresponse>() {
                     @Override
                     public void onResponse(Call<MovieDBresponse> call, Response<MovieDBresponse> response) {
@@ -64,11 +71,9 @@ public class EditorFrontPageRepository {
     }
 
     public MutableLiveData<List<Movie>> getMLDpopularMovie() {
-        RetrofitTMDbClient.getInstance()
-                .getMovieAPI()
-                .getPopularMovie(application.getString(R.string.TMDb_API_key),
-                        application.getString(R.string.lang_vietnamese),
-                        1)
+        movieAPI.getPopularMovie(BuildConfig.TMDB_ACCESS_KEY,
+                BuildConfig.VN_LANG,
+                1)
                 .enqueue(new Callback<MovieDBresponse>() {
                     @Override
                     public void onResponse(Call<MovieDBresponse> call, Response<MovieDBresponse> response) {
@@ -92,10 +97,8 @@ public class EditorFrontPageRepository {
     }
 
     public MutableLiveData<List<Movie>> getMLDupcomingMovie() {
-        RetrofitTMDbClient.getInstance()
-                .getMovieAPI()
-                .getUpcomingMovie(application.getString(R.string.TMDb_API_key),
-                        application.getString(R.string.lang_vietnamese),
+        movieAPI.getUpcomingMovie(BuildConfig.TMDB_ACCESS_KEY,
+                        BuildConfig.VN_LANG,
                         1)
                 .enqueue(new Callback<MovieDBresponse>() {
                     @Override
@@ -120,10 +123,8 @@ public class EditorFrontPageRepository {
     }
 
     public MutableLiveData<List<Movie>> getMLDnowPlayingMovie() {
-        RetrofitTMDbClient.getInstance()
-                .getMovieAPI()
-                .getNowPlayingMovie(application.getString(R.string.TMDb_API_key),
-                        application.getString(R.string.lang_vietnamese),
+        movieAPI.getNowPlayingMovie(BuildConfig.TMDB_ACCESS_KEY,
+                        BuildConfig.VN_LANG,
                         1)
                 .enqueue(new Callback<MovieDBresponse>() {
                     @Override
@@ -148,10 +149,8 @@ public class EditorFrontPageRepository {
     }
 
     public MutableLiveData<List<Movie>> getMLDtopRatedMovie() {
-        RetrofitTMDbClient.getInstance()
-                .getMovieAPI()
-                .getTopRatedMovie(application.getString(R.string.TMDb_API_key),
-                        application.getString(R.string.lang_vietnamese),
+        movieAPI.getTopRatedMovie(BuildConfig.TMDB_ACCESS_KEY,
+                        BuildConfig.VN_LANG,
                         1)
                 .enqueue(new Callback<MovieDBresponse>() {
                     @Override

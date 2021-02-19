@@ -18,14 +18,20 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class SearchViewModel extends AndroidViewModel {
     private Application application;
     private SearchRepository repository;
 
-    public SearchViewModel(@NonNull Application application) {
+    @Inject
+    public SearchViewModel(@NonNull Application application, SearchRepository repository) {
         super(application);
         this.application = application;
-        repository = new SearchRepository(application);
+        this.repository = repository;
     }
 
     public LiveData<PagedList<Movie>> getMLDmoviesFromTMDB(String search) {

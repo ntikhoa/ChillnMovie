@@ -13,6 +13,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.viewmodel.UserAccountViewModel;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class AutoLoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -24,9 +27,7 @@ public class AutoLoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_auto_login);
 
         mAuth = FirebaseAuth.getInstance();
-        viewModel = new ViewModelProvider(this,
-                ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()))
-                .get(UserAccountViewModel.class);
+        viewModel = new ViewModelProvider(this).get(UserAccountViewModel.class);
 
         if (mAuth.getCurrentUser() != null) {
             viewModel.setUserMode(mAuth.getUid())

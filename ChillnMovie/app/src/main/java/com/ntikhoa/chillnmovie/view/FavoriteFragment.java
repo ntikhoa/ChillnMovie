@@ -27,6 +27,9 @@ import com.ntikhoa.chillnmovie.viewmodel.FavoriteViewModel;
 
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class FavoriteFragment extends Fragment {
 
     private RecyclerView recyclerViewFavorite;
@@ -47,8 +50,7 @@ public class FavoriteFragment extends Fragment {
     }
 
     private void initComponent(View root) {
-        viewModel = new ViewModelProvider(this,
-                ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()))
+        viewModel = new ViewModelProvider(this)
                 .get(FavoriteViewModel.class);
 
         auth = FirebaseAuth.getInstance();
@@ -66,7 +68,7 @@ public class FavoriteFragment extends Fragment {
 
     private void loadData(String userId) {
         viewModel.getMLDmovieFavorite(userId)
-                .observe(this, new Observer<List<Long>>() {
+                .observe(getViewLifecycleOwner(), new Observer<List<Long>>() {
                     @Override
                     public void onChanged(List<Long> movieId) {
                         if (movieId != null && movieId.size() != 0)

@@ -10,12 +10,18 @@ import androidx.lifecycle.MutableLiveData;
 import com.ntikhoa.chillnmovie.model.UserAccount;
 import com.ntikhoa.chillnmovie.repository.UserAccountRepository;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class UserAccountViewModel extends AndroidViewModel {
     private final UserAccountRepository repository;
 
-    public UserAccountViewModel(@NonNull Application application) {
+    @Inject
+    public UserAccountViewModel(@NonNull Application application, UserAccountRepository repository) {
         super(application);
-        repository = new UserAccountRepository(application);
+        this.repository = repository;
     }
 
     public MutableLiveData<Boolean> login(String email, String password) {

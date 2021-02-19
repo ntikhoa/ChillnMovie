@@ -22,6 +22,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.viewmodel.UserAccountViewModel;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class LoginActivity extends AppCompatActivity {
 
     private MaterialButton btnGuest;
@@ -94,8 +97,7 @@ public class LoginActivity extends AppCompatActivity {
     private void initComponent() {
         mAuth = FirebaseAuth.getInstance();
 
-        viewModel = new ViewModelProvider(this,
-                ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()))
+        viewModel = new ViewModelProvider(this)
                 .get(UserAccountViewModel.class);
 
         btnGuest = findViewById(R.id.btnGuest);

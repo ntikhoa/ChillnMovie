@@ -6,23 +6,30 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.paging.PageKeyedDataSource;
 
-import com.ntikhoa.chillnmovie.R;
-import com.ntikhoa.chillnmovie.service.RetrofitTMDbClient;
+import com.ntikhoa.chillnmovie.BuildConfig;
+import com.ntikhoa.chillnmovie.service.MovieAPI;
 
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+@Singleton
 public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
 
     private Application application;
     private int category;
     private Call<MovieDBresponse> dBresponseCall;
+    private MovieAPI movieAPI;
 
-    public MovieDataSource(Application application, int category) {
+    @Inject
+    public MovieDataSource(Application application, MovieAPI movieAPI, int category) {
         this.application = application;
+        this.movieAPI = movieAPI;
         this.category = category;
     }
 
@@ -80,28 +87,20 @@ public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
 
     private void initDataSourceType(int pageKey) {
         if (category == Movie.POPULAR) {
-            dBresponseCall = RetrofitTMDbClient.getInstance()
-                    .getMovieAPI()
-                    .getPopularMovie(application.getString(R.string.TMDb_API_key),
-                            application.getString(R.string.lang_vietnamese),
+            dBresponseCall = movieAPI.getPopularMovie(BuildConfig.TMDB_ACCESS_KEY,
+                            BuildConfig.VN_LANG,
                             pageKey);
         } else if (category == Movie.NOW_PLAYING) {
-            dBresponseCall = RetrofitTMDbClient.getInstance()
-                    .getMovieAPI()
-                    .getNowPlayingMovie(application.getString(R.string.TMDb_API_key),
-                            application.getString(R.string.lang_vietnamese),
+            dBresponseCall = movieAPI.getNowPlayingMovie(BuildConfig.TMDB_ACCESS_KEY,
+                            BuildConfig.VN_LANG,
                             pageKey);
         } else if (category == Movie.UPCOMING) {
-            dBresponseCall = RetrofitTMDbClient.getInstance()
-                    .getMovieAPI()
-                    .getUpcomingMovie(application.getString(R.string.TMDb_API_key),
-                            application.getString(R.string.lang_vietnamese),
+            dBresponseCall = movieAPI.getUpcomingMovie(BuildConfig.TMDB_ACCESS_KEY,
+                            BuildConfig.VN_LANG,
                             pageKey);
         } else if (category == Movie.TOP_RATED) {
-            dBresponseCall = RetrofitTMDbClient.getInstance()
-                    .getMovieAPI()
-                    .getTopRatedMovie(application.getString(R.string.TMDb_API_key),
-                            application.getString(R.string.lang_vietnamese),
+            dBresponseCall = movieAPI.getTopRatedMovie(BuildConfig.TMDB_ACCESS_KEY,
+                            BuildConfig.VN_LANG,
                             pageKey);
         }
     }

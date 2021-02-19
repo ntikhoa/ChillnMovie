@@ -8,18 +8,23 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.ntikhoa.chillnmovie.model.Caster;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
-import com.ntikhoa.chillnmovie.model.UserRate;
 import com.ntikhoa.chillnmovie.repository.MovieDetailRepository;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class MovieDetailViewModel extends AndroidViewModel {
 
     private final MovieDetailRepository repository;
 
-    public MovieDetailViewModel(@NonNull Application application) {
+    @Inject
+    public MovieDetailViewModel(@NonNull Application application, MovieDetailRepository repository) {
         super(application);
-        repository = new MovieDetailRepository(application);
+        this.repository = repository;
     }
 
     public MutableLiveData<MovieDetail> getMLDmovieDetail(Long id) {

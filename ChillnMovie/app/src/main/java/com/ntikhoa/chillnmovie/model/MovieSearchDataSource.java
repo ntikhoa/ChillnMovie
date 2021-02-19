@@ -6,32 +6,36 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.paging.PageKeyedDataSource;
 
-import com.ntikhoa.chillnmovie.R;
-import com.ntikhoa.chillnmovie.service.RetrofitTMDbClient;
+import com.ntikhoa.chillnmovie.BuildConfig;
+import com.ntikhoa.chillnmovie.service.MovieAPI;
 
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
+@Singleton
 public class MovieSearchDataSource extends PageKeyedDataSource<Integer, Movie> {
 
     private Application application;
+    private MovieAPI movieAPI;
     private String search;
 
-    public MovieSearchDataSource(Application application, String search) {
+    @Inject
+    public MovieSearchDataSource(Application application, MovieAPI movieAPI, String search) {
         this.application = application;
+        this.movieAPI = movieAPI;
         this.search = search;
     }
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams<Integer> params, @NonNull LoadInitialCallback<Integer, Movie> callback) {
-        RetrofitTMDbClient.getInstance()
-                .getMovieAPI()
-                .getSearchMovie(application.getString(R.string.TMDb_API_key),
-                        application.getString(R.string.lang_vietnamese),
+        movieAPI.getSearchMovie(BuildConfig.TMDB_ACCESS_KEY,
+                        BuildConfig.VN_LANG,
                         1,
                         true,
                         search)
@@ -63,10 +67,8 @@ public class MovieSearchDataSource extends PageKeyedDataSource<Integer, Movie> {
 
     @Override
     public void loadAfter(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Integer, Movie> callback) {
-        RetrofitTMDbClient.getInstance()
-                .getMovieAPI()
-                .getSearchMovie(application.getString(R.string.TMDb_API_key),
-                        application.getString(R.string.lang_vietnamese),
+        movieAPI.getSearchMovie(BuildConfig.TMDB_ACCESS_KEY,
+                        BuildConfig.VN_LANG,
                         params.key,
                         true,
                         search)

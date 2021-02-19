@@ -19,6 +19,9 @@ import com.ntikhoa.chillnmovie.model.UserAccount;
 import com.ntikhoa.chillnmovie.model.UserModeSingleton;
 import com.ntikhoa.chillnmovie.viewmodel.UserAccountViewModel;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MenuActivity extends AppCompatActivity {
 
     private int mode;

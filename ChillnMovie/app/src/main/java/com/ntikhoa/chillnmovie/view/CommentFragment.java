@@ -12,6 +12,9 @@ import android.widget.EditText;
 
 import com.ntikhoa.chillnmovie.R;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class CommentFragment extends Fragment {
 
     private OnClickSubmit onClickSubmit;

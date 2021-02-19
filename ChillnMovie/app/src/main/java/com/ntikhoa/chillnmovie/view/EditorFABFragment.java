@@ -16,6 +16,9 @@ import android.view.animation.AnimationUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ntikhoa.chillnmovie.R;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class EditorFABFragment extends Fragment {
     public static final String MOVIE_ID = "movie id";
 

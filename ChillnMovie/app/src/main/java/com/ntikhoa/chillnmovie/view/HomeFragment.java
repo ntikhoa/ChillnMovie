@@ -47,6 +47,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class HomeFragment extends Fragment {
 
     private HomePageViewModel viewModel;
@@ -93,9 +96,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void initViewModel() {
-        viewModel = new ViewModelProvider(this,
-                ViewModelProvider.AndroidViewModelFactory.getInstance(
-                        getActivity().getApplication()))
+        viewModel = new ViewModelProvider(this)
                 .get(HomePageViewModel.class);
     }
 
@@ -137,7 +138,7 @@ public class HomeFragment extends Fragment {
 
     private void loadData() {
         viewModel.getMLDvietnameseMovie()
-                .observe(this, new Observer<List<Movie>>() {
+                .observe(getViewLifecycleOwner(), new Observer<List<Movie>>() {
                     @Override
                     public void onChanged(List<Movie> movies) {
                         vietnameseMovieAdapter.submitList(movies);
@@ -145,7 +146,7 @@ public class HomeFragment extends Fragment {
                 });
 
         viewModel.getMLDtopRatedMovie()
-                .observe(this, new Observer<List<Movie>>() {
+                .observe(getViewLifecycleOwner(), new Observer<List<Movie>>() {
                     @Override
                     public void onChanged(List<Movie> movies) {
                         topRatedMovieAdapter.submitList(movies);
@@ -153,7 +154,7 @@ public class HomeFragment extends Fragment {
                 });
 
         viewModel.getMLDnowPlayingMovie()
-                .observe(this, new Observer<List<Movie>>() {
+                .observe(getViewLifecycleOwner(), new Observer<List<Movie>>() {
                     @Override
                     public void onChanged(List<Movie> movies) {
                         nowPlayingMovieAdapter.submitList(movies);
@@ -161,7 +162,7 @@ public class HomeFragment extends Fragment {
                 });
 
         viewModel.getMLDupcomingMovie()
-                .observe(this, new Observer<List<Movie>>() {
+                .observe(getViewLifecycleOwner(), new Observer<List<Movie>>() {
                     @Override
                     public void onChanged(List<Movie> movies) {
                         upcomingMovieAdapter.submitList(movies);
@@ -169,13 +170,11 @@ public class HomeFragment extends Fragment {
                 });
 
         viewModel.getMLDtrendingMovie()
-                .observe(this, new Observer<List<Movie>>() {
+                .observe(getViewLifecycleOwner(), new Observer<List<Movie>>() {
                     @Override
                     public void onChanged(List<Movie> movies) {
                         trendingMovieAdapter.submitList(movies);
                     }
                 });
-
-
     }
 }
