@@ -1,10 +1,5 @@
-package com.ntikhoa.chillnmovie.service;
+package com.ntikhoa.chillnmovie.api;
 
-import android.graphics.Movie;
-
-import androidx.lifecycle.LiveData;
-
-import com.google.api.Quota;
 import com.ntikhoa.chillnmovie.model.CreditDBresponse;
 import com.ntikhoa.chillnmovie.model.MovieDBresponse;
 import com.ntikhoa.chillnmovie.model.MovieDetail;

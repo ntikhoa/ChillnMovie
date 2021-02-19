@@ -1,4 +1,4 @@
-package com.ntikhoa.chillnmovie.service;
+package com.ntikhoa.chillnmovie.api;
 
 import com.ntikhoa.chillnmovie.model.RatingSource;
 
