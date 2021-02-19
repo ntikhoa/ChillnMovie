@@ -25,7 +25,7 @@ import com.ntikhoa.chillnmovie.model.MovieDetail;
 import com.ntikhoa.chillnmovie.model.MovieRate;
 import com.ntikhoa.chillnmovie.model.Video;
 import com.ntikhoa.chillnmovie.model.VideoDBResponse;
-import com.ntikhoa.chillnmovie.service.MovieAPI;
+import com.ntikhoa.chillnmovie.api.MovieAPI;
 import com.ntikhoa.chillnmovie.view.MovieDetailActivity;
 
 import java.text.SimpleDateFormat;

@@ -10,7 +10,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDataSourceFactory;
 import com.ntikhoa.chillnmovie.model.MovieFirestoreDataSourceFactory;
-import com.ntikhoa.chillnmovie.service.MovieAPI;
+import com.ntikhoa.chillnmovie.api.MovieAPI;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;

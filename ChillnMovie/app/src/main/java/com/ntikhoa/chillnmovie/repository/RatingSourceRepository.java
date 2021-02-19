@@ -1,7 +1,6 @@
 package com.ntikhoa.chillnmovie.repository;
 
 import android.app.Application;
-import android.media.Rating;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -16,7 +15,7 @@ import com.ntikhoa.chillnmovie.BuildConfig;
 import com.ntikhoa.chillnmovie.model.CollectionName;
 import com.ntikhoa.chillnmovie.model.MovieRate;
 import com.ntikhoa.chillnmovie.model.RatingSource;
-import com.ntikhoa.chillnmovie.service.RatingSourceAPI;
+import com.ntikhoa.chillnmovie.api.RatingSourceAPI;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

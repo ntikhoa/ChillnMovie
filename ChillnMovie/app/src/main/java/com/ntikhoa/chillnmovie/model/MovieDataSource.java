@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.paging.PageKeyedDataSource;
 
 import com.ntikhoa.chillnmovie.BuildConfig;
-import com.ntikhoa.chillnmovie.service.MovieAPI;
+import com.ntikhoa.chillnmovie.api.MovieAPI;
 
 import java.util.List;
 

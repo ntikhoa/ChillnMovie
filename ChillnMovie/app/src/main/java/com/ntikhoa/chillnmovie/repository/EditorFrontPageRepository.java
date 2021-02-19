@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.ntikhoa.chillnmovie.BuildConfig;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDBresponse;
-import com.ntikhoa.chillnmovie.service.MovieAPI;
+import com.ntikhoa.chillnmovie.api.MovieAPI;
 
 import java.util.ArrayList;
 import java.util.List;

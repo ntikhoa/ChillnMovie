@@ -3,9 +3,8 @@ package com.ntikhoa.chillnmovie.di;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.ntikhoa.chillnmovie.model.UserModeSingleton;
-import com.ntikhoa.chillnmovie.service.MovieAPI;
-import com.ntikhoa.chillnmovie.service.RatingSourceAPI;
+import com.ntikhoa.chillnmovie.api.MovieAPI;
+import com.ntikhoa.chillnmovie.api.RatingSourceAPI;
 
 import javax.inject.Singleton;
 

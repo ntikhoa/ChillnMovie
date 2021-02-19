@@ -7,7 +7,7 @@ import androidx.paging.PagedList;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDataSourceAlgoliaFactory;
 import com.ntikhoa.chillnmovie.model.MovieSearchDataSourceFactory;
-import com.ntikhoa.chillnmovie.service.MovieAPI;
+import com.ntikhoa.chillnmovie.api.MovieAPI;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
