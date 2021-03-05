@@ -16,3 +16,4 @@ reviews for the film, Editor can also put movies in different categories.
 * Algolia (text search)
 * Pagination (for api, firebase and algolia)
 * Material Design
+* View Binding
