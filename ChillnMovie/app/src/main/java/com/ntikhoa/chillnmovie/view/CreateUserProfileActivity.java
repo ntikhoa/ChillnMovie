@@ -18,6 +18,7 @@ import android.widget.RadioGroup;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.databinding.ActivityCreateUserProfileBinding;
 import com.ntikhoa.chillnmovie.model.UserAccount;
 import com.ntikhoa.chillnmovie.viewmodel.UserAccountViewModel;
 
@@ -29,14 +30,7 @@ public class CreateUserProfileActivity extends AppCompatActivity {
     public static final String UID = "uid";
     public static final String EMAIL = "email";
 
-    private ImageView imageViewAvatar;
-    private EditText editTextUserName;
-    private EditText editTextCountry;
-    private EditText editTextBirthdate;
-    private EditText editTextEmail;
-    private RadioGroup radioGroupGender;
-
-    private MaterialButton btnSubmit, btnSkip;
+    private ActivityCreateUserProfileBinding binding;
 
     int gender = -1;
 
@@ -50,28 +44,29 @@ public class CreateUserProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_user_profile);
+        binding = ActivityCreateUserProfileBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         loadData();
-        initComponent();
+        viewModel = new ViewModelProvider(this).get(UserAccountViewModel.class);
 
-        editTextEmail.setText(email);
+        binding.editTextEmail.setText(email);
 
-        btnSkip.setOnClickListener(new View.OnClickListener() {
+        binding.btnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
 
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
+        binding.btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createUserProfile();
             }
         });
 
-        imageViewAvatar.setOnClickListener(new View.OnClickListener() {
+        binding.imageViewAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -81,7 +76,7 @@ public class CreateUserProfileActivity extends AppCompatActivity {
             }
         });
 
-        radioGroupGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        binding.radioGroupGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
@@ -105,16 +100,16 @@ public class CreateUserProfileActivity extends AppCompatActivity {
     }
 
     private void createUserProfile() {
-        String name = editTextUserName.getText().toString();
+        String name = binding.editTextUserName.getText().toString();
         if (name.trim().length() > 16) {
-            editTextUserName.setError("Max length 16");
+            binding.editTextUserName.setError("Max length 16");
             return;
         }
-        String country = editTextCountry.getText().toString();
+        String country = binding.editTextCountry.getText().toString();
 
-        String birthdate = editTextBirthdate.getText().toString();
+        String birthdate = binding.editTextBirthdate.getText().toString();
         if (!validate(birthdate.trim())) {
-            editTextBirthdate.setError("Invalid input");
+            binding.editTextBirthdate.setError("Invalid input");
             return;
         }
 
@@ -171,23 +166,8 @@ public class CreateUserProfileActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE && resultCode == RESULT_OK) {
             if (data != null && data.getData() != null) {
                 imageUri = data.getData();
-                imageViewAvatar.setImageURI(imageUri);
+                binding.imageViewAvatar.setImageURI(imageUri);
             }
         }
-    }
-
-    private void initComponent() {
-        viewModel = new ViewModelProvider(this).get(UserAccountViewModel.class);
-
-        imageViewAvatar = findViewById(R.id.imageViewAvatar);
-        editTextUserName = findViewById(R.id.editTextUserName);
-        editTextCountry = findViewById(R.id.editTextCountry);
-        editTextBirthdate = findViewById(R.id.editTextBirthdate);
-        editTextEmail = findViewById(R.id.editTextEmail);
-
-        btnSkip = findViewById(R.id.btnSkip);
-        btnSubmit = findViewById(R.id.btnSubmit);
-
-        radioGroupGender = findViewById(R.id.radioGroupGender);
     }
 }
