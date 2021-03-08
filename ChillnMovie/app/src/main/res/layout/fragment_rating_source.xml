@@ -11,7 +11,7 @@
     tools:context=".view.RatingSourceFragment">
 
     <ProgressBar
-        android:id="@+id/progress"
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
@@ -30,7 +30,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageChillnMovie" />
 
     <include
-        android:id="@+id/visualEffect"
+        android:id="@+id/visual"
         layout="@layout/rating_small_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,16 +46,16 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/visualEffect" />
+        app:layout_constraintTop_toTopOf="@+id/visual" />
 
     <include
-        android:id="@+id/soundEffect"
+        android:id="@+id/audio"
         layout="@layout/rating_small_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/visualEffect" />
+        app:layout_constraintTop_toTopOf="@+id/visual" />
 
     <ImageView
         android:id="@+id/imageChillnMovie"
@@ -145,9 +145,9 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:text="@string/visual"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/visualEffect"
-        app:layout_constraintStart_toStartOf="@+id/visualEffect"
-        app:layout_constraintTop_toBottomOf="@+id/visualEffect" />
+        app:layout_constraintEnd_toEndOf="@+id/visual"
+        app:layout_constraintStart_toStartOf="@+id/visual"
+        app:layout_constraintTop_toBottomOf="@+id/visual" />
 
     <TextView
         android:id="@+id/labelPlot"
@@ -167,8 +167,8 @@
         android:text="@string/audio"
         android:textStyle="bold"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintEnd_toEndOf="@+id/soundEffect"
-        app:layout_constraintStart_toStartOf="@+id/soundEffect"
-        app:layout_constraintTop_toBottomOf="@+id/soundEffect" />
+        app:layout_constraintEnd_toEndOf="@+id/audio"
+        app:layout_constraintStart_toStartOf="@+id/audio"
+        app:layout_constraintTop_toBottomOf="@+id/audio" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

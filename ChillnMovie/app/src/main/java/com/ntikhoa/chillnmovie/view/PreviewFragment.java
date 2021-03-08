@@ -3,16 +3,15 @@ package com.ntikhoa.chillnmovie.view;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.databinding.FragmentPreviewBinding;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -24,10 +23,16 @@ public class PreviewFragment extends Fragment {
     public static final int POSTER = 0;
     public static final int BACKDROP = 1;
 
+    private FragmentPreviewBinding binding;
+
     private onClickListener onClickListener;
 
     private Uri uri;
     private int mode;
+
+    public PreviewFragment() {
+        super(R.layout.fragment_preview);
+    }
 
     public void setOnClickListener(PreviewFragment.onClickListener onClickListener) {
         this.onClickListener = onClickListener;
@@ -52,23 +57,22 @@ public class PreviewFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_preview, container, false);
-        ImageView preview = root.findViewById(R.id.imageViewPreview);
-        Button btnSubmit = root.findViewById(R.id.btnSubmit);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        binding = FragmentPreviewBinding.bind(view);
+
         if (mode == POSTER) {
-            preview.setLayoutParams(new FrameLayout.LayoutParams(
+            binding.imageViewPreview.setLayoutParams(new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
         }
-        preview.setImageURI(uri);
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickListener.onClick(mode);
-            }
-        });
-        return root;
+        binding.imageViewPreview.setImageURI(uri);
+        binding.btnSubmit.setOnClickListener(v -> onClickListener.onClick(mode));
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     interface onClickListener {

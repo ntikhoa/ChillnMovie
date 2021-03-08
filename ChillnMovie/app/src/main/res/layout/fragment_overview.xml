@@ -19,10 +19,12 @@
         app:helperText="@string/require"
         app:helperTextTextColor="@color/colorOnPrimary"
         app:hintTextAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintBottom_toTopOf="@+id/checkboxTrending"
+        app:layout_constraintBottom_toTopOf="@+id/checkBoxTrending"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextOverview"
@@ -35,34 +37,34 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/checkboxTrending"
+        android:id="@+id/checkBoxTrending"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/trending"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintBottom_toTopOf="@+id/btnSubmit"
-        app:layout_constraintEnd_toStartOf="@id/checkboxUpcoming"
+        app:layout_constraintEnd_toStartOf="@id/checkBoxUpcoming"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/checkboxUpcoming"
+        android:id="@+id/checkBoxUpcoming"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/upcoming_movie"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintEnd_toStartOf="@id/checkboxNowPlaying"
-        app:layout_constraintStart_toEndOf="@id/checkboxTrending"
-        app:layout_constraintTop_toTopOf="@+id/checkboxTrending" />
+        app:layout_constraintEnd_toStartOf="@id/checkBoxNowPlaying"
+        app:layout_constraintStart_toEndOf="@id/checkBoxTrending"
+        app:layout_constraintTop_toTopOf="@+id/checkBoxTrending" />
 
     <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/checkboxNowPlaying"
+        android:id="@+id/checkBoxNowPlaying"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/now_playing"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/checkboxUpcoming"
-        app:layout_constraintTop_toTopOf="@+id/checkboxTrending" />
+        app:layout_constraintStart_toEndOf="@id/checkBoxUpcoming"
+        app:layout_constraintTop_toTopOf="@+id/checkBoxTrending" />
 
     <Button
         android:id="@+id/btnSubmit"

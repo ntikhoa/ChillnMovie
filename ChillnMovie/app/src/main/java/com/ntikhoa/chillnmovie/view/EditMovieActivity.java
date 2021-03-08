@@ -17,12 +17,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.databinding.ActivityEditMovieBinding;
 import com.ntikhoa.chillnmovie.model.Genre;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
 import com.ntikhoa.chillnmovie.viewmodel.EditMovieViewModel;
@@ -31,8 +29,6 @@ import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -43,29 +39,9 @@ public class EditMovieActivity extends AppCompatActivity {
     public static final int REQUEST_POSTER = 1;
     public static final int REQUEST_BACKDROP = 2;
 
+    private ActivityEditMovieBinding binding;
+
     private EditMovieViewModel viewModel;
-
-    private EditText editTextTitle;
-    private EditText editTextOriginalTitle;
-    private EditText editTextStatus;
-    private EditText editTextReleaseDate;
-    private TextView textViewGenres;
-    private EditText editTextTrailer;
-    private EditText editTextRuntime;
-    private EditText editTextOriginalLanguage;
-    private EditText editTextBudget;
-    private EditText editTextRevenue;
-
-    private MaterialButton btnNext;
-    private MaterialButton btnCancel;
-    private MaterialButton btnEditGenres;
-    private MaterialButton btnPlayTrailer;
-    private ImageButton btnHelp;
-
-    private MaterialButton btnSetPoster;
-    private MaterialButton btnSetBackdrop;
-    private MaterialButton btnPreviewPoster;
-    private MaterialButton btnPreviewBackdrop;
 
     private Uri poster, backdrop;
 
@@ -80,19 +56,20 @@ public class EditMovieActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_movie);
+        binding = ActivityEditMovieBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         initComponent();
         loadData();
 
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        binding.btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
 
-        btnEditGenres.setOnClickListener(new View.OnClickListener() {
+        binding.btnEditGenres.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (movieDetail != null)
@@ -100,18 +77,18 @@ public class EditMovieActivity extends AppCompatActivity {
             }
         });
 
-        btnHelp.setOnClickListener(new View.OnClickListener() {
+        binding.btnHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editTextTrailer.setError(getString(R.string.help), null);
+                binding.editTextTrailer.setError(getString(R.string.help), null);
             }
         });
 
-        btnPlayTrailer.setOnClickListener(new View.OnClickListener() {
+        binding.btnPlayTrailer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (movieDetail != null) {
-                    String videoKey = editTextTrailer.getText().toString();
+                    String videoKey = binding.editTextTrailer.getText().toString();
                     Intent intent = new Intent(getApplicationContext(), TrailerPlayerActivity.class);
                     intent.putExtra(TrailerPlayerActivity.EXTRA_TRAILER_KEY, videoKey);
                     startActivity(intent);
@@ -119,7 +96,7 @@ public class EditMovieActivity extends AppCompatActivity {
             }
         });
 
-        btnNext.setOnClickListener(new View.OnClickListener() {
+        binding.btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (movieDetail != null) {
@@ -137,7 +114,7 @@ public class EditMovieActivity extends AppCompatActivity {
             }
         });
 
-        btnSetPoster.setOnClickListener(new View.OnClickListener() {
+        binding.btnSetPoster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -147,7 +124,7 @@ public class EditMovieActivity extends AppCompatActivity {
             }
         });
 
-        btnPreviewPoster.setOnClickListener(new View.OnClickListener() {
+        binding.btnPreviewPoster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (poster != null) {
@@ -174,7 +151,7 @@ public class EditMovieActivity extends AppCompatActivity {
             }
         });
 
-        btnSetBackdrop.setOnClickListener(new View.OnClickListener() {
+        binding.btnSetBackdrop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -184,7 +161,7 @@ public class EditMovieActivity extends AppCompatActivity {
             }
         });
 
-        btnPreviewBackdrop.setOnClickListener(new View.OnClickListener() {
+        binding.btnPreviewBackdrop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (backdrop != null) {
@@ -231,44 +208,44 @@ public class EditMovieActivity extends AppCompatActivity {
         fragment.setOnClickSubmit(new OverviewFragment.OnClickSubmit() {
             @Override
             public void onClick() {
-                String title = editTextTitle.getText().toString();
-                if (editTextTitle.getText().toString().trim().equalsIgnoreCase("")) {
-                    editTextTitle.setError("This field cannot be blank");
+                String title = binding.editTextTitle.getText().toString();
+                if (binding.editTextTitle.getText().toString().trim().equalsIgnoreCase("")) {
+                    binding.editTextTitle.setError("This field cannot be blank");
                     return;
                 }
 
-                String originalTitle = editTextOriginalTitle.getText().toString();
-                String status = editTextStatus.getText().toString();
-                String videoKey = editTextTrailer.getText().toString();
+                String originalTitle = binding.editTextOriginalTitle.getText().toString();
+                String status = binding.editTextStatus.getText().toString();
+                String videoKey = binding.editTextTrailer.getText().toString();
 
-                String releaseDate = editTextReleaseDate.getText().toString();
+                String releaseDate = binding.editTextReleaseDate.getText().toString();
                 if (!releaseDate.isEmpty() && !validate(releaseDate)) {
-                    editTextReleaseDate.setError("Invalid input");
+                    binding.editTextReleaseDate.setError("Invalid input");
                     return;
                 }
 
                 int runtime;
-                if (editTextRuntime.getText().toString().trim().equalsIgnoreCase("")) {
+                if (binding.editTextRuntime.getText().toString().trim().equalsIgnoreCase("")) {
                     runtime = 0;
-                } else runtime = Integer.parseInt(editTextRuntime.getText().toString());
+                } else runtime = Integer.parseInt(binding.editTextRuntime.getText().toString());
 
-                String originalLanguage = editTextOriginalLanguage.getText().toString();
+                String originalLanguage = binding.editTextOriginalLanguage.getText().toString();
 
                 int budget;
-                if (editTextBudget.getText().toString().trim().equalsIgnoreCase("")) {
+                if (binding.editTextBudget.getText().toString().trim().equalsIgnoreCase("")) {
                     budget = 0;
-                } else budget = Integer.parseInt(editTextBudget.getText().toString());
+                } else budget = Integer.parseInt(binding.editTextBudget.getText().toString());
 
                 int revenue;
-                if (editTextRevenue.getText().toString().trim().equalsIgnoreCase("")) {
+                if (binding.editTextRevenue.getText().toString().trim().equalsIgnoreCase("")) {
                     revenue = 0;
-                } else revenue = Integer.parseInt(editTextRevenue.getText().toString());
+                } else revenue = Integer.parseInt(binding.editTextRevenue.getText().toString());
 
                 String overview = fragment.getOverview();
 
                 if (newGenres.size() < 1) {
-                    textViewGenres.requestFocus();
-                    textViewGenres.setError("Cannot empty");
+                    binding.textViewGenres.requestFocus();
+                    binding.textViewGenres.setError("Cannot empty");
                     return;
                 }
 
@@ -303,39 +280,11 @@ public class EditMovieActivity extends AppCompatActivity {
 
     private void initComponent() {
         initViewModel();
-        initEditText();
-        initBtn();
         initGenresList();
     }
 
     private void initViewModel() {
         viewModel = new ViewModelProvider(this).get(EditMovieViewModel.class);
-    }
-
-    private void initEditText() {
-        editTextTitle = findViewById(R.id.editTextTitle);
-        editTextOriginalTitle = findViewById(R.id.editTextOriginalTitle);
-        editTextStatus = findViewById(R.id.editTextStatus);
-        editTextReleaseDate = findViewById(R.id.editTextReleaseDate);
-        textViewGenres = findViewById(R.id.textViewGenres);
-        editTextTrailer = findViewById(R.id.editTextTrailer);
-        editTextRuntime = findViewById(R.id.editTextRuntime);
-        editTextOriginalLanguage = findViewById(R.id.editTextCountry);
-        editTextBudget = findViewById(R.id.editTextBudget);
-        editTextRevenue = findViewById(R.id.editTextRevenue);
-    }
-
-    private void initBtn() {
-        btnNext = findViewById(R.id.btnNext);
-        btnCancel = findViewById(R.id.btnSkip);
-        btnEditGenres = findViewById(R.id.btnEditGenres);
-        btnPlayTrailer = findViewById(R.id.btnPlayTrailer);
-        btnHelp = findViewById(R.id.btnHelp);
-
-        btnSetPoster = findViewById(R.id.btnSetPoster);
-        btnSetBackdrop = findViewById(R.id.btnSetBackdrop);
-        btnPreviewPoster = findViewById(R.id.btnPreviewPoster);
-        btnPreviewBackdrop = findViewById(R.id.btnPreviewBackdrop);
     }
 
     private void initGenresList() {
@@ -363,33 +312,33 @@ public class EditMovieActivity extends AppCompatActivity {
 
     private void fetchData(MovieDetail movieDetail) {
         String title = movieDetail.getTitle();
-        fetchViewString(editTextTitle, title);
+        fetchViewString(binding.editTextTitle, title);
 
         String originalTitle = movieDetail.getOriginalTitle();
-        fetchViewString(editTextOriginalTitle, originalTitle);
+        fetchViewString(binding.editTextOriginalTitle, originalTitle);
 
         String status = movieDetail.getStatus();
-        fetchViewString(editTextStatus, status);
+        fetchViewString(binding.editTextStatus, status);
 
         String releaseDate = movieDetail.getReleaseDate();
-        fetchViewString(editTextReleaseDate, releaseDate);
+        fetchViewString(binding.editTextReleaseDate, releaseDate);
 
         fetchGenres();
 
         String videoKey = movieDetail.getTrailer_key();
-        fetchViewString(editTextTrailer, videoKey);
+        fetchViewString(binding.editTextTrailer, videoKey);
 
         Integer runtime = movieDetail.getRuntime();
-        fetchViewInteger(editTextRuntime, runtime);
+        fetchViewInteger(binding.editTextRuntime, runtime);
 
         String originalLanguage = movieDetail.getOriginalLanguage();
-        fetchViewString(editTextOriginalLanguage, originalLanguage);
+        fetchViewString(binding.editTextOriginalLanguage, originalLanguage);
 
         Integer budget = movieDetail.getBudget();
-        fetchViewInteger(editTextBudget, budget);
+        fetchViewInteger(binding.editTextBudget, budget);
 
         Integer revenue = movieDetail.getRevenue();
-        fetchViewInteger(editTextRevenue, revenue);
+        fetchViewInteger(binding.editTextRevenue, revenue);
     }
 
     private void fetchViewString(EditText editText, String data) {
@@ -422,8 +371,8 @@ public class EditMovieActivity extends AppCompatActivity {
             }
             genresBuilder.deleteCharAt(genresBuilder.length() - 1);
             genres = genresBuilder.toString();
-            textViewGenres.setText(genres);
-        } else textViewGenres.setText("-");
+            binding.textViewGenres.setText(genres);
+        } else binding.textViewGenres.setText("-");
     }
 
     private void updateData() {
@@ -502,8 +451,8 @@ public class EditMovieActivity extends AppCompatActivity {
                     genresBuilder.append("\n");
                 }
                 genres = genresBuilder.toString();
-                textViewGenres.setText(genres);
-            } else textViewGenres.setText("-");
+                binding.textViewGenres.setText(genres);
+            } else binding.textViewGenres.setText("-");
         });
 
         builder.setNegativeButton("Cancel", (dialogInterface, which) -> dialogInterface.dismiss());

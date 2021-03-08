@@ -2,6 +2,9 @@ package com.ntikhoa.chillnmovie.view;
 
 import android.os.Bundle;
 
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -11,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.databinding.FragmentCommentBinding;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -19,40 +23,41 @@ public class CommentFragment extends Fragment {
 
     private OnClickSubmit onClickSubmit;
 
-    private Button btnSubmit;
-    private EditText editTextComment;
+    private FragmentCommentBinding binding;
 
     public void setOnClickSubmit(OnClickSubmit onClickSubmit) {
         this.onClickSubmit = onClickSubmit;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_comment, container, false);
-        initComponent(root);
+    public CommentFragment() {
+        super(R.layout.fragment_comment);
+    }
 
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        binding = FragmentCommentBinding.bind(view);
+
+        binding.btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickSubmit.onClick();
             }
         });
-
-        return root;
-    }
-
-    private void initComponent(View root) {
-        btnSubmit = root.findViewById(R.id.btnSubmit);
-        editTextComment = root.findViewById(R.id.editTextComment);
     }
 
     public String getComment() {
-        return editTextComment.getText().toString();
+        return binding.editTextComment.getText().toString();
     }
 
 
     interface OnClickSubmit {
         void onClick();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

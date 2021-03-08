@@ -2,17 +2,16 @@ package com.ntikhoa.chillnmovie.view;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.databinding.FragmentRateMovieBinding;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -24,53 +23,41 @@ public class RateMovieFragment extends Fragment {
     public static final int MIN_RATE = 0;
     public static final int STEP = 1;
 
-    Button btnDecrease, btnIncrease;
-    ProgressBar pbRating;
-    TextView tvRating;
+    private FragmentRateMovieBinding binding;
 
     int rate = MAX_RATE;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_rate_movie, container, false);
-        initComponent(root);
-        addListener();
-        setRating();
-        return root;
+    public RateMovieFragment() {
+        super(R.layout.fragment_rate_movie);
     }
 
-    private void initComponent(View root) {
-        btnDecrease = root.findViewById(R.id.btnDecrease);
-        btnIncrease = root.findViewById(R.id.btnIncrease);
-        View include = root.findViewById(R.id.include);
-        pbRating = include.findViewById(R.id.progressBarRating);
-        tvRating = include.findViewById(R.id.textViewRate);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        binding = FragmentRateMovieBinding.bind(view);
+
+        addListener();
+        setRating();
     }
 
     private void addListener() {
-        btnDecrease.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (rate > MIN_RATE) {
-                    rate -= STEP;
-                    setRating();
-                }
+        binding.btnDecrease.setOnClickListener(v -> {
+            if (rate > MIN_RATE) {
+                rate -= STEP;
+                setRating();
             }
         });
 
-        btnIncrease.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (rate < MAX_RATE) {
-                    rate += STEP;
-                    setRating();
-                }
+        binding.btnIncrease.setOnClickListener(v -> {
+            if (rate < MAX_RATE) {
+                rate += STEP;
+                setRating();
             }
         });
     }
 
     private void setRating() {
+        ProgressBar pbRating = binding.include.progressBarRating;
 
         if (rate >= GREEN_RATING) {
             pbRating.setProgressDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(),
@@ -87,10 +74,16 @@ public class RateMovieFragment extends Fragment {
         pbRating.setMax(MAX_RATE);
         pbRating.setProgress(rate);
 
-        tvRating.setText(String.valueOf(rate));
+        binding.include.textViewRate.setText(String.valueOf(rate));
     }
 
     public int getRate() {
         return rate;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

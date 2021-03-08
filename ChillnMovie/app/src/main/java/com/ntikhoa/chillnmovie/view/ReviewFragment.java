@@ -1,26 +1,20 @@
 package com.ntikhoa.chillnmovie.view;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerDrawable;
 import com.ntikhoa.chillnmovie.R;
-import com.ntikhoa.chillnmovie.model.UserAccount;
+import com.ntikhoa.chillnmovie.databinding.UserRateItemBinding;
 import com.ntikhoa.chillnmovie.model.UserRate;
 import com.ntikhoa.chillnmovie.viewmodel.UserRateViewModel;
 import com.squareup.picasso.Picasso;
@@ -32,22 +26,20 @@ public class ReviewFragment extends Fragment {
 
     private static final String MOVIE_ID = "movie id";
 
+    private UserRateItemBinding binding;
+
     private Long movieId;
 
     private UserRateViewModel viewModel;
-
-    private TextView textViewUserName;
-    private TextView textViewRateDate;
-    private Button textViewRate;
-    private TextView textViewComment;
-    private ImageView imageViewAvatar;
-
-    private TextView textViewEmpty;
 
     private OnClickListener onClickListener;
 
     public void setOnClickListener(OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
+    }
+
+    public ReviewFragment() {
+        super(R.layout.user_rate_item);
     }
 
     public static ReviewFragment newInstance(Long movieId) {
@@ -67,53 +59,36 @@ public class ReviewFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.user_rate_item, container, false);
-        initComponent(root);
-        loadData(root);
-        return root;
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        binding = UserRateItemBinding.bind(view);
+
+        initComponent();
+        loadData();
     }
 
-    private void initComponent(View root) {
+    private void initComponent() {
         viewModel = new ViewModelProvider(getActivity())
                 .get(UserRateViewModel.class);
 
-        textViewUserName = root.findViewById(R.id.textViewUserName);
-        textViewRateDate = root.findViewById(R.id.textViewRateDate);
-        textViewComment = root.findViewById(R.id.textViewComment);
-        textViewRate = root.findViewById(R.id.textViewRate);
-        imageViewAvatar = root.findViewById(R.id.imageViewAvatar);
-
-        textViewEmpty = root.findViewById(R.id.textViewEmpty);
-
         Drawable icVerify = ContextCompat.getDrawable(getActivity(), R.drawable.ic_check_circle);
-        textViewUserName.setCompoundDrawablesWithIntrinsicBounds(icVerify, null, null, null);
-        textViewUserName.setCompoundDrawablePadding(6); //6px = 8dp
+        binding.textViewUserName.setCompoundDrawablesWithIntrinsicBounds(icVerify, null, null, null);
+        binding.textViewUserName.setCompoundDrawablePadding(6); //6px = 8dp
     }
 
-    private void loadData(View root) {
+    private void loadData() {
         viewModel.getMLDreview(movieId)
-                .observe(getViewLifecycleOwner(), new Observer<UserRate>() {
-                    @Override
-                    public void onChanged(UserRate userRate) {
-                        if (userRate != null) {
-                            textViewComment.setText(userRate.getComment());
-                            textViewRateDate.setText(userRate.getRateDate());
-                            setUserRate(userRate);
-                            setUserInfo(userRate.getUserId());
+                .observe(getViewLifecycleOwner(), userRate -> {
+                    if (userRate != null) {
+                        binding.textViewComment.setText(userRate.getComment());
+                        binding.textViewRateDate.setText(userRate.getRateDate());
+                        setUserRate(userRate);
+                        setUserInfo(userRate.getUserId());
 
-                            root.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    onClickListener.onClick();
-                                }
-                            });
+                        binding.getRoot().setOnClickListener(v -> onClickListener.onClick());
 
-                        } else {
-                            textViewEmpty.setVisibility(View.VISIBLE);
-                        }
+                    } else {
+                        binding.textViewEmpty.setVisibility(View.VISIBLE);
                     }
                 });
     }
@@ -124,17 +99,14 @@ public class ReviewFragment extends Fragment {
         Integer soundEffect = userRate.getAudioVote();
         Double average = (plot + visualEffect + soundEffect) / 3d;
         String avgStr = String.format("%.1f", average);
-        textViewRate.setText(avgStr);
+        binding.textViewRate.setText(avgStr);
     }
 
     private void setUserInfo(String userId) {
         viewModel.getMLDuserAccount(userId)
-                .observe(this, new Observer<UserAccount>() {
-                    @Override
-                    public void onChanged(UserAccount userAccount) {
-                        textViewUserName.setText(userAccount.getName());
-                        setAvatar(userAccount.getAvatarPath());
-                    }
+                .observe(getViewLifecycleOwner(), userAccount -> {
+                    binding.textViewUserName.setText(userAccount.getName());
+                    setAvatar(userAccount.getAvatarPath());
                 });
     }
 
@@ -152,7 +124,13 @@ public class ReviewFragment extends Fragment {
 
         Picasso.get().load(avatarPath)
                 .placeholder(drawable)
-                .into(imageViewAvatar);
+                .into(binding.imageViewAvatar);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     public interface OnClickListener {

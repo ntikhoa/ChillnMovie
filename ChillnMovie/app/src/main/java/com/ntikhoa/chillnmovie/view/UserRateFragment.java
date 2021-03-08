@@ -2,6 +2,8 @@ package com.ntikhoa.chillnmovie.view;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.adapter.UserRateAdapter;
+import com.ntikhoa.chillnmovie.databinding.FragmentUserRateBinding;
 import com.ntikhoa.chillnmovie.model.UserRate;
 import com.ntikhoa.chillnmovie.viewmodel.UserRateViewModel;
 
@@ -26,15 +29,16 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class UserRateFragment extends Fragment {
     private static final String MOVIE_ID = "movie id";
 
+    private FragmentUserRateBinding binding;
+
     private UserRateViewModel viewModel;
-    private RecyclerView recyclerViewUserRate;
+
     private UserRateAdapter userRateAdapter;
-    private TextView textViewEmpty;
 
     private Long movieId;
 
     public UserRateFragment() {
-        //require default constructor
+        super(R.layout.fragment_user_rate);
     }
 
     public static UserRateFragment newInstance(Long movieId) {
@@ -54,25 +58,22 @@ public class UserRateFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_user_rate, container, false);
-        initComponent(root);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        binding = FragmentUserRateBinding.bind(view);
+
+        initComponent();
         loadData();
-        return root;
     }
 
-    private void initComponent(View root) {
+    private void initComponent() {
         viewModel = new ViewModelProvider(getActivity())
                 .get(UserRateViewModel.class);
 
-        recyclerViewUserRate = root.findViewById(R.id.recyclerViewUserRate);
-        recyclerViewUserRate.setLayoutManager(
+        binding.recyclerViewUserRate.setLayoutManager(
                 new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         userRateAdapter = new UserRateAdapter(getActivity());
-        recyclerViewUserRate.setAdapter(userRateAdapter);
-
-        textViewEmpty = root.findViewById(R.id.textViewEmpty);
+        binding.recyclerViewUserRate.setAdapter(userRateAdapter);
     }
 
     private void loadData() {
@@ -81,8 +82,14 @@ public class UserRateFragment extends Fragment {
             public void onChanged(List<UserRate> userRates) {
                 if (userRates != null && userRates.size() != 0)
                     userRateAdapter.submitList(userRates);
-                else textViewEmpty.setVisibility(View.VISIBLE);
+                else binding.textViewEmpty.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

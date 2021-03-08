@@ -3,18 +3,17 @@ package com.ntikhoa.chillnmovie.view;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.databinding.FragmentEditorFabBinding;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -22,10 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class EditorFABFragment extends Fragment {
     public static final String MOVIE_ID = "movie id";
 
-    private FloatingActionButton fabExpand;
-    private FloatingActionButton fabAdd;
-    private FloatingActionButton fabEdit;
-    private FloatingActionButton fabRefresh;
+    private FragmentEditorFabBinding binding;
 
     private Animation rotateOpen;
     private Animation rotateClose;
@@ -45,11 +41,10 @@ public class EditorFABFragment extends Fragment {
     }
 
     public EditorFABFragment() {
-        //require default constructor
+        super(R.layout.fragment_editor_fab);
     }
 
     public static EditorFABFragment newInstance(Long movieId) {
-
         Bundle args = new Bundle();
         args.putLong(MOVIE_ID, movieId);
         EditorFABFragment fragment = new EditorFABFragment();
@@ -66,24 +61,11 @@ public class EditorFABFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_editor_fab, container, false);
-        initComponent(root);
-        setOnClickFAB();
-        return root;
-    }
-
-    private void initComponent(View root) {
-        initEditorMenuView(root);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        binding = FragmentEditorFabBinding.bind(view);
         initAnimation();
-    }
-
-    private void initEditorMenuView(View root) {
-        fabExpand = root.findViewById(R.id.fabExpand);
-        fabAdd = root.findViewById(R.id.fabAdd);
-        fabEdit = root.findViewById(R.id.fabEdit);
-        fabRefresh = root.findViewById(R.id.fabRefresh);
+        setOnClickFAB();
     }
 
     private void initAnimation() {
@@ -96,87 +78,73 @@ public class EditorFABFragment extends Fragment {
     }
 
     private void setOnClickFAB() {
-        fabExpand.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clicked = !clicked;
-                setVisibility(clicked);
-                setAnimation(clicked);
-            }
+        binding.fabExpand.setOnClickListener(v -> {
+            clicked = !clicked;
+            setVisibility(clicked);
+            setAnimation(clicked);
         });
 
-        fabRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Handler().post(new Runnable() {
+        binding.fabRefresh.setOnClickListener(v ->
+                new Handler().post(() -> {
+                    Intent intent = getActivity().getIntent();
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK
+                            | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    getActivity().overridePendingTransition(0, 0);
+                    getActivity().finish();
 
-                    @Override
-                    public void run()
-                    {
-                        Intent intent = getActivity().getIntent();
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK
-                                | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        getActivity().overridePendingTransition(0, 0);
-                        getActivity().finish();
+                    getActivity().overridePendingTransition(0, 0);
+                    startActivity(intent);
+                }));
 
-                        getActivity().overridePendingTransition(0, 0);
-                        startActivity(intent);
-                    }
-                });
-            }
+        binding.fabEdit.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), EditMovieActivity.class);
+            intent.putExtra(EditMovieActivity.EXTRA_ID, id);
+            startActivity(intent);
         });
 
-        fabEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), EditMovieActivity.class);
-                intent.putExtra(EditMovieActivity.EXTRA_ID, id);
-                startActivity(intent);
-            }
-        });
-
-        fabAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickFABadd.onClick();
-            }
-        });
+        binding.fabAdd.setOnClickListener(v -> onClickFABadd.onClick());
     }
 
 
     private void setVisibility(boolean clicked) {
         if (clicked) {
-            fabEdit.setVisibility(View.VISIBLE);
-            fabAdd.setVisibility(View.VISIBLE);
-            fabRefresh.setVisibility(View.VISIBLE);
-            fabEdit.setClickable(true);
-            fabAdd.setClickable(true);
-            fabRefresh.setClickable(true);
+            binding.fabEdit.setVisibility(View.VISIBLE);
+            binding.fabAdd.setVisibility(View.VISIBLE);
+            binding.fabRefresh.setVisibility(View.VISIBLE);
+            binding.fabEdit.setClickable(true);
+            binding.fabAdd.setClickable(true);
+            binding.fabRefresh.setClickable(true);
         } else {
-            fabEdit.setVisibility(View.INVISIBLE);
-            fabAdd.setVisibility(View.INVISIBLE);
-            fabRefresh.setVisibility(View.INVISIBLE);
-            fabEdit.setClickable(false);
-            fabAdd.setClickable(false);
-            fabRefresh.setClickable(false);
+            binding.fabEdit.setVisibility(View.INVISIBLE);
+            binding.fabAdd.setVisibility(View.INVISIBLE);
+            binding.fabRefresh.setVisibility(View.INVISIBLE);
+            binding.fabEdit.setClickable(false);
+            binding.fabAdd.setClickable(false);
+            binding.fabRefresh.setClickable(false);
         }
     }
 
     private void setAnimation(boolean clicked) {
         if (clicked) {
-            fabExpand.startAnimation(rotateOpen);
-            fabEdit.startAnimation(from_bottom_vertical);
-            fabAdd.startAnimation(from_bottom_vertical);
-            fabRefresh.startAnimation(from_bottom_horizontal);
+            binding.fabExpand.startAnimation(rotateOpen);
+            binding.fabEdit.startAnimation(from_bottom_vertical);
+            binding.fabAdd.startAnimation(from_bottom_vertical);
+            binding.fabRefresh.startAnimation(from_bottom_horizontal);
         } else {
-            fabExpand.startAnimation(rotateClose);
-            fabEdit.startAnimation(to_bottom_vertical);
-            fabAdd.startAnimation(to_bottom_vertical);
-            fabRefresh.startAnimation(to_bottom_horizontal);
+            binding.fabExpand.startAnimation(rotateClose);
+            binding.fabEdit.startAnimation(to_bottom_vertical);
+            binding.fabAdd.startAnimation(to_bottom_vertical);
+            binding.fabRefresh.startAnimation(to_bottom_horizontal);
         }
     }
 
     interface OnClickFAB {
         void onClick();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

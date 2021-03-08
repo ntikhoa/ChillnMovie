@@ -11,7 +11,6 @@ import com.ntikhoa.chillnmovie.api.MovieAPI;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
 public class MovieDataSourceFactory extends DataSource.Factory {
 
     private Application application;
@@ -25,6 +24,7 @@ public class MovieDataSourceFactory extends DataSource.Factory {
         this.application = application;
         mutableLiveData = new MutableLiveData<>();
         this.category = category;
+        this.movieAPI = movieAPI;
     }
 
     @NonNull

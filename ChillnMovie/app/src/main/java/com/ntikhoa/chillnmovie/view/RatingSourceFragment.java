@@ -2,18 +2,18 @@ package com.ntikhoa.chillnmovie.view;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.databinding.FragmentRatingSourceBinding;
 import com.ntikhoa.chillnmovie.model.MovieRate;
 import com.ntikhoa.chillnmovie.model.RatingSource;
 import com.ntikhoa.chillnmovie.viewmodel.RatingSourceViewModel;
@@ -22,6 +22,11 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class RatingSourceFragment extends Fragment {
+    private static final String ID = "movie id";
+    private static final String IMDB_ID = "imdb id";
+
+    private FragmentRatingSourceBinding binding;
+
     private String imdbId;
     private Long id;
 
@@ -33,141 +38,84 @@ public class RatingSourceFragment extends Fragment {
 
     private RatingSourceViewModel viewModel;
 
-    private ProgressBar progressBar;
+    public RatingSourceFragment() {
+        super(R.layout.fragment_rating_source);
+    }
 
-    private ProgressBar pbRatingChillnMovie;
-    private TextView tvRatingChillnMovie;
-
-    private ProgressBar pbVisual;
-    private TextView tvVisual;
-
-    private ProgressBar pbPlot;
-    private TextView tvPlot;
-
-    private ProgressBar pbAudio;
-    private TextView tvAudio;
-
-    private ProgressBar pbRatingIMDb;
-    private TextView tvRatingIMDb;
-
-    private ProgressBar pbRatingMetacritic;
-    private TextView tvRatingMetacritic;
-
-    private ProgressBar pbRatingTMDb;
-    private TextView tvRatingTMDb;
-
-    private ProgressBar pbRatingRottenTomatoes;
-    private TextView tvRatingRottenTomatoes;
-
-    public RatingSourceFragment(String imdbId, Long id) {
-        this.imdbId = imdbId;
-        this.id = id;
+    public static RatingSourceFragment newInstance(String imdbId, Long id) {
+        Bundle args = new Bundle();
+        args.putString(IMDB_ID, imdbId);
+        args.putLong(ID, id);
+        RatingSourceFragment fragment = new RatingSourceFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_rating_source, container, false);
-        initComponent(root);
-        loadData();
-        return root;
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            imdbId = getArguments().getString(IMDB_ID);
+            id = getArguments().getLong(ID);
+        }
     }
 
-    private void initComponent(View root) {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        binding = FragmentRatingSourceBinding.bind(view);
+
         viewModel = new ViewModelProvider(this)
                 .get(RatingSourceViewModel.class);
-
-        progressBar = root.findViewById(R.id.progress);
-
-        View chillnMovie = root.findViewById(R.id.chillnMovie);
-        pbRatingChillnMovie = chillnMovie.findViewById(R.id.progressBarRating);
-        tvRatingChillnMovie = chillnMovie.findViewById(R.id.textViewRate);
-
-        View visual = root.findViewById(R.id.visualEffect);
-        pbVisual = visual.findViewById(R.id.progressBarRating);
-        tvVisual = visual.findViewById(R.id.textViewRate);
-
-        View plot = root.findViewById(R.id.plot);
-        pbPlot = plot.findViewById(R.id.progressBarRating);
-        tvPlot = plot.findViewById(R.id.textViewRate);
-
-        View audio = root.findViewById(R.id.soundEffect);
-        pbAudio = audio.findViewById(R.id.progressBarRating);
-        tvAudio = audio.findViewById(R.id.textViewRate);
-
-        View imdb = root.findViewById(R.id.imdb);
-        pbRatingIMDb = imdb.findViewById(R.id.progressBarRating);
-        tvRatingIMDb = imdb.findViewById(R.id.textViewRate);
-
-        View metacritic = root.findViewById(R.id.metacritic);
-        pbRatingMetacritic = metacritic.findViewById(R.id.progressBarRating);
-        tvRatingMetacritic = metacritic.findViewById(R.id.textViewRate);
-
-        View tmdb = root.findViewById(R.id.theMovieDb);
-        pbRatingTMDb = tmdb.findViewById(R.id.progressBarRating);
-        tvRatingTMDb = tmdb.findViewById(R.id.textViewRate);
-
-        View rottenTomatoes = root.findViewById(R.id.rottenTomatoes);
-        pbRatingRottenTomatoes = rottenTomatoes.findViewById(R.id.progressBarRating);
-        tvRatingRottenTomatoes = rottenTomatoes.findViewById(R.id.textViewRate);
+        loadData();
     }
 
     private void loadData() {
-        progressBar.setVisibility(View.VISIBLE);
+        binding.progressBar.setVisibility(View.VISIBLE);
 
         viewModel.getMLDmovieRate(id)
-                .observe(getViewLifecycleOwner(), new Observer<MovieRate>() {
-                    @Override
-                    public void onChanged(MovieRate movieRate) {
-                        fetchChillnMovieData(movieRate);
-                    }
-                });
+                .observe(getViewLifecycleOwner(), movieRate -> fetchChillnMovieData(movieRate));
 
         viewModel.getMLDratingSource(imdbId)
-                .observe(getViewLifecycleOwner(), new Observer<RatingSource>() {
-                    @Override
-                    public void onChanged(RatingSource ratingSource) {
-                        fetchData(ratingSource);
-                        progressBar.setVisibility(View.GONE);
-                    }
+                .observe(getViewLifecycleOwner(), ratingSource -> {
+                    fetchData(ratingSource);
+                    binding.progressBar.setVisibility(View.GONE);
                 });
     }
 
     private void fetchData(RatingSource ratingSource) {
         String imdbStr = ratingSource.getImDb();
-        Double imdb;
+        double imdb;
         if (imdbStr != null && !imdbStr.isEmpty()) {
             imdb = Double.parseDouble(imdbStr);
-            setRating(imdb, pbRatingIMDb, tvRatingIMDb, UNIT_10);
+            setRating(imdb, binding.imdb.progressBarRating, binding.imdb.textViewRate, UNIT_10);
         }
 
         String metacriticStr = ratingSource.getMetacritic();
-        Double metacritic;
+        double metacritic;
         if (metacriticStr != null && !metacriticStr.isEmpty()) {
             metacritic = Double.parseDouble(metacriticStr);
-            setRating(metacritic, pbRatingMetacritic, tvRatingMetacritic, UNIT_100);
-        } else metacritic = 0d;
+            setRating(metacritic, binding.metacritic.progressBarRating, binding.metacritic.textViewRate, UNIT_100);
+        }
 
         String tmdbStr = ratingSource.getTheMovieDb();
-        Double tmdb;
         if (tmdbStr != null && !tmdbStr.isEmpty()) {
-            tmdb = Double.parseDouble(tmdbStr);
-            setRating(tmdb, pbRatingTMDb, tvRatingTMDb, UNIT_10);
+            double tmdb = Double.parseDouble(tmdbStr);
+            setRating(tmdb, binding.theMovieDb.progressBarRating, binding.theMovieDb.textViewRate, UNIT_10);
         }
 
         String rottenTomatoesStr = ratingSource.getRottenTomatoes();
-        Double rottenTomatoes;
         if (rottenTomatoesStr != null && !rottenTomatoesStr.isEmpty()) {
-            rottenTomatoes = Double.parseDouble(rottenTomatoesStr);
-            setRating(rottenTomatoes, pbRatingRottenTomatoes, tvRatingRottenTomatoes, UNIT_100);
+            double rottenTomatoes = Double.parseDouble(rottenTomatoesStr);
+            setRating(rottenTomatoes, binding.rottenTomatoes.progressBarRating, binding.rottenTomatoes.textViewRate, UNIT_100);
         }
     }
 
     private void fetchChillnMovieData(MovieRate movieRate) {
-        setRating(movieRate.getVoteAverage(), pbRatingChillnMovie, tvRatingChillnMovie, UNIT_10);
-        setRating(movieRate.getVisualVoteAverage(), pbVisual, tvVisual, UNIT_10);
-        setRating(movieRate.getPlotVoteAverage(), pbPlot, tvPlot, UNIT_10);
-        setRating(movieRate.getAudioVoteAverage(), pbAudio, tvAudio, UNIT_10);
+        setRating(movieRate.getVoteAverage(), binding.chillnMovie.progressBarRating, binding.chillnMovie.textViewRate, UNIT_10);
+        setRating(movieRate.getVisualVoteAverage(), binding.visual.progressBarRating, binding.visual.textViewRate, UNIT_10);
+        setRating(movieRate.getPlotVoteAverage(), binding.plot.progressBarRating, binding.plot.textViewRate, UNIT_10);
+        setRating(movieRate.getAudioVoteAverage(), binding.audio.progressBarRating, binding.audio.textViewRate, UNIT_10);
     }
 
     private void setRating(double rating, ProgressBar pbRating, TextView tvRating, int UNIT) {

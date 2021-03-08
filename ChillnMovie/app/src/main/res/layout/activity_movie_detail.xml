@@ -20,7 +20,7 @@
             android:background="@color/transparentBlack80"
             android:padding="16dp">
 
-            <FrameLayout
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/fragmentMovieHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -28,10 +28,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:background="@color/white"
-                tools:layout_height="280dp" />
+                tools:layout_height="280dp"
+                tools:layout="@layout/fragment_movie_header"/>
 
             <ImageButton
-                android:id="@+id/btnAddMovie"
+                android:id="@+id/btnAddToFavorite"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:background="@drawable/add_to_favorite"
@@ -49,8 +50,8 @@
                 android:background="@drawable/rate"
                 android:contentDescription="@string/rate_button"
                 app:layout_constraintEnd_toStartOf="@id/btnPlayTrailer"
-                app:layout_constraintStart_toEndOf="@id/btnAddMovie"
-                app:layout_constraintTop_toTopOf="@+id/btnAddMovie" />
+                app:layout_constraintStart_toEndOf="@id/btnAddToFavorite"
+                app:layout_constraintTop_toTopOf="@+id/btnAddToFavorite" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnPlayTrailer"
@@ -80,7 +81,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnAddMovie" />
+                app:layout_constraintTop_toBottomOf="@+id/btnAddToFavorite" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewCaster"
@@ -102,7 +103,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/recyclerViewCaster"/>
 
-            <FrameLayout
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/fragmentMovieInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

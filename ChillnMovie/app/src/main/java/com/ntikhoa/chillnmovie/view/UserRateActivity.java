@@ -3,7 +3,6 @@ package com.ntikhoa.chillnmovie.view;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.graphics.Bitmap;
@@ -11,13 +10,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ntikhoa.chillnmovie.R;
-import com.ntikhoa.chillnmovie.model.UserRate;
+import com.ntikhoa.chillnmovie.databinding.ActivityUserRateBinding;
 import com.ntikhoa.chillnmovie.viewmodel.UserRateViewModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -29,50 +26,25 @@ public class UserRateActivity extends AppCompatActivity {
     public static final String MOVIE_ID = "movieId";
     public static final String POSTER = "poster";
 
-    private UserRateViewModel viewModel;
+    private ActivityUserRateBinding binding;
 
-    private FrameLayout frameBackground;
+    private UserRateViewModel viewModel;
 
     private long movieId;
     private String posterPath;
 
-    private ProgressBar pbVisual;
-    private TextView tvVisual;
-
-    private ProgressBar pbPlot;
-    private TextView tvPlot;
-
-    private ProgressBar pbAudio;
-    private TextView tvAudio;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_rate);
+        binding = ActivityUserRateBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        initComponent();
-        loadData();
-
-        setBackground();
-    }
-
-    private void initComponent() {
         viewModel = new ViewModelProvider(this)
                 .get(UserRateViewModel.class);
 
-        frameBackground = findViewById(R.id.frameBackground);
+        loadData();
 
-        View visual = findViewById(R.id.rateVisual);
-        pbVisual = visual.findViewById(R.id.progressBarRating);
-        tvVisual = visual.findViewById(R.id.textViewRate);
-
-        View plot = findViewById(R.id.ratePlot);
-        pbPlot = plot.findViewById(R.id.progressBarRating);
-        tvPlot = plot.findViewById(R.id.textViewRate);
-
-        View audio = findViewById(R.id.rateAudio);
-        pbAudio = audio.findViewById(R.id.progressBarRating);
-        tvAudio = audio.findViewById(R.id.textViewRate);
+        setBackground();
     }
 
     private void loadData() {
@@ -82,23 +54,17 @@ public class UserRateActivity extends AppCompatActivity {
         setBackground();
 
         viewModel.getMLDreview(movieId)
-                .observe(this, new Observer<UserRate>() {
-                    @Override
-                    public void onChanged(UserRate userRate) {
-                        setRating(userRate.getPlotVote(), pbPlot, tvPlot);
-                        setRating(userRate.getVisualVote(), pbVisual, tvVisual);
-                        setRating(userRate.getAudioVote(), pbAudio, tvAudio);
+                .observe(this, userRate -> {
+                    setRating(userRate.getPlotVote(), binding.ratePlot.progressBarRating, binding.ratePlot.textViewRate);
+                    setRating(userRate.getVisualVote(), binding.rateVisual.progressBarRating, binding.rateVisual.textViewRate);
+                    setRating(userRate.getAudioVote(), binding.rateAudio.progressBarRating, binding.rateAudio.textViewRate);
 
-                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                        ReviewFragment fragment = ReviewFragment.newInstance(movieId);
-                        ft.add(R.id.fragmentContainer, fragment);
-                        ft.commit();
-                        fragment.setOnClickListener(new ReviewFragment.OnClickListener() {
-                            @Override
-                            public void onClick() {
-                            }
-                        });
-                    }
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    ReviewFragment fragment = ReviewFragment.newInstance(movieId);
+                    ft.add(R.id.fragmentContainer, fragment);
+                    ft.commit();
+                    fragment.setOnClickListener(() -> {
+                    });
                 });
     }
 
@@ -109,7 +75,7 @@ public class UserRateActivity extends AppCompatActivity {
                 .into(new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        frameBackground.setBackground(new BitmapDrawable(getResources(), bitmap));
+                        binding.frameBackground.setBackground(new BitmapDrawable(getResources(), bitmap));
                     }
 
                     @Override

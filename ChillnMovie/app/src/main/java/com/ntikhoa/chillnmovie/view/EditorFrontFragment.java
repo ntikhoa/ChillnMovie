@@ -3,191 +3,134 @@ package com.ntikhoa.chillnmovie.view;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
 
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.adapter.MovieAdapter;
 import com.ntikhoa.chillnmovie.adapter.MoviePagerAdapter;
+import com.ntikhoa.chillnmovie.databinding.FragmentEditorFrontBinding;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.viewmodel.EditorFrontPageViewModel;
-
-import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class EditorFrontFragment extends Fragment {
 
+    private FragmentEditorFrontBinding binding;
+
     private EditorFrontPageViewModel viewModel;
 
     private MoviePagerAdapter trendingMovieAdapter;
-    private ViewPager2 viewPagerTrendingMovie;
-    private TabLayout tabLayout;
 
     private MovieAdapter popularMovieAdapter;
-    private RecyclerView recyclerViewPopularMovie;
-    private TextView textViewMorePopular;
 
     private MovieAdapter nowPlayingMovieAdapter;
-    private RecyclerView recyclerViewNowPlayingMovie;
-    private TextView textViewMoreNowPlaying;
 
     private MovieAdapter upcomingMovieAdapter;
-    private RecyclerView recyclerViewUpcomingMovie;
-    private TextView textViewMoreUpcoming;
 
     private MovieAdapter topRatedMovieAdapter;
-    private RecyclerView recyclerViewTopRatedMovie;
-    private TextView textViewMoreTopRated;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_editor_front, container, false);
-        initComponent(root);
-        loadData();
-        return root;
+    public EditorFrontFragment() {
+        super(R.layout.fragment_editor_front);
     }
 
-    private void initComponent(View root) {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        binding = FragmentEditorFrontBinding.bind(view);
+        initComponent();
+        loadData();
+    }
+
+    private void initComponent() {
         viewModel = new ViewModelProvider(this)
                 .get(EditorFrontPageViewModel.class);
 
-        viewPagerTrendingMovie = root.findViewById(R.id.viewPagerTrending);
         trendingMovieAdapter = new MoviePagerAdapter(getActivity());
-        viewPagerTrendingMovie.setAdapter(trendingMovieAdapter);
+        binding.viewPagerTrending.setAdapter(trendingMovieAdapter);
 
-        tabLayout = root.findViewById(R.id.tabs);
-        new TabLayoutMediator(tabLayout, viewPagerTrendingMovie, (tab, position) -> {
+        new TabLayoutMediator(binding.tabs, binding.viewPagerTrending, (tab, position) -> {
         }).attach();
 
-        recyclerViewPopularMovie = root.findViewById(R.id.recyclerViewTrendingMovie);
-        recyclerViewPopularMovie.setLayoutManager(
+        binding.recyclerViewPopular.setLayoutManager(
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         popularMovieAdapter = new MovieAdapter(getActivity());
-        recyclerViewPopularMovie.setAdapter(popularMovieAdapter);
+        binding.recyclerViewPopular.setAdapter(popularMovieAdapter);
 
-        recyclerViewNowPlayingMovie = root.findViewById(R.id.recyclerViewNowPlaying);
-        recyclerViewNowPlayingMovie.setLayoutManager(
+        binding.recyclerViewNowPlaying.setLayoutManager(
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         nowPlayingMovieAdapter = new MovieAdapter(getActivity());
-        recyclerViewNowPlayingMovie.setAdapter(nowPlayingMovieAdapter);
+        binding.recyclerViewNowPlaying.setAdapter(nowPlayingMovieAdapter);
 
-        recyclerViewUpcomingMovie = root.findViewById(R.id.recyclerViewUpcoming);
-        recyclerViewUpcomingMovie.setLayoutManager(
+        binding.recyclerViewUpcoming.setLayoutManager(
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         upcomingMovieAdapter = new MovieAdapter(getActivity());
-        recyclerViewUpcomingMovie.setAdapter(upcomingMovieAdapter);
+        binding.recyclerViewUpcoming.setAdapter(upcomingMovieAdapter);
 
-        recyclerViewTopRatedMovie = root.findViewById(R.id.recyclerViewTopRated);
-        recyclerViewTopRatedMovie.setLayoutManager(
+        binding.recyclerViewTopRated.setLayoutManager(
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         topRatedMovieAdapter = new MovieAdapter(getActivity());
-        recyclerViewTopRatedMovie.setAdapter(topRatedMovieAdapter);
+        binding.recyclerViewTopRated.setAdapter(topRatedMovieAdapter);
 
-        textViewMoreNowPlaying = root.findViewById(R.id.textViewMoreNowPlaying);
-        textViewMorePopular = root.findViewById(R.id.textViewMorePopular);
-        textViewMoreUpcoming = root.findViewById(R.id.textViewMoreUpcoming);
-        textViewMoreTopRated = root.findViewById(R.id.textViewMoreTopRated);
 
-        textViewMoreNowPlaying.setOnClickListener(onClickMore);
-        textViewMorePopular.setOnClickListener(onClickMore);
-        textViewMoreUpcoming.setOnClickListener(onClickMore);
-        textViewMoreTopRated.setOnClickListener(onClickMore);
+        binding.textViewMoreNowPlaying.setOnClickListener(onClickMore);
+        binding.textViewMorePopular.setOnClickListener(onClickMore);
+        binding.textViewMoreUpcoming.setOnClickListener(onClickMore);
+        binding.textViewMoreTopRated.setOnClickListener(onClickMore);
     }
 
     private void loadData() {
         viewModel.getMLDtrendingMovie()
-                .observe(this, new Observer<List<Movie>>() {
-                    @Override
-                    public void onChanged(List<Movie> movies) {
-                        trendingMovieAdapter.submitList(movies);
-                    }
-                });
+                .observe(getViewLifecycleOwner(),
+                        movies -> trendingMovieAdapter.submitList(movies));
 
         viewModel.getMLDpopularMovie()
-                .observe(this, new Observer<List<Movie>>() {
-                    @Override
-                    public void onChanged(List<Movie> movies) {
-                        popularMovieAdapter.submitList(movies);
-                    }
-                });
+                .observe(getViewLifecycleOwner(),
+                        movies -> popularMovieAdapter.submitList(movies));
 
         viewModel.getMLDnowPlayingMovie()
-                .observe(this, new Observer<List<Movie>>() {
-                    @Override
-                    public void onChanged(List<Movie> movies) {
-                        nowPlayingMovieAdapter.submitList(movies);
-                    }
-                });
+                .observe(getViewLifecycleOwner(),
+                        movies -> nowPlayingMovieAdapter.submitList(movies));
 
         viewModel.getMLDupcomingMovie()
-                .observe(this, new Observer<List<Movie>>() {
-                    @Override
-                    public void onChanged(List<Movie> movies) {
-                        upcomingMovieAdapter.submitList(movies);
-                    }
-                });
+                .observe(getViewLifecycleOwner(),
+                        movies -> upcomingMovieAdapter.submitList(movies));
 
         viewModel.getMLDtopRatedMovie()
-                .observe(this, new Observer<List<Movie>>() {
-                    @Override
-                    public void onChanged(List<Movie> movies) {
-                        topRatedMovieAdapter.submitList(movies);
-                    }
-                });
+                .observe(getViewLifecycleOwner(),
+                        movies -> topRatedMovieAdapter.submitList(movies));
     }
 
-    private View.OnClickListener onClickMore = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(getActivity().getApplicationContext(), MovieActivity.class);
-            switch (view.getId()) {
-                case R.id.textViewMorePopular:
-                    intent.putExtra(MovieActivity.EXTRA_CATEGORY, Movie.POPULAR);
-                    break;
-                case R.id.textViewMoreNowPlaying:
-                    intent.putExtra(MovieActivity.EXTRA_CATEGORY, Movie.NOW_PLAYING);
-                    break;
-                case R.id.textViewMoreUpcoming:
-                    intent.putExtra(MovieActivity.EXTRA_CATEGORY, Movie.UPCOMING);
-                    break;
-                case R.id.textViewMoreTopRated:
-                    intent.putExtra(MovieActivity.EXTRA_CATEGORY, Movie.TOP_RATED);
-                    break;
-            }
-            startActivity(intent);
+    private View.OnClickListener onClickMore = view -> {
+        Intent intent = new Intent(getActivity().getApplicationContext(), MovieActivity.class);
+        switch (view.getId()) {
+            case R.id.textViewMorePopular:
+                intent.putExtra(MovieActivity.EXTRA_CATEGORY, Movie.POPULAR);
+                break;
+            case R.id.textViewMoreNowPlaying:
+                intent.putExtra(MovieActivity.EXTRA_CATEGORY, Movie.NOW_PLAYING);
+                break;
+            case R.id.textViewMoreUpcoming:
+                intent.putExtra(MovieActivity.EXTRA_CATEGORY, Movie.UPCOMING);
+                break;
+            case R.id.textViewMoreTopRated:
+                intent.putExtra(MovieActivity.EXTRA_CATEGORY, Movie.TOP_RATED);
+                break;
         }
+        startActivity(intent);
     };
 
-//    public void onClickSeeMore(View view) {
-//        Intent intent = new Intent(getActivity().getApplicationContext(), MovieActivity.class);
-//        switch (view.getId()) {
-//            case R.id.textViewMoreTrending:
-//                intent.putExtra(MovieActivity.EXTRA_CATEGORY, Movie.POPULAR);
-//                break;
-//            case R.id.textViewMoreNowPlaying:
-//                intent.putExtra(MovieActivity.EXTRA_CATEGORY, Movie.NOW_PLAYING);
-//                break;
-//            case R.id.textViewMoreUpcoming:
-//                intent.putExtra(MovieActivity.EXTRA_CATEGORY, Movie.UPCOMING);
-//                break;
-//            case R.id.textViewMoreTopRated:
-//                intent.putExtra(MovieActivity.EXTRA_CATEGORY, Movie.TOP_RATED);
-//                break;
-//        }
-//        startActivity(intent);
-//    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 }
