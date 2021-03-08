@@ -11,7 +11,6 @@ import com.ntikhoa.chillnmovie.api.MovieAPI;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
 public class MovieSearchDataSourceFactory extends DataSource.Factory {
 
     private Application application;

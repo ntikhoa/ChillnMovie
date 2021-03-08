@@ -18,7 +18,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-@Singleton
 public class MovieDataSource extends PageKeyedDataSource<Integer, Movie> {
 
     private Application application;

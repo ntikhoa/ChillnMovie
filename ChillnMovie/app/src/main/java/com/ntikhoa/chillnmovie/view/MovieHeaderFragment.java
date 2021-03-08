@@ -2,6 +2,7 @@ package com.ntikhoa.chillnmovie.view;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerDrawable;
 import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.databinding.FragmentMovieHeaderBinding;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
 import com.squareup.picasso.Picasso;
@@ -29,14 +31,11 @@ public class MovieHeaderFragment extends Fragment {
     public static final String TITLE = "title";
     public static final String VOTE_AVERAGE = "vote average";
 
+    private FragmentMovieHeaderBinding binding;
+
     private String backdropPath;
     private String title;
     private Double voteAverage;
-
-    private ImageView imageViewBackdrop;
-    private TextView textViewTitle;
-    private ProgressBar pbRating;
-    private TextView textViewRating;
 
     private OnClickPBrating onClickPBrating;
 
@@ -44,8 +43,11 @@ public class MovieHeaderFragment extends Fragment {
         this.onClickPBrating = onClickPBrating;
     }
 
-    public static MovieHeaderFragment newInstance(String backdropPath, String title, Double voteAverage) {
+    public MovieHeaderFragment() {
+        super(R.layout.fragment_movie_header);
+    }
 
+    public static MovieHeaderFragment newInstance(String backdropPath, String title, Double voteAverage) {
         Bundle args = new Bundle();
         MovieHeaderFragment fragment = new MovieHeaderFragment();
         args.putString(BACKDROP_PATH, backdropPath);
@@ -66,28 +68,18 @@ public class MovieHeaderFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_movie_header, container, false);
-        initComponent(root);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        binding = FragmentMovieHeaderBinding.bind(view);
+
         setBackdropImage();
         setRating();
-        pbRating.setOnClickListener(new View.OnClickListener() {
+        binding.ratingView.progressBarRating.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickPBrating.onClick();
             }
         });
-
-        return root;
-    }
-
-    public void initComponent(View view) {
-        imageViewBackdrop = view.findViewById(R.id.imageViewBackdrop);
-        textViewTitle = view.findViewById(R.id.textViewTitle);
-        View root = view.findViewById(R.id.ratingView);
-        pbRating = root.findViewById(R.id.progressBarRating);
-        textViewRating = root.findViewById(R.id.textViewRate);
     }
 
     private void setBackdropImage() {
@@ -106,32 +98,38 @@ public class MovieHeaderFragment extends Fragment {
         Picasso.get()
                 .load(backdropPath)
                 .placeholder(drawable)
-                .into(imageViewBackdrop);
-        textViewTitle.setText(title);
+                .into(binding.imageViewBackdrop);
+        binding.textViewTitle.setText(title);
     }
 
     private void setRating() {
         double rating = voteAverage;
 
         if (rating >= 8.0d) {
-            pbRating.setProgressDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(),
+            binding.ratingView.progressBarRating.setProgressDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(),
                     R.drawable.circle_green));
         } else if (rating >= 5.0d) {
-            pbRating.setProgressDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(),
+            binding.ratingView.progressBarRating.setProgressDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(),
                     R.drawable.circle_yellow));
         } else {
-            pbRating.setProgressDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(),
+            binding.ratingView.progressBarRating.setProgressDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(),
                     R.drawable.circle_red));
         }
         //when setProgressDrawable manually, have to add this line
-        pbRating.setProgress(1);
-        pbRating.setMax(10);
-        pbRating.setProgress((int) rating);
+        binding.ratingView.progressBarRating.setProgress(1);
+        binding.ratingView.progressBarRating.setMax(10);
+        binding.ratingView.progressBarRating.setProgress((int) rating);
         String ratingFormatted = String.format("%.1f", rating);
-        textViewRating.setText(ratingFormatted);
+        binding.ratingView.textViewRate.setText(ratingFormatted);
     }
 
     interface OnClickPBrating {
         void onClick();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

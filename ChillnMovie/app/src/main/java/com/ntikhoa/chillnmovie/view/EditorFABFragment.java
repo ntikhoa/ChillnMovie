@@ -8,13 +8,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.databinding.FragmentEditorFabBinding;
 
@@ -48,7 +45,6 @@ public class EditorFABFragment extends Fragment {
     }
 
     public static EditorFABFragment newInstance(Long movieId) {
-
         Bundle args = new Bundle();
         args.putLong(MOVIE_ID, movieId);
         EditorFABFragment fragment = new EditorFABFragment();
@@ -82,51 +78,31 @@ public class EditorFABFragment extends Fragment {
     }
 
     private void setOnClickFAB() {
-        binding.fabExpand.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clicked = !clicked;
-                setVisibility(clicked);
-                setAnimation(clicked);
-            }
+        binding.fabExpand.setOnClickListener(v -> {
+            clicked = !clicked;
+            setVisibility(clicked);
+            setAnimation(clicked);
         });
 
-        binding.fabRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Handler().post(new Runnable() {
+        binding.fabRefresh.setOnClickListener(v ->
+                new Handler().post(() -> {
+                    Intent intent = getActivity().getIntent();
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK
+                            | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    getActivity().overridePendingTransition(0, 0);
+                    getActivity().finish();
 
-                    @Override
-                    public void run()
-                    {
-                        Intent intent = getActivity().getIntent();
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK
-                                | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        getActivity().overridePendingTransition(0, 0);
-                        getActivity().finish();
+                    getActivity().overridePendingTransition(0, 0);
+                    startActivity(intent);
+                }));
 
-                        getActivity().overridePendingTransition(0, 0);
-                        startActivity(intent);
-                    }
-                });
-            }
+        binding.fabEdit.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), EditMovieActivity.class);
+            intent.putExtra(EditMovieActivity.EXTRA_ID, id);
+            startActivity(intent);
         });
 
-        binding.fabEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), EditMovieActivity.class);
-                intent.putExtra(EditMovieActivity.EXTRA_ID, id);
-                startActivity(intent);
-            }
-        });
-
-        binding.fabAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickFABadd.onClick();
-            }
-        });
+        binding.fabAdd.setOnClickListener(v -> onClickFABadd.onClick());
     }
 
 

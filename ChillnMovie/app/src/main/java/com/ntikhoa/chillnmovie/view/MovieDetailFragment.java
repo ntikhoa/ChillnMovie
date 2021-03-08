@@ -2,14 +2,15 @@ package com.ntikhoa.chillnmovie.view;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.databinding.FragmentMovieDetailBinding;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
 
 import java.text.DecimalFormat;
@@ -19,16 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MovieDetailFragment extends Fragment {
 
-    private TextView textViewTitle;
-    private TextView textViewOriginalTitle;
-    private TextView textViewStatus;
-    private TextView textViewReleaseDate;
-    private TextView textViewGenres;
-    private TextView textViewRuntime;
-    private TextView textViewOriginalLanguage;
-    private TextView textViewBudget;
-    private TextView textViewRevenue;
-    private TextView textViewOverview;
+    private FragmentMovieDetailBinding binding;
 
     private MovieDetail movieDetail;
 
@@ -36,59 +28,48 @@ public class MovieDetailFragment extends Fragment {
         this.movieDetail = movieDetail;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_movie_detail, container, false);
-        initComponent(root);
-        setTextInfo();
-        return root;
+    public MovieDetailFragment() {
+        super(R.layout.fragment_movie_detail);
     }
 
-    private void initComponent(View root) {
-        textViewTitle = root.findViewById(R.id.textViewTitle);
-        textViewOriginalTitle = root.findViewById(R.id.textViewOriginalTitle);
-        textViewStatus = root.findViewById(R.id.textViewStatus);
-        textViewReleaseDate = root.findViewById(R.id.textViewReleaseDate);
-        textViewGenres = root.findViewById(R.id.textViewGenres);
-        textViewRuntime = root.findViewById(R.id.textViewRuntime);
-        textViewOriginalLanguage = root.findViewById(R.id.textViewOriginalLanguage);
-        textViewBudget = root.findViewById(R.id.textViewBudget);
-        textViewRevenue = root.findViewById(R.id.textViewRevenue);
-        textViewOverview = root.findViewById(R.id.textViewOverview);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        binding = FragmentMovieDetailBinding.bind(view);
+        setTextInfo();
     }
 
     private void setTextInfo() {
         String title = movieDetail.getTitle();
-        setDescription(textViewTitle, title);
+        setDescription(binding.textViewTitle, title);
 
         String originalTitle = movieDetail.getOriginalTitle();
-        setDescription(textViewOriginalTitle, originalTitle);
+        setDescription(binding.textViewOriginalTitle, originalTitle);
 
         String status = movieDetail.getStatus();
-        setDescription(textViewStatus, status);
+        setDescription(binding.textViewStatus, status);
 
         String releaseDate = movieDetail.getReleaseDate();
-        setDescription(textViewReleaseDate, releaseDate);
+        setDescription(binding.textViewReleaseDate, releaseDate);
 
-        setGenres(textViewGenres);
+        setGenres(binding.textViewGenres);
 
         Integer runtime = movieDetail.getRuntime();
         if (runtime != null && runtime != 0)
-            textViewRuntime.setText(runtime + " ph");
-        else textViewRuntime.setText("-");
+            binding.textViewRuntime.setText(runtime + " ph");
+        else binding.textViewRuntime.setText("-");
 
         String originalLanguage = movieDetail.getOriginalLanguage();
-        setDescription(textViewOriginalLanguage, originalLanguage);
+        setDescription(binding.textViewOriginalLanguage, originalLanguage);
 
         Integer budget = movieDetail.getBudget();
-        setFormattedCurrency(textViewBudget, budget);
+        setFormattedCurrency(binding.textViewBudget, budget);
 
         Integer revenue = movieDetail.getRevenue();
-        setFormattedCurrency(textViewRevenue, revenue);
+        setFormattedCurrency(binding.textViewRevenue, revenue);
 
         String overview = movieDetail.getOverview();
-        setDescription(textViewOverview, overview);
+        setDescription(binding.textViewOverview, overview);
     }
 
     private void setDescription(TextView textView, String data) {
@@ -119,5 +100,11 @@ public class MovieDetailFragment extends Fragment {
             revenueFormatted += formatter.format(data);
             textViewCurrency.setText(revenueFormatted);
         } else textViewCurrency.setText("-");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }
