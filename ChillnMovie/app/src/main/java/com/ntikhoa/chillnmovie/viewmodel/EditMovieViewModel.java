@@ -6,6 +6,7 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.ntikhoa.chillnmovie.model.MovieDetail;
 import com.ntikhoa.chillnmovie.repository.EditMovieRepository;
@@ -15,13 +16,12 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class EditMovieViewModel extends AndroidViewModel {
+public class EditMovieViewModel extends ViewModel {
 
     private EditMovieRepository repository;
 
     @Inject
-    public EditMovieViewModel(@NonNull Application application, EditMovieRepository repository) {
-        super(application);
+    public EditMovieViewModel(EditMovieRepository repository) {
         this.repository = repository;
     }
 

@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.ntikhoa.chillnmovie.model.Caster;
 import com.ntikhoa.chillnmovie.model.MovieDetail;
@@ -17,13 +18,12 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class MovieDetailViewModel extends AndroidViewModel {
+public class MovieDetailViewModel extends ViewModel {
 
     private final MovieDetailRepository repository;
 
     @Inject
-    public MovieDetailViewModel(@NonNull Application application, MovieDetailRepository repository) {
-        super(application);
+    public MovieDetailViewModel(MovieDetailRepository repository) {
         this.repository = repository;
     }
 

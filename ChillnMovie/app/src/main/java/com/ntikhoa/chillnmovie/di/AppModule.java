@@ -1,8 +1,15 @@
 package com.ntikhoa.chillnmovie.di;
 
+import android.content.Context;
+
+import androidx.core.content.ContextCompat;
+
+import com.facebook.shimmer.Shimmer;
+import com.facebook.shimmer.ShimmerDrawable;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.api.MovieAPI;
 import com.ntikhoa.chillnmovie.api.RatingSourceAPI;
 
@@ -11,6 +18,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
+import dagger.hilt.android.scopes.ActivityRetainedScoped;
 import dagger.hilt.components.SingletonComponent;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -70,5 +78,21 @@ public class AppModule {
     @Singleton
     public FirebaseStorage provideFirebaseStorage() {
         return FirebaseStorage.getInstance();
+    }
+
+    @Provides
+    @ActivityRetainedScoped
+    public ShimmerDrawable provideShimmerDrawable(Context context) {
+        Shimmer shimmer = new Shimmer.ColorHighlightBuilder()
+                .setBaseColor(ContextCompat.getColor(context, R.color.colorShimmerBase))
+                .setBaseAlpha(1)
+                .setHighlightColor(ContextCompat.getColor(context, R.color.colorShimmerHighlight))
+                .setHighlightAlpha(1)
+                .setDropoff(50)
+                .setDuration(500)
+                .build();
+        ShimmerDrawable drawable = new ShimmerDrawable();
+        drawable.setShimmer(shimmer);
+        return drawable;
     }
 }

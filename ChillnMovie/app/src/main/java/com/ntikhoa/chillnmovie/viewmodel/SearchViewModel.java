@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
@@ -23,14 +24,12 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class SearchViewModel extends AndroidViewModel {
-    private Application application;
+public class SearchViewModel extends ViewModel {
+
     private SearchRepository repository;
 
     @Inject
-    public SearchViewModel(@NonNull Application application, SearchRepository repository) {
-        super(application);
-        this.application = application;
+    public SearchViewModel(SearchRepository repository) {
         this.repository = repository;
     }
 

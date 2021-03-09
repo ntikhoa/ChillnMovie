@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.repository.EditorFrontPageRepository;
@@ -16,7 +17,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class EditorFrontPageViewModel extends AndroidViewModel {
+public class EditorFrontPageViewModel extends ViewModel {
 
     private final MutableLiveData<List<Movie>> MLDtrendingMovie;
     private final MutableLiveData<List<Movie>> MLDpopularMovie;
@@ -26,9 +27,9 @@ public class EditorFrontPageViewModel extends AndroidViewModel {
 
     private EditorFrontPageRepository repository;
 
+
     @Inject
-    public EditorFrontPageViewModel(@NonNull Application application, EditorFrontPageRepository repository) {
-        super(application);
+    public EditorFrontPageViewModel(EditorFrontPageRepository repository) {
         this.repository = repository;
 
         MLDtrendingMovie = repository.getMLDtrendingMovie();

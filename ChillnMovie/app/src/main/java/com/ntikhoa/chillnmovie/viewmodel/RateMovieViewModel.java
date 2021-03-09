@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.ntikhoa.chillnmovie.model.MovieDetail;
 import com.ntikhoa.chillnmovie.model.MovieRate;
@@ -17,14 +18,12 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class RateMovieViewModel extends AndroidViewModel {
-    private Application application;
+public class RateMovieViewModel extends ViewModel {
+
     private final RateMovieRepository repository;
 
     @Inject
-    public RateMovieViewModel(@NonNull Application application, RateMovieRepository repository) {
-        super(application);
-        this.application = application;
+    public RateMovieViewModel(RateMovieRepository repository) {
         this.repository = repository;
     }
 

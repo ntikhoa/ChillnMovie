@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
@@ -24,14 +25,11 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class MovieViewModel extends AndroidViewModel {
-    private final Application application;
+public class MovieViewModel extends ViewModel {
     private final MoviePagingRepository repository;
 
     @Inject
-    public MovieViewModel(@NonNull Application application, MoviePagingRepository repository) {
-        super(application);
-        this.application = application;
+    public MovieViewModel(MoviePagingRepository repository) {
         this.repository = repository;
     }
 

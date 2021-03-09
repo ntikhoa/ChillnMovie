@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -95,8 +93,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(MovieDetailActivity.this)
                 .get(MovieDetailViewModel.class);
 
-        binding.recyclerViewCaster.setLayoutManager(
-                new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         casterAdapter = new CasterAdapter(this);
         binding.recyclerViewCaster.setAdapter(casterAdapter);
     }

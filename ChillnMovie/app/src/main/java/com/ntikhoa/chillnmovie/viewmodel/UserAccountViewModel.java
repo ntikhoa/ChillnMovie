@@ -6,6 +6,7 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.ntikhoa.chillnmovie.model.UserAccount;
 import com.ntikhoa.chillnmovie.repository.UserAccountRepository;
@@ -15,12 +16,12 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class UserAccountViewModel extends AndroidViewModel {
+public class UserAccountViewModel extends ViewModel {
+
     private final UserAccountRepository repository;
 
     @Inject
-    public UserAccountViewModel(@NonNull Application application, UserAccountRepository repository) {
-        super(application);
+    public UserAccountViewModel(UserAccountRepository repository) {
         this.repository = repository;
     }
 

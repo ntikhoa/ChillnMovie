@@ -50,6 +50,7 @@ public class CasterAdapter extends ListAdapter<Caster, CasterAdapter.CasterViewH
                     holder.imageViewProfile.setImageDrawable(
                             ContextCompat.getDrawable(context, R.drawable.female_default));
             } else {
+
                 Shimmer shimmer = new Shimmer.ColorHighlightBuilder()
                         .setBaseColor(ContextCompat.getColor(context, R.color.colorShimmerBase))
                         .setBaseAlpha(1)
