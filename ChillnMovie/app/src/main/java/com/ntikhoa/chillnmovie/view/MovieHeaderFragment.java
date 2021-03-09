@@ -6,21 +6,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerDrawable;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.databinding.FragmentMovieHeaderBinding;
-import com.ntikhoa.chillnmovie.model.Movie;
-import com.ntikhoa.chillnmovie.model.MovieDetail;
 import com.squareup.picasso.Picasso;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -74,12 +66,7 @@ public class MovieHeaderFragment extends Fragment {
 
         setBackdropImage();
         setRating();
-        binding.ratingView.progressBarRating.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickPBrating.onClick();
-            }
-        });
+        binding.ratingView.progressBarRating.setOnClickListener(v -> onClickPBrating.onClick());
     }
 
     private void setBackdropImage() {
