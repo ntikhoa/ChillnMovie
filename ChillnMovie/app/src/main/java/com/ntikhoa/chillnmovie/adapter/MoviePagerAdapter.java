@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerDrawable;
 import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.model.ConstantShimmerEffect;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.view.MovieDetailActivity;
 import com.squareup.picasso.Picasso;
@@ -39,19 +40,9 @@ public class MoviePagerAdapter extends ListAdapter<Movie, MoviePagerAdapter.Movi
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
         Movie movie = getItem(position);
         if (movie != null) {
-            Shimmer shimmer = new Shimmer.ColorHighlightBuilder()
-                    .setBaseColor(ContextCompat.getColor(context, R.color.colorShimmerBase))
-                    .setBaseAlpha(1)
-                    .setHighlightColor(ContextCompat.getColor(context, R.color.colorShimmerHighlight))
-                    .setHighlightAlpha(1)
-                    .setDropoff(50)
-                    .setDuration(500)
-                    .build();
-            ShimmerDrawable drawable = new ShimmerDrawable();
-            drawable.setShimmer(shimmer);
-
+            ConstantShimmerEffect shimmerEffect = new ConstantShimmerEffect(context);
             Picasso.get().load(movie.getBackdropPath())
-                    .placeholder(drawable)
+                    .placeholder(shimmerEffect.getDrawable())
                     .into(holder.imageViewBackdrop);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {

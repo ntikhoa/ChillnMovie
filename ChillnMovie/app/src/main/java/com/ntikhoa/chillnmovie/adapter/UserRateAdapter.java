@@ -20,6 +20,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.model.CollectionName;
+import com.ntikhoa.chillnmovie.model.ConstantShimmerEffect;
 import com.ntikhoa.chillnmovie.model.UserAccount;
 import com.ntikhoa.chillnmovie.model.UserRate;
 import com.squareup.picasso.Picasso;
@@ -57,20 +58,11 @@ public class UserRateAdapter extends ListAdapter<UserRate, UserRateAdapter.RateV
                             UserAccount userAccount = documentSnapshot.toObject(UserAccount.class);
 
                             holder.textViewUserName.setText(userAccount.getName());
-                            Shimmer shimmer = new Shimmer.ColorHighlightBuilder()
-                                    .setBaseColor(ContextCompat.getColor(context, R.color.colorShimmerBase))
-                                    .setBaseAlpha(1)
-                                    .setHighlightColor(ContextCompat.getColor(context, R.color.colorShimmerHighlight))
-                                    .setHighlightAlpha(1)
-                                    .setDropoff(50)
-                                    .setDuration(500)
-                                    .build();
-                            ShimmerDrawable drawable = new ShimmerDrawable();
-                            drawable.setShimmer(shimmer);
 
+                            ConstantShimmerEffect shimmerEffect = new ConstantShimmerEffect(context);
                             String path = userAccount.getAvatarPath();
                             Picasso.get().load(path)
-                                    .placeholder(drawable)
+                                    .placeholder(shimmerEffect.getDrawable())
                                     .into(holder.imageViewAvatar);
 
                             holder.textViewComment.setMaxHeight(113);//112.5px = 150dp

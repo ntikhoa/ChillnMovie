@@ -22,6 +22,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.model.CollectionName;
+import com.ntikhoa.chillnmovie.model.ConstantShimmerEffect;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.view.MovieDetailActivity;
 import com.squareup.picasso.Picasso;
@@ -88,19 +89,9 @@ public class FavoriteAdapter extends ListAdapter<Long, FavoriteAdapter.FavoriteV
     }
 
     private void setBackdrop(FavoriteViewHolder holder, String backdropPath) {
-        Shimmer shimmer = new Shimmer.ColorHighlightBuilder()
-                .setBaseColor(ContextCompat.getColor(context, R.color.colorShimmerBase))
-                .setBaseAlpha(1)
-                .setHighlightColor(ContextCompat.getColor(context, R.color.colorShimmerHighlight))
-                .setHighlightAlpha(1)
-                .setDropoff(50)
-                .setDuration(500)
-                .build();
-        ShimmerDrawable drawable = new ShimmerDrawable();
-        drawable.setShimmer(shimmer);
-
+        ConstantShimmerEffect shimmerEffect = new ConstantShimmerEffect(context);
         Picasso.get().load(backdropPath)
-                .placeholder(drawable)
+                .placeholder(shimmerEffect.getDrawable())
                 .into(holder.imageBackdrop);
     }
 

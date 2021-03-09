@@ -16,6 +16,7 @@ import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerDrawable;
 import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.model.Caster;
+import com.ntikhoa.chillnmovie.model.ConstantShimmerEffect;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.squareup.picasso.Picasso;
 
@@ -51,20 +52,11 @@ public class CasterAdapter extends ListAdapter<Caster, CasterAdapter.CasterViewH
                             ContextCompat.getDrawable(context, R.drawable.female_default));
             } else {
 
-                Shimmer shimmer = new Shimmer.ColorHighlightBuilder()
-                        .setBaseColor(ContextCompat.getColor(context, R.color.colorShimmerBase))
-                        .setBaseAlpha(1)
-                        .setHighlightColor(ContextCompat.getColor(context, R.color.colorShimmerHighlight))
-                        .setHighlightAlpha(1)
-                        .setDropoff(50)
-                        .setDuration(500)
-                        .build();
-                ShimmerDrawable drawable = new ShimmerDrawable();
-                drawable.setShimmer(shimmer);
 
+                ConstantShimmerEffect shimmerEffect = new ConstantShimmerEffect(context);
                 String path = Movie.path + caster.getProfilePath();
                 Picasso.get().load(path)
-                        .placeholder(drawable)
+                        .placeholder(shimmerEffect.getDrawable())
                         .into(holder.imageViewProfile);
             }
             holder.textViewCasterName.setText(caster.getName());
