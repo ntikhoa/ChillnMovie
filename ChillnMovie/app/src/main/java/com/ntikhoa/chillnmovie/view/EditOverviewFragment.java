@@ -9,20 +9,20 @@ import androidx.fragment.app.Fragment;
 import android.view.View;
 
 import com.ntikhoa.chillnmovie.R;
-import com.ntikhoa.chillnmovie.databinding.FragmentOverviewBinding;
+import com.ntikhoa.chillnmovie.databinding.FragmentEditOverviewBinding;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class OverviewFragment extends Fragment {
+public class EditOverviewFragment extends Fragment {
     public static final String OVERVIEW = "overview";
     public static final String TRENDING = "trending";
     public static final String UPCOMING = "upcoming";
     public static final String NOW_PLAYING = "now playing";
 
-    private FragmentOverviewBinding binding;
+    private FragmentEditOverviewBinding binding;
 
-    private OverviewFragment.OnClickSubmit onClickSubmit;
+    private EditOverviewFragment.OnClickSubmit onClickSubmit;
 
     private String overview;
 
@@ -30,24 +30,24 @@ public class OverviewFragment extends Fragment {
     private boolean isUpcoming;
     private boolean isNowPlaying;
 
-    public OverviewFragment() {
-        super(R.layout.fragment_overview);
+    public EditOverviewFragment() {
+        super(R.layout.fragment_edit_overview);
     }
 
-    public void setOnClickSubmit(OverviewFragment.OnClickSubmit onClickSubmit) {
+    public void setOnClickSubmit(EditOverviewFragment.OnClickSubmit onClickSubmit) {
         this.onClickSubmit = onClickSubmit;
     }
 
-    public static OverviewFragment newInstance(String overview,
-                                               boolean isTrending,
-                                               boolean isUpcoming,
-                                               boolean isNowPlaying) {
+    public static EditOverviewFragment newInstance(String overview,
+                                                   boolean isTrending,
+                                                   boolean isUpcoming,
+                                                   boolean isNowPlaying) {
         Bundle args = new Bundle();
         args.putString(OVERVIEW, overview);
         args.putBoolean(TRENDING, isTrending);
         args.putBoolean(UPCOMING, isUpcoming);
         args.putBoolean(NOW_PLAYING, isNowPlaying);
-        OverviewFragment fragment = new OverviewFragment();
+        EditOverviewFragment fragment = new EditOverviewFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,7 +66,7 @@ public class OverviewFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding = FragmentOverviewBinding.bind(view);
+        binding = FragmentEditOverviewBinding.bind(view);
 
         binding.editTextOverview.setText(overview);
         binding.checkBoxTrending.setChecked(isTrending);

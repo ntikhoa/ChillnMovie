@@ -8,7 +8,6 @@ import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.View;
 
@@ -94,8 +93,6 @@ public class SearchFragment extends Fragment {
         viewModel = new ViewModelProvider(this)
                 .get(SearchViewModel.class);
 
-        binding.recyclerViewSearchMovie.setLayoutManager(new LinearLayoutManager(getContext(),
-                LinearLayoutManager.VERTICAL, false));
         if (searchMode == MODE_TMDB) {
             movieAdapter = new MoviePagedListAdapter(getActivity());
             binding.recyclerViewSearchMovie.setAdapter(movieAdapter);

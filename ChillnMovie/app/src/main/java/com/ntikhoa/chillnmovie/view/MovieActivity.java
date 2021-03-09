@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Bundle;
 
+import com.ntikhoa.chillnmovie.R;
 import com.ntikhoa.chillnmovie.adapter.MoviePagedListAdapter;
 import com.ntikhoa.chillnmovie.databinding.ActivityMovieBinding;
 import com.ntikhoa.chillnmovie.viewmodel.MovieViewModel;
@@ -33,7 +34,6 @@ public class MovieActivity extends AppCompatActivity {
     }
 
     private void initComponent() {
-        binding.recyclerViewMovie.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MoviePagedListAdapter(MovieActivity.this);
         binding.recyclerViewMovie.setAdapter(adapter);
         viewModel = new ViewModelProvider(this)

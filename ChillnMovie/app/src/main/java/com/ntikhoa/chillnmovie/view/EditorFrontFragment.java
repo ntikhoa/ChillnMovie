@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.View;
 
@@ -31,11 +30,8 @@ public class EditorFrontFragment extends Fragment {
     private MoviePagerAdapter trendingMovieAdapter;
 
     private MovieAdapter popularMovieAdapter;
-
     private MovieAdapter nowPlayingMovieAdapter;
-
     private MovieAdapter upcomingMovieAdapter;
-
     private MovieAdapter topRatedMovieAdapter;
 
     public EditorFrontFragment() {
@@ -51,41 +47,46 @@ public class EditorFrontFragment extends Fragment {
     }
 
     private void initComponent() {
+        initViewModel();
+        setUpViewPagerAndTabLayout();
+        initRecyclerView();
+        setOnClickListenerBtnMore();
+    }
+
+    private void initViewModel() {
         viewModel = new ViewModelProvider(this)
                 .get(EditorFrontPageViewModel.class);
+    }
 
+    private void setUpViewPagerAndTabLayout() {
         trendingMovieAdapter = new MoviePagerAdapter(getActivity());
         binding.viewPagerTrending.setAdapter(trendingMovieAdapter);
 
         new TabLayoutMediator(binding.tabs, binding.viewPagerTrending, (tab, position) -> {
         }).attach();
+    }
 
-        binding.recyclerViewPopular.setLayoutManager(
-                new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+    private void initRecyclerView() {
         popularMovieAdapter = new MovieAdapter(getActivity());
         binding.recyclerViewPopular.setAdapter(popularMovieAdapter);
 
-        binding.recyclerViewNowPlaying.setLayoutManager(
-                new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         nowPlayingMovieAdapter = new MovieAdapter(getActivity());
         binding.recyclerViewNowPlaying.setAdapter(nowPlayingMovieAdapter);
 
-        binding.recyclerViewUpcoming.setLayoutManager(
-                new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         upcomingMovieAdapter = new MovieAdapter(getActivity());
         binding.recyclerViewUpcoming.setAdapter(upcomingMovieAdapter);
 
-        binding.recyclerViewTopRated.setLayoutManager(
-                new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         topRatedMovieAdapter = new MovieAdapter(getActivity());
         binding.recyclerViewTopRated.setAdapter(topRatedMovieAdapter);
+    }
 
-
+    private void setOnClickListenerBtnMore() {
         binding.textViewMoreNowPlaying.setOnClickListener(onClickMore);
         binding.textViewMorePopular.setOnClickListener(onClickMore);
         binding.textViewMoreUpcoming.setOnClickListener(onClickMore);
         binding.textViewMoreTopRated.setOnClickListener(onClickMore);
     }
+
 
     private void loadData() {
         viewModel.getMLDtrendingMovie()

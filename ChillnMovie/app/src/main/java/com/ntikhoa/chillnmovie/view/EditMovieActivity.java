@@ -101,7 +101,7 @@ public class EditMovieActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (movieDetail != null) {
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    OverviewFragment fragment = OverviewFragment.newInstance(
+                    EditOverviewFragment fragment = EditOverviewFragment.newInstance(
                             movieDetail.getOverview(),
                             movieDetail.getIsTrending(),
                             movieDetail.getIsUpcoming(),
@@ -203,9 +203,9 @@ public class EditMovieActivity extends AppCompatActivity {
         }
     }
 
-    private void setOnSubmitBtn(OverviewFragment fragment) {
+    private void setOnSubmitBtn(EditOverviewFragment fragment) {
         //updateData();
-        fragment.setOnClickSubmit(new OverviewFragment.OnClickSubmit() {
+        fragment.setOnClickSubmit(new EditOverviewFragment.OnClickSubmit() {
             @Override
             public void onClick() {
                 String title = binding.editTextTitle.getText().toString();

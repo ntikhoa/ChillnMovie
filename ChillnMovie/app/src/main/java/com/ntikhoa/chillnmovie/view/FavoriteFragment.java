@@ -1,6 +1,5 @@
 package com.ntikhoa.chillnmovie.view;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,7 +8,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
@@ -33,7 +31,9 @@ public class FavoriteFragment extends Fragment {
     private FragmentFavoriteBinding binding;
 
     private FavoriteAdapter favoriteAdapter;
+
     private FavoriteViewModel viewModel;
+
     @Inject
     FirebaseAuth auth;
 
@@ -54,8 +54,6 @@ public class FavoriteFragment extends Fragment {
         viewModel = new ViewModelProvider(this)
                 .get(FavoriteViewModel.class);
 
-        binding.recyclerViewFavorite.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext(),
-                LinearLayoutManager.VERTICAL, false));
         favoriteAdapter = new FavoriteAdapter(getActivity());
         binding.recyclerViewFavorite.setAdapter(favoriteAdapter);
 

@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.View;
 
@@ -62,24 +61,15 @@ public class HomeFragment extends Fragment {
     }
 
     private void initRecyclerView() {
-        binding.recyclerViewVietnamese.setLayoutManager(new LinearLayoutManager(getActivity(),
-                LinearLayoutManager.HORIZONTAL, false));
         vietnameseMovieAdapter = new MovieAdapter(getActivity());
         binding.recyclerViewVietnamese.setAdapter(vietnameseMovieAdapter);
 
-        binding.recyclerViewTopRated.setLayoutManager(
-                new LinearLayoutManager(getActivity(),
-                        LinearLayoutManager.HORIZONTAL, false));
         topRatedMovieAdapter = new MovieAdapter(getActivity());
         binding.recyclerViewTopRated.setAdapter(topRatedMovieAdapter);
 
-        binding.recyclerViewNowPlaying.setLayoutManager(
-                new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         nowPlayingMovieAdapter = new MovieAdapter(getActivity());
         binding.recyclerViewNowPlaying.setAdapter(nowPlayingMovieAdapter);
 
-        binding.recyclerViewUpcoming.setLayoutManager(
-                new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         upcomingMovieAdapter = new MovieAdapter(getActivity());
         binding.recyclerViewUpcoming.setAdapter(upcomingMovieAdapter);
 
