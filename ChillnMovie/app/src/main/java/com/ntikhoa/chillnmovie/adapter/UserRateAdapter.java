@@ -2,33 +2,25 @@ package com.ntikhoa.chillnmovie.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.facebook.shimmer.Shimmer;
-import com.facebook.shimmer.ShimmerDrawable;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.databinding.UserRateItemBinding;
 import com.ntikhoa.chillnmovie.model.CollectionName;
 import com.ntikhoa.chillnmovie.model.ConstantShimmerEffect;
 import com.ntikhoa.chillnmovie.model.UserAccount;
 import com.ntikhoa.chillnmovie.model.UserRate;
 import com.squareup.picasso.Picasso;
 
+
 public class UserRateAdapter extends ListAdapter<UserRate, UserRateAdapter.RateViewHolder> {
 
     private Context context;
-    FirebaseFirestore db;
+    private FirebaseFirestore db;
 
     public UserRateAdapter(Context context) {
         super(UserRate.CALLBACK);
@@ -41,72 +33,66 @@ public class UserRateAdapter extends ListAdapter<UserRate, UserRateAdapter.RateV
     @Override
     public RateViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View root = inflater.inflate(R.layout.user_rate_item, parent, false);
-        return new RateViewHolder(root);
+        UserRateItemBinding binding =
+                UserRateItemBinding.inflate(inflater, parent, false);
+        return new RateViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RateViewHolder holder, int position) {
         UserRate userRate = getItem(position);
         if (userRate != null) {
-            db.collection(CollectionName.USER_PROFILE)
-                    .document(userRate.getUserId())
-                    .get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            UserAccount userAccount = documentSnapshot.toObject(UserAccount.class);
-
-                            holder.textViewUserName.setText(userAccount.getName());
-
-                            ConstantShimmerEffect shimmerEffect = new ConstantShimmerEffect(context);
-                            String path = userAccount.getAvatarPath();
-                            Picasso.get().load(path)
-                                    .placeholder(shimmerEffect.getDrawable())
-                                    .into(holder.imageViewAvatar);
-
-                            holder.textViewComment.setMaxHeight(113);//112.5px = 150dp
-                        }
-                    });
-
-            holder.textViewRateDate.setText(userRate.getRateDate());
-
-            setUserRate(userRate, holder);
-
-            String comment = userRate.getComment();
-            if (comment.length() < 200)
-                holder.textViewComment.setText(userRate.getComment());
-            else {
-                String limit = comment.substring(0, 200) + " ...";
-                holder.textViewComment.setText(limit);
-            }
+            holder.bind(userRate);
         }
     }
 
-    private void setUserRate(UserRate userRate, RateViewHolder holder) {
-        Integer plot = userRate.getPlotVote();
-        Integer visualEffect = userRate.getVisualVote();
-        Integer soundEffect = userRate.getAudioVote();
-        Double average = (plot + visualEffect + soundEffect) / 3d;
-        String avgStr = String.format("%.1f", average);
-        holder.textViewRate.setText(avgStr);
-    }
+    class RateViewHolder extends RecyclerView.ViewHolder {
 
-    static class RateViewHolder extends RecyclerView.ViewHolder {
+        private UserRateItemBinding binding;
 
-        private TextView textViewUserName;
-        private TextView textViewRateDate;
-        private Button textViewRate;
-        private TextView textViewComment;
-        private ImageView imageViewAvatar;
+        public RateViewHolder(UserRateItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
 
-        public RateViewHolder(@NonNull View itemView) {
-            super(itemView);
-            textViewUserName = itemView.findViewById(R.id.textViewUserName);
-            textViewRateDate = itemView.findViewById(R.id.textViewRateDate);
-            textViewComment = itemView.findViewById(R.id.textViewComment);
-            textViewRate = itemView.findViewById(R.id.textViewRate);
-            imageViewAvatar = itemView.findViewById(R.id.imageViewAvatar);
+        public void bind(UserRate userRate) {
+            db.collection(CollectionName.USER_PROFILE)
+                    .document(userRate.getUserId())
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        UserAccount userAccount = documentSnapshot.toObject(UserAccount.class);
+
+                        binding.textViewUserName.setText(userAccount.getName());
+
+                        ConstantShimmerEffect shimmerEffect = new ConstantShimmerEffect(context);
+                        String path = userAccount.getAvatarPath();
+                        Picasso.get().load(path)
+                                .placeholder(shimmerEffect.getDrawable())
+                                .into(binding.imageViewAvatar);
+
+                        binding.textViewComment.setMaxHeight(113);//112.5px = 150dp
+                    });
+
+            binding.textViewRateDate.setText(userRate.getRateDate());
+
+            setUserRate(userRate);
+
+            String comment = userRate.getComment();
+            if (comment.length() < 200)
+                binding.textViewComment.setText(userRate.getComment());
+            else {
+                String limit = comment.substring(0, 200) + " ...";
+                binding.textViewComment.setText(limit);
+            }
+        }
+
+        private void setUserRate(UserRate userRate) {
+            Integer plot = userRate.getPlotVote();
+            Integer visualEffect = userRate.getVisualVote();
+            Integer soundEffect = userRate.getAudioVote();
+            Double average = (plot + visualEffect + soundEffect) / 3d;
+            String avgStr = String.format("%.1f", average);
+            binding.textViewRate.setText(avgStr);
         }
     }
 }

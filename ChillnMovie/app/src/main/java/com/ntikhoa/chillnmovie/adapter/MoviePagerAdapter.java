@@ -2,20 +2,14 @@ package com.ntikhoa.chillnmovie.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.facebook.shimmer.Shimmer;
-import com.facebook.shimmer.ShimmerDrawable;
-import com.ntikhoa.chillnmovie.R;
+import com.ntikhoa.chillnmovie.databinding.MovieItemPagerBinding;
 import com.ntikhoa.chillnmovie.model.ConstantShimmerEffect;
 import com.ntikhoa.chillnmovie.model.Movie;
 import com.ntikhoa.chillnmovie.view.MovieDetailActivity;
@@ -23,6 +17,7 @@ import com.squareup.picasso.Picasso;
 
 public class MoviePagerAdapter extends ListAdapter<Movie, MoviePagerAdapter.MovieViewHolder> {
     private final Context context;
+
     public MoviePagerAdapter(Context context) {
         super(Movie.CALLBACK);
         this.context = context;
@@ -32,35 +27,45 @@ public class MoviePagerAdapter extends ListAdapter<Movie, MoviePagerAdapter.Movi
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.movie_item_pager, parent, false);
-        return new MovieViewHolder(view);
+        MovieItemPagerBinding binding =
+                MovieItemPagerBinding.inflate(inflater, parent, false);
+        return new MovieViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
         Movie movie = getItem(position);
         if (movie != null) {
-            ConstantShimmerEffect shimmerEffect = new ConstantShimmerEffect(context);
-            Picasso.get().load(movie.getBackdropPath())
-                    .placeholder(shimmerEffect.getDrawable())
-                    .into(holder.imageViewBackdrop);
-
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, MovieDetailActivity.class);
-                    intent.putExtra(MovieDetailActivity.EXTRA_ID, movie.getId());
-                    context.startActivity(intent);
-                }
-            });
+            holder.bind(movie);
         }
     }
 
-    static class MovieViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageViewBackdrop;
-        public MovieViewHolder(@NonNull View itemView) {
-            super(itemView);
-            imageViewBackdrop = itemView.findViewById(R.id.imageViewBackdrop);
+    class MovieViewHolder extends RecyclerView.ViewHolder {
+
+        private MovieItemPagerBinding binding;
+
+        public MovieViewHolder(MovieItemPagerBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+
+            binding.getRoot().setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    Movie movie = getItem(position);
+                    if (movie != null) {
+                        Intent intent = new Intent(context, MovieDetailActivity.class);
+                        intent.putExtra(MovieDetailActivity.EXTRA_ID, movie.getId());
+                        context.startActivity(intent);
+                    }
+                }
+            });
+        }
+
+        public void bind(Movie movie) {
+            ConstantShimmerEffect shimmerEffect = new ConstantShimmerEffect(context);
+            Picasso.get().load(movie.getBackdropPath())
+                    .placeholder(shimmerEffect.getDrawable())
+                    .into(binding.imageViewBackdrop);
         }
     }
 }
