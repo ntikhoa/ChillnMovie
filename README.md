@@ -9,6 +9,7 @@ reviews for the film, Editor can also put movies in different categories.
 # Architecture (MVVM model)
 ![](Preview/architecture.png)
 # Technique uses
+* Java
 * MVVM model (architecture component, live data)
 * Hilt (dagger 2)
 * RESTful API (Retrofit)
