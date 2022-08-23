@@ -11,7 +11,7 @@ reviews for the film, Editor can also put movies in different categories.
 # Technique uses
 * Java
 * MVVM model (architecture component, live data)
-* Hilt
+* Dependency Injection (Hilt)
 * RESTful API (Retrofit)
 * Google Firebase (Firestore, Auth, Storage)
 * Algolia (full text search)
@@ -20,9 +20,9 @@ reviews for the film, Editor can also put movies in different categories.
 * Animation
 * View Binding
 # Weeknesses
-* Concurrency error
-* Background jobs are not handle properly
-* Does not apply best practice
+* Concurrency errors
+* Background jobs are not handled properly
+* Does not apply best practices
 * Java T_T
 # Portfolio
 ## Authentication
