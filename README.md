@@ -11,11 +11,24 @@ reviews for the film, Editor can also put movies in different categories.
 # Technique uses
 * Java
 * MVVM model (architecture component, live data)
-* Hilt (dagger 2)
+* Hilt
 * RESTful API (Retrofit)
 * Google Firebase (Firestore, Auth, Storage)
-* Algolia (text search)
-* Pagination (for api, firebase and algolia)
+* Algolia (full text search)
+* Pagination (Paging 3)
 * Material Design
 * Animation
 * View Binding
+# Weeknesses
+* Concurrency Error
+* Does not apply best practice
+* Java T_T
+# Portfolio
+## Authentication
+![](Preview/auth.png)
+## Home
+![](Preview/home.png)
+## Movie Detail
+![](Preview/MovieDetail.png)
+## Edit Movie
+![](Preview/EditMovie.png)
