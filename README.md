@@ -20,7 +20,8 @@ reviews for the film, Editor can also put movies in different categories.
 * Animation
 * View Binding
 # Weeknesses
-* Concurrency Error
+* Concurrency error
+* Background jobs are not handle properly
 * Does not apply best practice
 * Java T_T
 # Portfolio
